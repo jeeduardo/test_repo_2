@@ -91,7 +91,6 @@ find_click('id', 'nav6', '', 10, "Getting reports")
 # driver.find_element_by_id('nav601').click()
 find_click('id', 'nav601', '', 10, "Going to 'Report List'")
 
-#driver.find_element_by_id('category_BANKING').click()
 #show_loading(10, "Getting the Banking reports")
 find_click('id', 'category_BANKING', '', 2, "Getting the Banking reports")
 #driver.find_element_by_id('DEPOSIT_DETAIL_reportListLink_Banking').click()
@@ -100,13 +99,7 @@ find_click('id', 'DEPOSIT_DETAIL_reportListLink_Banking', '', 10, "Getting Depos
 # @TODO: set dates covered (from and to) for the report
 # Deposit Detail
 
-try:
-  date_macro = driver.find_element_by_id('date_macro')
-except Exception, e:
-  print 'Something was wrong:', e
-  print 'Retrying...'
-  time.sleep(10)
-  date_macro = driver.find_element_by_id('date_macro')
+date_macro = driver.find_element_by_id('date_macro')
 
 # date_macro.find_element_by_xpath("//option[@value='all']").click()
 driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
@@ -161,13 +154,28 @@ show_loading(10, "Getting Excel version of \"Profit & Loss\" report...")
 
 # Profit and Loss Detail report
 find_click('id', 'nav6', '', 10, "Getting reports")
-find_click('id', 'PANDL_DET_reportListLink_Company', '', 10, "Getting \"Profit & Loss Detail\" report...")
+find_click('id', 'PANDL_DET_reportListLink_Company', '', 20, "Getting \"Profit & Loss Detail\" report...")
 driver.switch_to_default_content()
 home_frames = driver.find_elements_by_tag_name('iframe')
 driver.switch_to_frame(home_frames[0])
 driver.find_element_by_id('button_id_b5_excel_small.gif').click()
 show_loading(10, "Getting Excel version of \"Profit & Loss Detail\" report...")
 
+
+# 18Sep2012 - Balance Sheet report
+find_click('id', 'nav6', '', 10, "Getting reports")
+find_click('id', 'BAL_SHEET_reportListLink_Company', '', 10, "Getting \"Balance Sheet\" report")
+driver.switch_to_default_content()
+driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
+driver.find_element_by_id('button_id_b5_excel_small.gif').click()
+show_loading(10, "Getting Excel version of \"Balance Sheet\" report...")
+
+find_click('id', 'nav6', '', 10)
+find_click('id', 'BAL_SHEET_SUM_reportListLink_Company', '', 10, "Getting \"Balance Sheet Summary\" report")
+driver.switch_to_default_content()
+driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
+driver.find_element_by_id('button_id_b5_excel_small.gif').click()
+show_loading(10, "Getting Excel version of \"Balance Sheet Summary\" report...")
 
 # try the interactive python shell IF things go wrong...
 
