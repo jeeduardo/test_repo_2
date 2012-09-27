@@ -215,14 +215,16 @@ driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 driver.find_element_by_id('button_id_b5_excel_small.gif').click()
 show_loading(10, "Getting Excel version of \"Balance Sheet\" report...")
 
-find_click('id', 'nav6', '', 10)
+#find_click('id', 'nav6', '', 10)
+reload_report_list()
 find_click('id', 'BAL_SHEET_SUM_reportListLink_Company', '', 10, "Getting \"Balance Sheet Summary\" report")
 driver.switch_to_default_content()
 driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 driver.find_element_by_id('button_id_b5_excel_small.gif').click()
 show_loading(10, "Getting Excel version of \"Balance Sheet Summary\" report...")
 
-find_click('id', 'nav6', '', 10)
+#find_click('id', 'nav6', '', 10)
+reload_report_list()
 find_click('id', 'CASH_FLOW_reportListLink_Company', '', 15, "Getting \"Statement of Cash Flows\" report")
 driver.switch_to_default_content()
 driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
@@ -230,7 +232,8 @@ driver.find_element_by_id('button_id_b5_excel_small.gif').click()
 show_loading(10, "Getting Excel version of \"Statement of Cash Flows\"")
 
 # 20Sep2012 - Account Listing report
-find_click('id', 'nav6', '', 10)
+#find_click('id', 'nav6', '', 10)
+reload_report_list()
 find_click('id', 'ACCT_LIST_reportListLink_Company', '', 15, "Getting \"Account Listing\" report")
 driver.switch_to_default_content()
 driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
@@ -239,7 +242,8 @@ show_loading(10, "Getting excel version of \"Account Listing\"")
 
 
 # A/R Aging
-find_click('id', 'nav6', '', 10)
+#find_click('id', 'nav6', '', 10)
+reload_report_list()
 find_click('id', 'AR_AGING_reportListLink_Customers', '', 15, "Getting \"A/R Aging Summary\" report")
 driver.switch_to_default_content()
 driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
@@ -252,6 +256,8 @@ driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 driver.find_element_by_id('button_id_b5_excel_small.gif').click()
 show_loading(10, "Getting excel version of \"A/R Aging Summary\" report")
 
+# 27Sep2012
+reload_report_list()
 
 # try the interactive python shell IF things go wrong...
 
