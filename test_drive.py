@@ -50,6 +50,14 @@ def reload_report_list():
   home_frames = driver.find_elements_by_tag_name('iframe')
   driver.switch_to_frame(home_frames[0]) # since the page was reloaded
 
+# switch to the frame where the menu/s and link/s can be found
+def switch_frame():
+  global driver
+  # below 'print' is TEMPORARY
+  print "switching to menu/link frame..."
+  driver.switch_to_default_content()
+  driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
+
 # 05Sep2012 - enable logging
 # 25Sep2012 - use os.sep for directory separator
 logging.basicConfig(filename=os.getcwd() + os.sep + 'quickbooks_dump.log', level=logging.INFO, format='%(asctime) %(levelname)s : %(message)s')
@@ -256,9 +264,41 @@ driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 driver.find_element_by_id('button_id_b5_excel_small.gif').click()
 show_loading(10, "Getting excel version of \"A/R Aging Summary\" report")
 
-# 27Sep2012
+# 27Sep2012 - A/R Aging Detail
 reload_report_list()
+find_click('id', 'AR_AGING_DET_reportListLink_Customers', '', 15, "Getting \"A/R Aging Detail\" report")
+driver.switch_to_default_content()
+driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
+date_macro = driver.find_element_by_id('date_macro')
+date_macro.find_element_by_xpath("//option[@value='all']").click()
+driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
+show_loading(20, "Running report") # 20 - for the meantime
+driver.switch_to_default_content()
+driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
+driver.find_element_by_id('button_id_b5_excel_small.gif').click()
+show_loading(10, "Getting excel version of \"A/R Aging Detail\" report")
 
+
+# Customer Balance Summary report
+reload_report_list()
+find_click('id', 'CUST_BAL_reportListLink_Customers', '', 15, "Getting \"Customer Balance Summary\" report")
+switch_frame()
+date_macro = driver.find_element_by_id('date_macro')
+date_macro.find_element_by_xpath("//option[@value='all']").click()
+driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
+show_loading(20, "Running report") # 20 - for the meantime
+switch_frame()
+driver.find_element_by_id('button_id_b5_excel_small.gif').click()
+show_loading(10, "Getting excel version of \"Customer Balance Summary\" report")
+
+
+# Customer Balance Detail report
+reload_report_list()
+find_click('id', 'CUST_BAL_DET_reportListLink_Customers', '', 15, "Getting \"Customer Balance Detail\" report")
+switch_frame()
+switch_frame()
+
+reload_report_list()
 # try the interactive python shell IF things go wrong...
 
 # 03Sept2012 - Josephson (don't sign it out just yet!)
