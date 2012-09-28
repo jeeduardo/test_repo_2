@@ -17,6 +17,8 @@ from freshbooks_functions import cfg
 
 # 28Sep2012
 FF = freshbooks_functions
+# firefox profile
+fp = FF.fp
 
 # 06June2012
 # logging config
@@ -31,48 +33,43 @@ logging.basicConfig(filename=os.getcwd() + '/freshbooks.log', level=logging.INFO
 # @params p_params - parameters to pass to the url used in downloading the file
 
 def get_file(p_disp_msg, p_driver, p_pattern, p_url, p_params=''):
-    global logging
-    # print p_disp_msg
-    logging.info(p_disp_msg)
-    p_driver.get(p_url + p_params)
-    # print 'File saved as %s' % get_csv_filename(p_pattern)
-    logging.info('File saved as %s' % get_csv_filename(p_pattern))
-    return 0
+  global logging
+  # print p_disp_msg
+  logging.info(p_disp_msg)
+  p_driver.get(p_url + p_params)
+  # print 'File saved as %s' % get_csv_filename(p_pattern)
+  logging.info('File saved as %s' % get_csv_filename(p_pattern))
+  return 0
 
 # use -lrt preferably or -rt
 # if pattern left blank, it will get the name of latest csv file
 def get_csv_filename(pattern=''):
-    # file is non-existent
-    #p = os.popen("ls -t wackstest-cascadeo" + pattern + "*.csv | head -1")
-    # the pattern below (i.e. "Trial Josephson (Cascadeo)")should be stored in the .cfg file
-    # p = os.popen("ls -t Trial\ Josephson\ \(Cascadeo\)" + pattern + "*.csv | head -1")
-    p = os.popen("ls -t Staging\ Backup\ Cascadeo" + pattern + "*.csv | head -1")
-    filename = p.readline().strip()
-    p.close()
-    return re.escape(filename)
+  # file is non-existent
+  #p = os.popen("ls -t wackstest-cascadeo" + pattern + "*.csv | head -1")
+  # the pattern below (i.e. "Trial Josephson (Cascadeo)")should be stored in the .cfg file
+  # p = os.popen("ls -t Trial\ Josephson\ \(Cascadeo\)" + pattern + "*.csv | head -1")
+  p = os.popen("ls -t Staging\ Backup\ Cascadeo" + pattern + "*.csv | head -1")
+  filename = p.readline().strip()
+  p.close()
+  return re.escape(filename)
 
 def rename_file(pattern, filename, replace_with=''):
-    global backup_dirname
-    patternToCheck = pattern 
-
-    # mvCmd = "mv " + filename + " wackstest-cascadeo" + pattern + replace_with + "_" + datetime.now().strftime('%m-%d-%Y_%H%M%S') + ".csv"
-    # 06June2012 - move to created backup directory
-    #mvCmd = "mv " + filename + " " + backup_dirname + "/Trial\ Josephson\ \(Cascadeo\)" + pattern + replace_with + "_" + datetime.now().strftime('%m-%d-%Y_%H%M%S') + ".csv"
-    mvCmd = "mv " + filename + " " + backup_dirname + "/Staging\ Backup\ Cascadeo" + pattern + replace_with + "_" + datetime.now().strftime('%m-%d-%Y_%H%M%S') + ".csv"
-    # print 'executing command "' + mvCmd + '"'
-    logging.info('executing "' + mvCmd + '"')
-    res = os.system(mvCmd)
-    return res
+  global backup_dirname
+  patternToCheck = pattern 
+  mvCmd = "mv " + filename + " " + backup_dirname + "/Staging\ Backup\ Cascadeo" + pattern + replace_with + "_" + datetime.now().strftime('%m-%d-%Y_%H%M%S') + ".csv"
+  logging.info('executing "' + mvCmd + '"')
+  res = os.system(mvCmd)
+  return res
 
 def get_and_rename_file(pattern, replace_with=''):
-    filename = get_csv_filename(pattern)
-    # print 'latest csv file: %s' % filename
-    
-    if (rename_file(pattern, filename, replace_with) == 0):
-        # print 'File %s was successfully renamed' % filename
-        logging.info('File %s was successfully renamed' % filename)
-    else:
-        logging.error('Something went wrong with the moving of file. Please check %s', filename)
+  filename = get_csv_filename(pattern)
+  # print 'latest csv file: %s' % filename
+  
+  if (rename_file(pattern, filename, replace_with) == 0):
+    # print 'File %s was successfully renamed' % filename
+    logging.info('File %s was successfully renamed' % filename)
+  else:
+    logging.error('Something went wrong with the moving of file. Please check %s', filename)
 
 
 logging.info('getting set configurations')
@@ -86,7 +83,8 @@ exit()
 # 06June2012
 # create backup directory
 #backup_dirname = "Trial\ Josephson\ \(Cascadeo\)\ -\ " + datetime.now().strftime('%Y-%m-%d')
-backup_dirname = "Staging\ Backup\ Cascadeo\ -\ " + datetime.now().strftime('%Y-%m-%d')
+#backup_dirname = "Staging\ Backup\ Cascadeo\ -\ " + datetime.now().strftime('%Y-%m-%d')
+backup_dirname = cfg.get('settings', 'backup_dir_name') + datetime.now().strftime('_%Y-%m-%d')
 backup_dirname_rs = os.system("mkdir " + backup_dirname)
 
 url = cfg.get('credentials', 'main_url')
@@ -121,13 +119,6 @@ now = datetime.now()
 nowYear4Digit = str(now.year)
 nowYear2Digit = str(now.strftime('%y'))
 
-
-# firefox profile to use?
-fp = webdriver.FirefoxProfile()
-fp.set_preference("browser.download.folderList",2)
-fp.set_preference("browser.download.manager.showWhenStarting",False)
-fp.set_preference("browser.download.dir", os.getcwd())
-fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "text/csv")
 
 driver = webdriver.Firefox(firefox_profile=fp)
 # print 'initializing freshbooks home page...'
