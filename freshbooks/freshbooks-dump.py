@@ -122,14 +122,14 @@ nowYear2Digit = str(now.strftime('%y'))
 driver = webdriver.Firefox(firefox_profile=fp)
 # print 'initializing freshbooks home page...'
 logging.info('initializing freshbooks home page...')
-driver.get(url)
+driver.get(FF.url)
 time.sleep(5)
 
 logging.info('logging in as %s' % username)
 driver.find_element_by_id('username').click()
-driver.find_element_by_id('username').send_keys(username)
+driver.find_element_by_id('username').send_keys(FF.username)
 driver.find_element_by_id('password').click()
-driver.find_element_by_id('password').send_keys(pw)
+driver.find_element_by_id('password').send_keys(FF.pw)
 # print driver.find_element_by_xpath("//input[@type='submit']")
 driver.find_element_by_xpath("//input[@type='submit']")
 
