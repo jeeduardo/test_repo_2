@@ -53,24 +53,6 @@ def get_csv_filename(pattern=''):
   p.close()
   return re.escape(filename)
 
-def rename_file(pattern, filename, replace_with=''):
-  global backup_dirname
-  patternToCheck = pattern 
-  mvCmd = "mv " + filename + " " + backup_dirname + "/Staging\ Backup\ Cascadeo" + pattern + replace_with + "_" + datetime.now().strftime('%m-%d-%Y_%H%M%S') + ".csv"
-  logging.info('executing "' + mvCmd + '"')
-  res = os.system(mvCmd)
-  return res
-
-def get_and_rename_file(pattern, replace_with=''):
-  filename = get_csv_filename(pattern)
-  # print 'latest csv file: %s' % filename
-  
-  if (rename_file(pattern, filename, replace_with) == 0):
-    # print 'File %s was successfully renamed' % filename
-    logging.info('File %s was successfully renamed' % filename)
-  else:
-    logging.error('Something went wrong with the moving of file. Please check %s', filename)
-
 
 logging.info('getting set configurations')
 #cfg = ConfigParser.ConfigParser()
@@ -82,8 +64,7 @@ print 'Backup dir. name = %s' % (cfg.get('settings', 'backup_dir_name'))
 # create backup directory
 #backup_dirname = "Trial\ Josephson\ \(Cascadeo\)\ -\ " + datetime.now().strftime('%Y-%m-%d')
 #backup_dirname = "Staging\ Backup\ Cascadeo\ -\ " + datetime.now().strftime('%Y-%m-%d')
-backup_dirname = cfg.get('settings', 'backup_dir_name') + datetime.now().strftime('_%Y-%m-%d')
-backup_dirname_rs = os.system("mkdir " + backup_dirname)
+backup_dirname_rs = os.system("mkdir " + FF.backup_dirname)
 
 #sent_invoice_csv_url = url + cfg.get('export_urls', 'sent_invoice_csv_url')
 #client_csv_url = url + cfg.get('export_urls', 'client_csv_url')
@@ -125,7 +106,7 @@ logging.info('initializing freshbooks home page...')
 driver.get(FF.url)
 time.sleep(5)
 
-logging.info('logging in as %s' % username)
+logging.info('logging in as %s' % FF.username)
 driver.find_element_by_id('username').click()
 driver.find_element_by_id('username').send_keys(FF.username)
 driver.find_element_by_id('password').click()
@@ -141,14 +122,14 @@ driver.find_elements_by_name('Submit')[2].click()
 # temporary (28Feb2012) - Wacko
 time.sleep(10)
 
+get_file('downloading "Clients" CSV backup...', driver, 'Clients', client_csv_url, '')
+FF.get_and_rename_file('Clients')
+
 # 28Sep2012 - Josephson (TEMPORARY!)
 time.sleep(10)
 driver.quit()
 exit()
 # 28Sep2012
-get_file('downloading "Clients" CSV backup...', driver, 'Clients', client_csv_url, '')
-get_and_rename_file('Clients')
-
 time.sleep(5)
 get_file('downloading "Staff" CSV backup...', driver, 'Staff', staff_csv_url, '')
 get_and_rename_file('Staff')
