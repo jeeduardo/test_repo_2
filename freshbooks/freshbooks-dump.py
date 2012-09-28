@@ -3,6 +3,7 @@
 # dump client csv from freshbooks
 import ConfigParser
 from datetime import datetime
+from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 import pdb
@@ -122,11 +123,6 @@ driver = webdriver.Firefox(firefox_profile=fp)
 # print 'initializing freshbooks home page...'
 logging.info('initializing freshbooks home page...')
 driver.get(url)
-# 28Sep2012 - Josephson (TEMPORARY!)
-time.sleep(10)
-driver.quit()
-exit()
-# 28Sep2012
 time.sleep(5)
 
 logging.info('logging in as %s' % username)
@@ -145,6 +141,11 @@ driver.find_elements_by_name('Submit')[2].click()
 # temporary (28Feb2012) - Wacko
 time.sleep(10)
 
+# 28Sep2012 - Josephson (TEMPORARY!)
+time.sleep(10)
+driver.quit()
+exit()
+# 28Sep2012
 get_file('downloading "Clients" CSV backup...', driver, 'Clients', client_csv_url, '')
 get_and_rename_file('Clients')
 
