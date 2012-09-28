@@ -77,8 +77,6 @@ logging.info('getting set configurations')
 print 'Backup dir. name = %s' % (cfg.get('settings', 'backup_dir_name'))
 
 
-# 28Sep2012 - Josephson (TEMPORARY)
-exit()
 # 06June2012
 # create backup directory
 #backup_dirname = "Trial\ Josephson\ \(Cascadeo\)\ -\ " + datetime.now().strftime('%Y-%m-%d')
@@ -93,29 +91,22 @@ sent_invoice_csv_url = FF.get_csv_url('sent_invoice_csv_url')
 client_csv_url = FF.get_csv_url('client_csv_url')
 staff_csv_url = FF.get_csv_url('staff_csv_url')
 
-print 'URLS!'
-print sent_invoice_csv_url
-print client_csv_url
-print staff_csv_url
-
-# 28Sep2012 - Josephson (TEMPORARY!)
-exit()
-
 # 05Mar2012 - expenses (by category for now?) url
-expenses_csv_url = cfg.get('export_urls', 'expenses_by_category_url')
+expenses_csv_url = FF.get_csv_url('expenses_by_category_url')
 
-profit_loss_url = cfg.get('export_urls', 'profit_loss_csv_url') # CHANGE variable name LATER please
+profit_loss_url = FF.get_csv_url('profit_loss_csv_url') # CHANGE variable name LATER please
 
-tax_summary_csv_url = cfg.get('export_urls', 'tax_summary_csv_url')
-accounts_aging_csv_url = cfg.get('export_urls', 'accounts_aging_csv_url')
-payments_coll_csv_url = cfg.get('export_urls', 'payments_coll_csv_url')
-item_sales_csv_url = cfg.get('export_urls', 'item_sales_csv_url')
-tasks_inv_csv_url = cfg.get('export_urls', 'tasks_inv_csv_url')
-snail_mail_csv_url = cfg.get('export_urls', 'snail_mail_csv_url')
-time_to_pay_csv_url = cfg.get('export_urls', 'time_to_pay_csv_url')
-revenue_by_client_url = cfg.get('export_urls', 'revenue_by_client_url')
-user_summary_csv_url = cfg.get('export_urls', 'user_summary_csv_url')
-task_summary_csv_url = cfg.get('export_urls', 'task_summary_csv_url')
+tax_summary_csv_url = FF.get_csv_url('tax_summary_csv_url')
+accounts_aging_csv_url = FF.get_csv_url('accounts_aging_csv_url')
+payments_coll_csv_url = FF.get_csv_url('payments_coll_csv_url')
+item_sales_csv_url = FF.get_csv_url('item_sales_csv_url')
+tasks_inv_csv_url = FF.get_csv_url('tasks_inv_csv_url')
+snail_mail_csv_url = FF.get_csv_url('snail_mail_csv_url')
+time_to_pay_csv_url = FF.get_csv_url('time_to_pay_csv_url')
+revenue_by_client_url = FF.get_csv_url('revenue_by_client_url')
+user_summary_csv_url = FF.get_csv_url('user_summary_csv_url')
+task_summary_csv_url = FF.get_csv_url('task_summary_csv_url')
+
 
 # currency
 ccy = cfg.get('settings', 'currency')
@@ -131,6 +122,11 @@ driver = webdriver.Firefox(firefox_profile=fp)
 # print 'initializing freshbooks home page...'
 logging.info('initializing freshbooks home page...')
 driver.get(url)
+# 28Sep2012 - Josephson (TEMPORARY!)
+time.sleep(10)
+driver.quit()
+exit()
+# 28Sep2012
 time.sleep(5)
 
 logging.info('logging in as %s' % username)
