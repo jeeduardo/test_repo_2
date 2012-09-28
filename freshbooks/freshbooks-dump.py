@@ -3,7 +3,6 @@
 # dump client csv from freshbooks
 import ConfigParser
 from datetime import datetime
-from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 import pdb
@@ -87,12 +86,20 @@ exit()
 backup_dirname = cfg.get('settings', 'backup_dir_name') + datetime.now().strftime('_%Y-%m-%d')
 backup_dirname_rs = os.system("mkdir " + backup_dirname)
 
-url = cfg.get('credentials', 'main_url')
-username = cfg.get('credentials', 'username')
-pw = cfg.get('credentials', 'pword')
-sent_invoice_csv_url = cfg.get('export_urls', 'sent_invoice_csv_url')
-client_csv_url = cfg.get('export_urls', 'client_csv_url')
-staff_csv_url = cfg.get('export_urls', 'staff_csv_url')
+#sent_invoice_csv_url = url + cfg.get('export_urls', 'sent_invoice_csv_url')
+#client_csv_url = url + cfg.get('export_urls', 'client_csv_url')
+#staff_csv_url = cfg.get('export_urls', 'staff_csv_url')
+sent_invoice_csv_url = FF.get_csv_url('sent_invoice_csv_url')
+client_csv_url = FF.get_csv_url('client_csv_url')
+staff_csv_url = FF.get_csv_url('staff_csv_url')
+
+print 'URLS!'
+print sent_invoice_csv_url
+print client_csv_url
+print staff_csv_url
+
+# 28Sep2012 - Josephson (TEMPORARY!)
+exit()
 
 # 05Mar2012 - expenses (by category for now?) url
 expenses_csv_url = cfg.get('export_urls', 'expenses_by_category_url')
