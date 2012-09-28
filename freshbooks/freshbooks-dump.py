@@ -10,6 +10,13 @@ import pdb
 import os, re
 # 06June2012 - enable logging
 import logging
+# 28Sep2012 - include freshbooks_functions
+import freshbooks_functions
+from freshbooks_functions import cfg
+
+
+# 28Sep2012
+FF = freshbooks_functions
 
 # 06June2012
 # logging config
@@ -69,9 +76,13 @@ def get_and_rename_file(pattern, replace_with=''):
 
 
 logging.info('getting set configurations')
-cfg = ConfigParser.ConfigParser()
-cfg.read('freshbooks-dump.cfg')
+#cfg = ConfigParser.ConfigParser()
+#cfg.read('freshbooks-dump.cfg')
+print 'Backup dir. name = %s' % (cfg.get('settings', 'backup_dir_name'))
 
+
+# 28Sep2012 - Josephson (TEMPORARY)
+exit()
 # 06June2012
 # create backup directory
 #backup_dirname = "Trial\ Josephson\ \(Cascadeo\)\ -\ " + datetime.now().strftime('%Y-%m-%d')
