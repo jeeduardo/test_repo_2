@@ -24,22 +24,6 @@ fp = FF.fp
 # logging config
 logging.basicConfig(filename=os.getcwd() + '/freshbooks.log', level=logging.INFO, format='%(asctime)s %(levelname)s : %(message)s')
 
-# function to get CSV file
-# don't wanna keep repeating myself
-# @params p_disp_msg - message to display while downloading the file (i.e. 'downloading Tax Summary CSV (billed)...')
-# @params p_driver - instance of the Firefox driver used to get the file
-# @params p_pattern - pattern to use in displaying the name of the file downloaded and to be renamed
-# @params p_url - url of file to download
-# @params p_params - parameters to pass to the url used in downloading the file
-
-def get_file(p_disp_msg, p_driver, p_pattern, p_url, p_params=''):
-  global logging
-  # print p_disp_msg
-  logging.info(p_disp_msg)
-  p_driver.get(p_url + p_params)
-  # print 'File saved as %s' % get_csv_filename(p_pattern)
-  logging.info('File saved as %s' % get_csv_filename(p_pattern))
-  return 0
 
 # use -lrt preferably or -rt
 # if pattern left blank, it will get the name of latest csv file
@@ -122,7 +106,7 @@ driver.find_elements_by_name('Submit')[2].click()
 # temporary (28Feb2012) - Wacko
 time.sleep(10)
 
-get_file('downloading "Clients" CSV backup...', driver, 'Clients', client_csv_url, '')
+FF.get_file('downloading "Clients" CSV backup...', driver, 'Clients', client_csv_url, '')
 FF.get_and_rename_file('Clients')
 
 # 28Sep2012 - Josephson (TEMPORARY!)

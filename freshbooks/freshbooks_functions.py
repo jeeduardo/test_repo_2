@@ -15,6 +15,22 @@ pw = cfg.get('credentials', 'pword')
 base_backup_dirname = cfg.get('settings', 'backup_dir_name')
 backup_dirname = base_backup_dirname + datetime.now().strftime('_%Y-%m-%d')
 
+# function to get CSV file
+# don't wanna keep repeating myself
+# @params p_disp_msg - message to display while downloading the file (i.e. 'downloading Tax Summary CSV (billed)...')
+# @params p_driver - instance of the Firefox driver used to get the file
+# @params p_pattern - pattern to use in displaying the name of the file downloaded and to be renamed
+# @params p_url - url of file to download
+# @params p_params - parameters to pass to the url used in downloading the file
+
+def get_file(p_disp_msg, p_driver, p_pattern, p_url, p_params=''):
+  global logging
+  # print p_disp_msg
+  logging.info(p_disp_msg)
+  p_driver.get(p_url + p_params)
+  # print 'File saved as %s' % get_csv_filename(p_pattern)
+  logging.info('File saved as %s' % get_csv_filename(p_pattern))
+  return 0
 
 def rename_file(pattern, filename, replace_with=''):
   global backup_dirname
