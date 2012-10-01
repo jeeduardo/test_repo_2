@@ -196,14 +196,16 @@ FF.get_and_rename_file('_PaymentCollected')
 # CONSIDER including the patterns like '_PaymentCollected' to configuration file
 # we're not certain as to when or if FreshBooks will change their naming conventions
 
-# 01Oct2012 - disable below part (START)
-## Item sales
-#params = '&date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y')
+# 01Oct2012 - use functions from FF
+# Item sales
+params = '&date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y')
 #print 'downloading Item sales CSV...'
 #driver.get(item_sales_csv_url)
 #print 'File saved as %s' % get_csv_filename('_Item Sales')
 ##print 'File saved as %s' % get_csv_filename()
-#get_and_rename_file(re.escape('_Item Sales'))
+FF.get_file('downloading Item sales CSV...', driver, re.escape('_Item Sales'), item_sales_csv_url, params)
+FF.get_and_rename_file(re.escape('_Item Sales'))
+# 01Oct2012 - disable below part (START)
 #
 ## Tasks invoiced
 ## _ProfitLoss and _TaxSummary files not yet renamed accdg to timestamp
@@ -298,21 +300,14 @@ FF.get_and_rename_file('_UserSummary')
 FF.get_file('downloading User Summary CSV...', driver, '', task_summary_csv_url, 'start_date='+now.strftime('01/01/%y')+'&end_date='+now.strftime('%m/%d/%y')+'&task[]=&submit=')
 FF.get_and_rename_file('_TaskSummary')
 
-# 28Sep2012 - Josephson (TEMPORARY!)
-time.sleep(10)
-# 01Oct2012 - don't forget to log out! (TEMPORARY!)
-driver.find_element_by_id('nav-log-out').click()
-time.sleep(5)
-driver.quit()
-exit()
-# 28Sep2012
-
 
 time.sleep(15)
 # type is "text/csv"
+time.sleep(5)
+driver.find_element_by_id('nav-log-out').click()
 logging.info('Data has been exported. Ending program.')
 driver.quit()
-exit
+exit(0)
 
 
 # ------------------------------------------
