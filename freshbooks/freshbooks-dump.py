@@ -2,6 +2,7 @@
 # freshbooks_clients.py
 # dump client csv from freshbooks
 import ConfigParser
+import selenium
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -63,10 +64,6 @@ ccy = cfg.get('settings', 'currency')
 
 
 now = datetime.now()
-# 4-digit and 2-digit year respectively
-nowYear4Digit = str(now.year)
-nowYear2Digit = str(now.strftime('%y'))
-
 
 driver = webdriver.Firefox(firefox_profile=fp)
 # print 'initializing freshbooks home page...'
@@ -75,16 +72,29 @@ driver.get(FF.url)
 time.sleep(5)
 
 logging.info('logging in as %s' % FF.username)
-driver.find_element_by_id('username').click()
-driver.find_element_by_id('username').send_keys(FF.username)
-driver.find_element_by_id('password').click()
-driver.find_element_by_id('password').send_keys(FF.pw)
-# print driver.find_element_by_xpath("//input[@type='submit']")
-driver.find_element_by_xpath("//input[@type='submit']")
-
-#print driver.execute_script("document.getElementsByClassName('button-submit')[0].style.display='block';")
-# print driver.find_elements_by_name('Submit')[2].click()
-driver.find_elements_by_name('Submit')[2].click()
+try:
+  driver.find_element_by_id('username').click()
+  driver.find_element_by_id('username').send_keys(FF.username)
+  driver.find_element_by_id('password').click()
+  driver.find_element_by_id('password').send_keys(FF.pw)
+  # print driver.find_element_by_xpath("//input[@type='submit']")
+  driver.find_element_by_xpath("//input[@type='submit']")
+  #print driver.execute_script("document.getElementsByClassName('button-submit')[0].style.display='block';")
+  # print driver.find_elements_by_name('Submit')[2].click()
+  driver.find_elements_by_name('Submit')[2].click()
+except selenium.common.exceptions.NoSuchElementException:
+  import traceback
+  err_msg = "Either network speed is TOO SLOW or such element doesn't exist in the page. Please check the site manually."
+  logging.error(traceback.format_exc())
+  logging.error(err_msg)
+  print err_msg
+  exit(1)
+except Exception
+  import traceback
+  tb = traceback.format_exc()
+  logging.error(tb)
+  print tb
+  exit(1)
 
 #
 # temporary (28Feb2012) - Wacko

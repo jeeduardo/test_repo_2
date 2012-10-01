@@ -40,7 +40,14 @@ backup_dirname = base_backup_dirname.replace(' ', '') + datetime.now().strftime(
 def get_file(p_disp_msg, p_driver, p_pattern, p_url, p_params=''):
   global logging
   logging.info(p_disp_msg)
-  p_driver.get(p_url + p_params)
+  try:
+    p_driver.get(p_url + p_params)
+  except Exception:
+    tb = traceback.format_exc()
+    logging.error(tb)
+    logging.error("Something went wrong with retrieving the CSV file. Please check.")
+    exit(1)
+
   logging.info('File saved as %s' % get_csv_filename(p_pattern))
   return 0
 
