@@ -113,6 +113,16 @@ FF.get_and_rename_file('Staff')
 
 driver.find_element_by_id('nav-reports').click()
 
+# 01Oct2012 - Recurring Revenue CSV reports (no params for now)
+# DEBUG THIS FIRST - TEMPORARY!
+FF.get_file('downloading Recurring Revenue (Annual) CSV...', driver, re.escape('_Recurring revenue - Annual'), recurring_rev_annual_url)
+FF.get_and_rename_file(re.escape('_Recurring revenue - Annual'))
+time.sleep(10)
+driver.find_element_by_id('nav-log-out').click()
+driver.quit()
+exit()
+# 01Oct2012
+
 # NEXT course of action please?
 #-Invoices (and its details) - Yes - both client invoices and received invoices as well as payment history 
 #- Expenses 
@@ -271,8 +281,10 @@ FF.get_file('downloading Revenue by Staff (Total Received by payment date) CSV..
 FF.get_and_rename_file(re.escape('_Client Sales'), '_RBS-TRPD')
 
 # WILL SKIP 'Recurring Revenue' --> Annual and Detailed for now (08Mar2012)
-# 01Oct2012
-FF.get_file('downloading Recurring Revenue (Annual) CSV...', driver, '', recurring_rev_annual_url)
+# 01Oct2012 - Recurring Revenue CSV reports (no params for now)
+# DEBUG THIS FIRST!
+FF.get_file('downloading Recurring Revenue (Annual) CSV...', driver, re.escape('_Recurring revenue - Annual'), recurring_rev_annual_url)
+#FF.get_and_rename_file(re.escape('_Recurring revenue - Annual'))
 #FF.get_and_rename_file...
 
 FF.get_file('downloading Recurring Revenue (Detailed) CSV...', driver, '', recurring_rev_detailed_url)
