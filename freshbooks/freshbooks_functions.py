@@ -13,7 +13,9 @@ url = cfg.get('credentials', 'main_url')
 username = cfg.get('credentials', 'username')
 pw = cfg.get('credentials', 'pword')
 base_backup_dirname = cfg.get('settings', 'backup_dir_name')
-backup_dirname = base_backup_dirname + datetime.now().strftime('_%Y-%m-%d')
+# 01Oct2012 - eliminate spaces in filename
+#backup_dirname = base_backup_dirname + datetime.now().strftime('_%Y-%m-%d')
+backup_dirname = base_backup_dirname.replace(' ', '') + datetime.now().strftime('_%Y-%m-%d')
 
 # function to get CSV file
 # don't wanna keep repeating myself
@@ -35,7 +37,8 @@ def get_file(p_disp_msg, p_driver, p_pattern, p_url, p_params=''):
 def rename_file(pattern, filename, replace_with=''):
   global backup_dirname
   patternToCheck = pattern 
-  mvCmd = "mv " + filename + " " + backup_dirname + "/" + base_backup_dirname + pattern + replace_with + "_" + datetime.now().strftime('%m-%d-%Y_%H%M%S') + ".csv"
+  # 01Oct2012 - eliminate spaces in filename
+  mvCmd = "mv " + filename + " " + backup_dirname + "/" + base_backup_dirname.replace(' ', '') + pattern + replace_with + "_" + datetime.now().strftime('%m-%d-%Y_%H%M%S') + ".csv"
   logging.info('executing "' + mvCmd + '"')
   res = os.system(mvCmd)
   return res
@@ -48,7 +51,7 @@ def get_csv_filename(pattern=''):
   # the pattern below (i.e. "Trial Josephson (Cascadeo)")should be stored in the .cfg file
   # p = os.popen("ls -t Trial\ Josephson\ \(Cascadeo\)" + pattern + "*.csv | head -1")
   p = os.popen("ls -t " + base_backup_dirname + pattern + "*.csv | head -1")
-  print 'The ls command: ls -t', (base_backup_dirname + pattern + "*.csv | head -1")
+  # print 'The ls command: ls -t', (base_backup_dirname + pattern + "*.csv | head -1")
   filename = p.readline().strip()
   p.close()
   return re.escape(filename)
@@ -80,3 +83,5 @@ fp.set_preference("browser.download.manager.showWhenStarting",False)
 fp.set_preference("browser.download.dir", os.getcwd())
 fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "text/csv")
 
+
+print "backup_dirname w/o spaces = %s" %(backup_dirname.replace(' ', ''))

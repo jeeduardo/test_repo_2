@@ -109,14 +109,9 @@ time.sleep(10)
 FF.get_file('downloading "Clients" CSV backup...', driver, 'Clients', client_csv_url, '')
 FF.get_and_rename_file('Clients')
 
-# 28Sep2012 - Josephson (TEMPORARY!)
-time.sleep(10)
-driver.quit()
-exit()
-# 28Sep2012
 time.sleep(5)
-get_file('downloading "Staff" CSV backup...', driver, 'Staff', staff_csv_url, '')
-get_and_rename_file('Staff')
+FF.get_file('downloading "Staff" CSV backup...', driver, 'Staff', staff_csv_url, '')
+FF.get_and_rename_file('Staff')
 
 driver.find_element_by_id('nav-reports').click()
 
@@ -124,7 +119,6 @@ driver.find_element_by_id('nav-reports').click()
 #-Invoices (and its details) - Yes - both client invoices and received invoices as well as payment history 
 #- Expenses 
 #- Reports
-# (Wacko) - like what type of reports?
 
 
 # my comments - wacko
@@ -141,6 +135,11 @@ driver.find_element_by_id('nav-reports').click()
 # Question: since when did Cascadeo use FreshBooks? (or perhaps when was their first invoice recorded?)
 
 time.sleep(10)
+# 28Sep2012 - Josephson (TEMPORARY!)
+time.sleep(10)
+driver.quit()
+exit()
+# 28Sep2012
 
 get_file('downloading sent invoices CSV backup...', driver, '_Invoice\ Details', sent_invoice_csv_url, '')
 get_and_rename_file('_Invoice\ Details')
