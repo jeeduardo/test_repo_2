@@ -58,6 +58,10 @@ revenue_by_client_url = FF.get_csv_url('revenue_by_client_url')
 user_summary_csv_url = FF.get_csv_url('user_summary_csv_url')
 task_summary_csv_url = FF.get_csv_url('task_summary_csv_url')
 
+#01Oct2012 - recurring revenue URLs
+recurring_rev_annual_url = FF.get_csv_url('recurring_rev_annual_url')
+recurring_rev_detailed_url = FF.get_csv_url('recurring_rev_detailed_url')
+
 
 # currency
 ccy = cfg.get('settings', 'currency')
@@ -267,6 +271,10 @@ FF.get_file('downloading Revenue by Staff (Total Received by payment date) CSV..
 FF.get_and_rename_file(re.escape('_Client Sales'), '_RBS-TRPD')
 
 # WILL SKIP 'Recurring Revenue' --> Annual and Detailed for now (08Mar2012)
+# 01Oct2012
+FF.get_file('downloading Recurring Revenue (Annual) CSV...', driver, '', recurring_rev_annual_url)
+
+FF.get_file('downloading Recurring Revenue (Detailed) CSV...', driver, '', recurring_rev_detailed_url)
 
 # User summary
 # might use %2F instead of '/' ???
