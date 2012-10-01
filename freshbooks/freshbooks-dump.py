@@ -14,7 +14,6 @@ import logging
 import freshbooks_functions
 from freshbooks_functions import cfg
 
-
 # 28Sep2012
 FF = freshbooks_functions
 # firefox profile
@@ -23,20 +22,6 @@ fp = FF.fp
 # 06June2012
 # logging config
 logging.basicConfig(filename=os.getcwd() + '/freshbooks.log', level=logging.INFO, format='%(asctime)s %(levelname)s : %(message)s')
-
-
-# use -lrt preferably or -rt
-# if pattern left blank, it will get the name of latest csv file
-def get_csv_filename(pattern=''):
-  # file is non-existent
-  #p = os.popen("ls -t wackstest-cascadeo" + pattern + "*.csv | head -1")
-  # the pattern below (i.e. "Trial Josephson (Cascadeo)")should be stored in the .cfg file
-  # p = os.popen("ls -t Trial\ Josephson\ \(Cascadeo\)" + pattern + "*.csv | head -1")
-  p = os.popen("ls -t Staging\ Backup\ Cascadeo" + pattern + "*.csv | head -1")
-  filename = p.readline().strip()
-  p.close()
-  return re.escape(filename)
-
 
 logging.info('getting set configurations')
 #cfg = ConfigParser.ConfigParser()
@@ -199,13 +184,8 @@ FF.get_and_rename_file('_PaymentCollected')
 # 01Oct2012 - use functions from FF
 # Item sales
 params = '&date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y')
-#print 'downloading Item sales CSV...'
-#driver.get(item_sales_csv_url)
-#print 'File saved as %s' % get_csv_filename('_Item Sales')
-##print 'File saved as %s' % get_csv_filename()
 FF.get_file('downloading Item sales CSV...', driver, re.escape('_Item Sales'), item_sales_csv_url, params)
 FF.get_and_rename_file(re.escape('_Item Sales'))
-# 01Oct2012 - disable below part (START)
 #
 ## Tasks invoiced
 ## _ProfitLoss and _TaxSummary files not yet renamed accdg to timestamp
@@ -215,8 +195,11 @@ FF.get_and_rename_file(re.escape('_Item Sales'))
 #driver.get(tasks_inv_csv_url + params)
 #print 'File saved as %s' % get_csv_filename()
 #get_and_rename_file(re.escape('_Invoiced Tasks'))
+FF.get_file('downloading Tasks invoiced CSV...', driver, re.escape('_Invoiced Tasks'), tasks_inv_csv_url, params)
+FF.get_and_rename_file(re.escape('_Invoiced Tasks'))
 #
 #
+# 01Oct2012 - disable below part (START)
 ## Snail mail 
 #params = 'date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y')
 #print 'downloading Snail Mail CSV...'
@@ -224,11 +207,11 @@ FF.get_and_rename_file(re.escape('_Item Sales'))
 #print 'File saved as %s' % get_csv_filename()
 #get_and_rename_file(re.escape('_Snail mail'))
 # 01Oct2012 - disable below (above!) part (END)
+FF.get_file('downloading Snail Mail CSV...', driver, re.escape('_Snail mail'), snail_mail_csv_url, params)
+FF.get_and_rename_file(re.escape('_Snail mail'))
 
 
 # Time to pay - percentage of the invoices created
-# HOW ABOUT a function of driver.get to this?
-# print, driver.get, print file name, rename file
 # conventions
 # PER - percentage of the invoices created
 # VAL - value
@@ -299,7 +282,6 @@ FF.get_and_rename_file('_UserSummary')
 # Task summary
 FF.get_file('downloading User Summary CSV...', driver, '', task_summary_csv_url, 'start_date='+now.strftime('01/01/%y')+'&end_date='+now.strftime('%m/%d/%y')+'&task[]=&submit=')
 FF.get_and_rename_file('_TaskSummary')
-
 
 time.sleep(15)
 # type is "text/csv"

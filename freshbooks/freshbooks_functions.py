@@ -27,10 +27,8 @@ backup_dirname = base_backup_dirname.replace(' ', '') + datetime.now().strftime(
 
 def get_file(p_disp_msg, p_driver, p_pattern, p_url, p_params=''):
   global logging
-  # print p_disp_msg
   logging.info(p_disp_msg)
   p_driver.get(p_url + p_params)
-  # print 'File saved as %s' % get_csv_filename(p_pattern)
   logging.info('File saved as %s' % get_csv_filename(p_pattern))
   return 0
 
@@ -46,21 +44,14 @@ def rename_file(pattern, filename, replace_with=''):
 # use -lrt preferably or -rt
 # if pattern left blank, it will get the name of latest csv file
 def get_csv_filename(pattern=''):
-  # file is non-existent
-  #p = os.popen("ls -t wackstest-cascadeo" + pattern + "*.csv | head -1")
-  # the pattern below (i.e. "Trial Josephson (Cascadeo)")should be stored in the .cfg file
-  # p = os.popen("ls -t Trial\ Josephson\ \(Cascadeo\)" + pattern + "*.csv | head -1")
   p = os.popen("ls -t " + base_backup_dirname + pattern + "*.csv | head -1")
-  # print 'The ls command: ls -t', (base_backup_dirname + pattern + "*.csv | head -1")
   filename = p.readline().strip()
   p.close()
   return re.escape(filename)
 
 def get_and_rename_file(pattern, replace_with=''):
   filename = get_csv_filename(pattern)
-  # print 'latest csv file: %s' % filename
   if (rename_file(pattern, filename, replace_with) == 0):
-    # print 'File %s was successfully renamed' % filename
     logging.info('File %s was successfully renamed' % filename)
   else:
     logging.error('Something went wrong with the moving of file. Please check %s', filename)
