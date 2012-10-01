@@ -7,6 +7,16 @@ import pdb
 from selenium import webdriver
 from datetime import datetime
 
+# 01Oct2012 - raise Exception if config file doesn't exist
+try:
+  if not os.path.exists(os.getcwd()+os.sep+'freshbooks-dump.cfg'):
+    raise Exception("Config file DOES NOT EXIST!")
+except:
+  import traceback
+  tb = traceback.format_exc()
+  logging.info(tb)
+  exit()
+
 cfg = ConfigParser.ConfigParser()
 cfg.read('freshbooks-dump.cfg')
 url = cfg.get('credentials', 'main_url')
@@ -74,5 +84,3 @@ fp.set_preference("browser.download.manager.showWhenStarting",False)
 fp.set_preference("browser.download.dir", os.getcwd())
 fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "text/csv")
 
-
-print "backup_dirname w/o spaces = %s" %(backup_dirname.replace(' ', ''))

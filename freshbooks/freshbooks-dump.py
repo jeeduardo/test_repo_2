@@ -28,7 +28,6 @@ logging.info('getting set configurations')
 #cfg.read('freshbooks-dump.cfg')
 print 'Backup dir. name = %s' % (cfg.get('settings', 'backup_dir_name'))
 
-
 # 06June2012
 # create backup directory
 #backup_dirname = "Trial\ Josephson\ \(Cascadeo\)\ -\ " + datetime.now().strftime('%Y-%m-%d')
