@@ -6,15 +6,17 @@ import logging
 import pdb
 from selenium import webdriver
 from datetime import datetime
+import traceback
 
 # 01Oct2012 - raise Exception if config file doesn't exist
 try:
   if not os.path.exists(os.getcwd()+os.sep+'freshbooks-dump.cfg'):
     raise Exception("Config file DOES NOT EXIST!")
 except:
-  import traceback
   tb = traceback.format_exc()
-  logging.info(tb)
+  print tb
+  logging.basicConfig(filename=os.getcwd() + '/freshbooks.log', level=logging.INFO, format='%(asctime)s %(levelname)s : %(message)s')
+  logging.error(tb)
   exit()
 
 cfg = ConfigParser.ConfigParser()
@@ -74,7 +76,8 @@ def get_csv_url(subsection):
   try:
     return url + cfg.get('export_urls', subsection)
   except ConfigParser.NoOptionError:
-    print "NO SUCH SUBSECTION. RETURNING blank!"
+    logging.error(traceback.format_exc())
+    logging.error("Subsection %s DOES NOT exist. RETURNING blank!" %(subsection))
     return ''
 
 # firefox profile to use
