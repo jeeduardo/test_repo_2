@@ -135,14 +135,9 @@ driver.find_element_by_id('nav-reports').click()
 # Question: since when did Cascadeo use FreshBooks? (or perhaps when was their first invoice recorded?)
 
 time.sleep(10)
-# 28Sep2012 - Josephson (TEMPORARY!)
-time.sleep(10)
-driver.quit()
-exit()
-# 28Sep2012
 
-get_file('downloading sent invoices CSV backup...', driver, '_Invoice\ Details', sent_invoice_csv_url, '')
-get_and_rename_file('_Invoice\ Details')
+FF.get_file('downloading sent invoices CSV backup...', driver, '_Invoice\ Details', sent_invoice_csv_url, '')
+FF.get_and_rename_file('_Invoice\ Details')
 
 
 # ------------------------------------------
@@ -151,8 +146,8 @@ get_and_rename_file('_Invoice\ Details')
 
 params = '&date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y') + '&group_by=category'
 # 08Mar2012 - wacko (might need to modify this, this can be grouped into five fields actually - Category, Vendor, Client, Author, Project)
-get_file('downloading expenses (by category) CSV backup...', driver, '_Expenses', expenses_csv_url, params)
-get_and_rename_file('_Expenses')
+FF.get_file('downloading expenses (by category) CSV backup...', driver, '_Expenses', expenses_csv_url, params)
+FF.get_and_rename_file('_Expenses')
 
 # profit and loss - billed, exclude sales tax (_ProfitLoss.csv)
 # convention
@@ -162,21 +157,29 @@ get_and_rename_file('_Expenses')
 # tax included - TIN
 # billed, tax excluded - BI-TEX
 
-get_file('downloading Profit & Loss CSV (billed, excluded sales tax)', driver, '_ProfitLoss', profit_loss_url, '&period=yearly&yearly_m=12&yearly_y='+now.strftime('%Y')+'&revenue=billed&expense_taxes=0')
-get_and_rename_file('_ProfitLoss', '_BI-TEX')
+FF.get_file('downloading Profit & Loss CSV (billed, excluded sales tax)', driver, '_ProfitLoss', profit_loss_url, '&period=yearly&yearly_m=12&yearly_y='+now.strftime('%Y')+'&revenue=billed&expense_taxes=0')
+FF.get_and_rename_file('_ProfitLoss', '_BI-TEX')
 
 # profit and loss - billed, include sales tax
-get_file('downloading Profit & Loss CSV (billed, included sales tax)...', driver, '_ProfitLoss', profit_loss_url, '&period=yearly&yearly_m=12&yearly_y=' + now.strftime('%Y') + '&revenue=billed&expense_taxes=1')
-get_and_rename_file('_ProfitLoss', '_BI-TIN')
+FF.get_file('downloading Profit & Loss CSV (billed, included sales tax)...', driver, '_ProfitLoss', profit_loss_url, '&period=yearly&yearly_m=12&yearly_y=' + now.strftime('%Y') + '&revenue=billed&expense_taxes=1')
+FF.get_and_rename_file('_ProfitLoss', '_BI-TIN')
 
 # profit and loss - collected, exclude sales tax
-get_file('downloading Profit & Loss CSV (collected, excluded sales tax)...', driver, '_ProfitLoss', profit_loss_url, '&period=yearly&yearly_m=12&yearly_y=' +now.strftime('%Y')+ '&revenue=collected&expense_taxes=0')
-get_and_rename_file('_ProfitLoss', '_CO-TEX')
+FF.get_file('downloading Profit & Loss CSV (collected, excluded sales tax)...', driver, '_ProfitLoss', profit_loss_url, '&period=yearly&yearly_m=12&yearly_y=' +now.strftime('%Y')+ '&revenue=collected&expense_taxes=0')
+FF.get_and_rename_file('_ProfitLoss', '_CO-TEX')
 
 
 # profit and loss - collected, include sales tax
-get_file('downloading Profit & Loss CSV (collected, included sales tax)...', driver, '_ProfitLoss', profit_loss_url, '&period=yearly&yearly_m=12&yearly_y=' + now.strftime('%Y') + '&revenue=collected&expense_taxes=1') 
-get_and_rename_file('_ProfitLoss', '_CO-TIN')
+FF.get_file('downloading Profit & Loss CSV (collected, included sales tax)...', driver, '_ProfitLoss', profit_loss_url, '&period=yearly&yearly_m=12&yearly_y=' + now.strftime('%Y') + '&revenue=collected&expense_taxes=1') 
+FF.get_and_rename_file('_ProfitLoss', '_CO-TIN')
+# 28Sep2012 - Josephson (TEMPORARY!)
+time.sleep(10)
+# 01Oct2012 - don't forget to log out! (TEMPORARY!)
+driver.find_element_by_id('nav-log-out').click()
+time.sleep(5)
+driver.quit()
+exit()
+# 28Sep2012
 
 ## Tax Summary
 # Tax summary - billed

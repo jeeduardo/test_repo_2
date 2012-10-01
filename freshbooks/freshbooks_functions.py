@@ -38,7 +38,7 @@ def rename_file(pattern, filename, replace_with=''):
   global backup_dirname
   patternToCheck = pattern 
   # 01Oct2012 - eliminate spaces in filename
-  mvCmd = "mv " + filename + " " + backup_dirname + "/" + base_backup_dirname.replace(' ', '') + pattern + replace_with + "_" + datetime.now().strftime('%m-%d-%Y_%H%M%S') + ".csv"
+  mvCmd = "mv " + filename + " " + backup_dirname + "/" + base_backup_dirname.replace(' ', '') + pattern.replace(' ', '') + replace_with + "_" + datetime.now().strftime('%m-%d-%Y_%H%M%S') + ".csv"
   logging.info('executing "' + mvCmd + '"')
   res = os.system(mvCmd)
   return res
