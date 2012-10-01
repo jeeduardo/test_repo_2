@@ -89,7 +89,7 @@ except selenium.common.exceptions.NoSuchElementException:
   logging.error(err_msg)
   print err_msg
   exit(1)
-except Exception
+except Exception:
   import traceback
   tb = traceback.format_exc()
   logging.error(tb)
@@ -133,10 +133,6 @@ time.sleep(10)
 FF.get_file('downloading sent invoices CSV backup...', driver, '_Invoice\ Details', sent_invoice_csv_url, '')
 FF.get_and_rename_file('_Invoice\ Details')
 
-
-# ------------------------------------------
-# expenses
-# 05Mar2012 - wacko (T E M P O R A R Y   O N L Y ! ! !)
 
 params = '&date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y') + '&group_by=category'
 # 08Mar2012 - wacko (might need to modify this, this can be grouped into five fields actually - Category, Vendor, Client, Author, Project)
@@ -195,27 +191,16 @@ FF.get_and_rename_file('_PaymentCollected')
 params = '&date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y')
 FF.get_file('downloading Item sales CSV...', driver, re.escape('_Item Sales'), item_sales_csv_url, params)
 FF.get_and_rename_file(re.escape('_Item Sales'))
-#
-## Tasks invoiced
-## _ProfitLoss and _TaxSummary files not yet renamed accdg to timestamp
-## because of varying parameters passed to the reports
-#params = 'date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y')
-#print 'downloading Tasks invoiced CSV...'
-#driver.get(tasks_inv_csv_url + params)
-#print 'File saved as %s' % get_csv_filename()
-#get_and_rename_file(re.escape('_Invoiced Tasks'))
+
+# Tasks invoiced
+# _ProfitLoss and _TaxSummary files not yet renamed accdg to timestamp
+# because of varying parameters passed to the reports
+params = 'date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y')
 FF.get_file('downloading Tasks invoiced CSV...', driver, re.escape('_Invoiced Tasks'), tasks_inv_csv_url, params)
 FF.get_and_rename_file(re.escape('_Invoiced Tasks'))
-#
-#
-# 01Oct2012 - disable below part (START)
-## Snail mail 
-#params = 'date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y')
-#print 'downloading Snail Mail CSV...'
-#driver.get(snail_mail_csv_url + params)
-#print 'File saved as %s' % get_csv_filename()
-#get_and_rename_file(re.escape('_Snail mail'))
-# 01Oct2012 - disable below (above!) part (END)
+ 
+# Snail mail 
+params = 'date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y')
 FF.get_file('downloading Snail Mail CSV...', driver, re.escape('_Snail mail'), snail_mail_csv_url, params)
 FF.get_and_rename_file(re.escape('_Snail mail'))
 
