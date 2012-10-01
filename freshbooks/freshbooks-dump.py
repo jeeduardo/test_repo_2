@@ -172,62 +172,56 @@ FF.get_and_rename_file('_ProfitLoss', '_CO-TEX')
 # profit and loss - collected, include sales tax
 FF.get_file('downloading Profit & Loss CSV (collected, included sales tax)...', driver, '_ProfitLoss', profit_loss_url, '&period=yearly&yearly_m=12&yearly_y=' + now.strftime('%Y') + '&revenue=collected&expense_taxes=1') 
 FF.get_and_rename_file('_ProfitLoss', '_CO-TIN')
-# 28Sep2012 - Josephson (TEMPORARY!)
-time.sleep(10)
-# 01Oct2012 - don't forget to log out! (TEMPORARY!)
-driver.find_element_by_id('nav-log-out').click()
-time.sleep(5)
-driver.quit()
-exit()
-# 28Sep2012
 
 ## Tax Summary
 # Tax summary - billed
 # convention:
 # BI - Billed
 # CO - Collected
-get_file('downloading Tax Summary CSV (billed)...', driver, '_TaxSummary'+ccy, tax_summary_csv_url, '&date_start=01/01/'+str(now.strftime('%y'))+'&date_end='+now.strftime('%m/%d/%y')+'&revenue=billed&currency='+ccy)
-get_and_rename_file('_TaxSummary'+ccy, '_BI')
+FF.get_file('downloading Tax Summary CSV (billed)...', driver, '_TaxSummary'+ccy, tax_summary_csv_url, '&date_start=01/01/'+str(now.strftime('%y'))+'&date_end='+now.strftime('%m/%d/%y')+'&revenue=billed&currency='+ccy)
+FF.get_and_rename_file('_TaxSummary'+ccy, '_BI')
 
 # Tax summary - collected
-get_file('downloading Tax Summary CSV (collected)...', driver, '_TaxSummary'+ccy, tax_summary_csv_url, '&date_start=01/01/'+str(now.strftime('%y'))+'&date_end='+now.strftime('%m/%d/%y')+'&revenue=collected&currency='+ccy)
-get_and_rename_file('_TaxSummary'+ccy, '_CO')
+FF.get_file('downloading Tax Summary CSV (collected)...', driver, '_TaxSummary'+ccy, tax_summary_csv_url, '&date_start=01/01/'+str(now.strftime('%y'))+'&date_end='+now.strftime('%m/%d/%y')+'&revenue=collected&currency='+ccy)
+FF.get_and_rename_file('_TaxSummary'+ccy, '_CO')
 
 
 # Accounts aging
-get_file('downloading Accounts Aging CSV...', driver, '_AccountsAging', accounts_aging_csv_url, '&end_date=' + now.strftime('%m/%d/%y'))
-get_and_rename_file('_AccountsAging')
+FF.get_file('downloading Accounts Aging CSV...', driver, '_AccountsAging', accounts_aging_csv_url, '&end_date=' + now.strftime('%m/%d/%y'))
+FF.get_and_rename_file('_AccountsAging')
 
 # Payments collected 
-get_file('downloading Payments collected CSV...', driver, '_PaymentCollected', payments_coll_csv_url, '&start_date=' + now.strftime('01/01/%y') + '&end_date=' + now.strftime('%m/%d/%y'))
-get_and_rename_file('_PaymentCollected')
+FF.get_file('downloading Payments collected CSV...', driver, '_PaymentCollected', payments_coll_csv_url, '&start_date=' + now.strftime('01/01/%y') + '&end_date=' + now.strftime('%m/%d/%y'))
+FF.get_and_rename_file('_PaymentCollected')
 # CONSIDER including the patterns like '_PaymentCollected' to configuration file
 # we're not certain as to when or if FreshBooks will change their naming conventions
 
-# Item sales
-params = '&date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y')
-print 'downloading Item sales CSV...'
-driver.get(item_sales_csv_url)
-print 'File saved as %s' % get_csv_filename('_Item Sales')
+# 01Oct2012 - disable below part (START)
+## Item sales
+#params = '&date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y')
+#print 'downloading Item sales CSV...'
+#driver.get(item_sales_csv_url)
+#print 'File saved as %s' % get_csv_filename('_Item Sales')
+##print 'File saved as %s' % get_csv_filename()
+#get_and_rename_file(re.escape('_Item Sales'))
+#
+## Tasks invoiced
+## _ProfitLoss and _TaxSummary files not yet renamed accdg to timestamp
+## because of varying parameters passed to the reports
+#params = 'date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y')
+#print 'downloading Tasks invoiced CSV...'
+#driver.get(tasks_inv_csv_url + params)
 #print 'File saved as %s' % get_csv_filename()
-get_and_rename_file(re.escape('_Item Sales'))
-
-# Tasks invoiced
-# _ProfitLoss and _TaxSummary files not yet renamed accdg to timestamp
-# because of varying parameters passed to the reports
-params = 'date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y')
-print 'downloading Tasks invoiced CSV...'
-driver.get(tasks_inv_csv_url + params)
-print 'File saved as %s' % get_csv_filename()
-get_and_rename_file(re.escape('_Invoiced Tasks'))
-
-
-# Snail mail 
-params = 'date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y')
-print 'downloading Snail Mail CSV...'
-driver.get(snail_mail_csv_url + params)
-print 'File saved as %s' % get_csv_filename()
-get_and_rename_file(re.escape('_Snail mail'))
+#get_and_rename_file(re.escape('_Invoiced Tasks'))
+#
+#
+## Snail mail 
+#params = 'date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y')
+#print 'downloading Snail Mail CSV...'
+#driver.get(snail_mail_csv_url + params)
+#print 'File saved as %s' % get_csv_filename()
+#get_and_rename_file(re.escape('_Snail mail'))
+# 01Oct2012 - disable below (above!) part (END)
 
 
 # Time to pay - percentage of the invoices created
@@ -237,16 +231,16 @@ get_and_rename_file(re.escape('_Snail mail'))
 # PER - percentage of the invoices created
 # VAL - value
 # CNT - count
-get_file('downloading Time to pay (percentage of the invoices created) CSV...', driver, '', time_to_pay_csv_url, '&show=1')
-get_and_rename_file(re.escape('_Time to pay'), '_PER')
+FF.get_file('downloading Time to pay (percentage of the invoices created) CSV...', driver, '', time_to_pay_csv_url, '&show=1')
+FF.get_and_rename_file(re.escape('_Time to pay'), '_PER')
 
 # Time to Pay - value of the invoices created
-get_file('downloading Time to pay (value of the invoices created) CSV...', driver, '', time_to_pay_csv_url, '&show=2')
-get_and_rename_file(re.escape('_Time to pay'), '_VAL')
+FF.get_file('downloading Time to pay (value of the invoices created) CSV...', driver, '', time_to_pay_csv_url, '&show=2')
+FF.get_and_rename_file(re.escape('_Time to pay'), '_VAL')
 
 # Time to Pay - count of the invoices created
-get_file('downloading Time to pay (count of the invoices created) CSV...', driver, '', time_to_pay_csv_url, '&show=3')
-get_and_rename_file(re.escape('_Time to pay'), '_CNT')
+FF.get_file('downloading Time to pay (count of the invoices created) CSV...', driver, '', time_to_pay_csv_url, '&show=3')
+FF.get_and_rename_file(re.escape('_Time to pay'), '_CNT')
 
 
 # Revenue by Client - Total collected
@@ -257,16 +251,16 @@ get_and_rename_file(re.escape('_Time to pay'), '_CNT')
 # TO - Total outstanding
 # TB - Total billed
 # i.e. RBC-TC - Revenue by Client (Total collected)
-get_file('downloading Revenue by Client (Total collected) CSV...', driver, '', revenue_by_client_url, '&year='+now.strftime('%Y')+'&client[]=sales=1&submit=')
-get_and_rename_file(re.escape('_Client Sales'), '_RBC-TC')
+FF.get_file('downloading Revenue by Client (Total collected) CSV...', driver, '', revenue_by_client_url, '&year='+now.strftime('%Y')+'&client[]=sales=1&submit=')
+FF.get_and_rename_file(re.escape('_Client Sales'), '_RBC-TC')
 
 # Revenue by Client - Total outstanding
-get_file('downloading Revenue by Client (Total outstanding) CSV...', driver, '', revenue_by_client_url, '&year='+now.strftime('%Y')+'&client[]=sales=2&submit=')
-get_and_rename_file(re.escape('_Client Sales'), '_RBC-TO')
+FF.get_file('downloading Revenue by Client (Total outstanding) CSV...', driver, '', revenue_by_client_url, '&year='+now.strftime('%Y')+'&client[]=sales=2&submit=')
+FF.get_and_rename_file(re.escape('_Client Sales'), '_RBC-TO')
 
 # Revenue by Client - Total billed
-get_file('downloading Revenue by Client (Total billed) CSV...', driver, '', revenue_by_client_url, '&year='+now.strftime('%Y')+'&client[]=sales=3&submit=')
-get_and_rename_file(re.escape('_Client Sales'), '_RBC-TB')
+FF.get_file('downloading Revenue by Client (Total billed) CSV...', driver, '', revenue_by_client_url, '&year='+now.strftime('%Y')+'&client[]=sales=3&submit=')
+FF.get_and_rename_file(re.escape('_Client Sales'), '_RBC-TB')
 
 # Revenue by Staff - Total Received (by invoice date)
 # conventions:
@@ -276,33 +270,42 @@ get_and_rename_file(re.escape('_Client Sales'), '_RBC-TB')
 # TO - Total outstanding
 # TB - Total billed
 # i.e. RBS-TO - Revenue by Staff (Total Outstanding)
-get_file('downloading Revenue by Staff (Total Received by invoice date) CSV...', driver, '', revenue_by_client_url, 'year='+now.strftime('%Y')+'&team[]=&sales=1&submit=')
-get_and_rename_file(re.escape('_Client Sales'), '_RBS-TRID')
+FF.get_file('downloading Revenue by Staff (Total Received by invoice date) CSV...', driver, '', revenue_by_client_url, 'year='+now.strftime('%Y')+'&team[]=&sales=1&submit=')
+FF.get_and_rename_file(re.escape('_Client Sales'), '_RBS-TRID')
 # you can use 'driver' as a global file(?)
 
 # Revenue by Staff - Total Outstanding
-get_file('downloading Revenue by Staff (Total Outstanding) CSV...', driver, '', revenue_by_client_url, 'year='+now.strftime('%Y')+'&team[]=&sales=2&submit=')
-get_and_rename_file(re.escape('_Client Sales'), '_RBS-TO')
+FF.get_file('downloading Revenue by Staff (Total Outstanding) CSV...', driver, '', revenue_by_client_url, 'year='+now.strftime('%Y')+'&team[]=&sales=2&submit=')
+FF.get_and_rename_file(re.escape('_Client Sales'), '_RBS-TO')
 
 
 # Revenue by Staff - Total Billed
-get_file('downloading Revenue by Staff (Total Billed) CSV...', driver, '', revenue_by_client_url, 'year='+now.strftime('%Y')+'&team[]=&sales=3&submit=')
-get_and_rename_file(re.escape('_Client Sales'), '_RBS-TB')
+FF.get_file('downloading Revenue by Staff (Total Billed) CSV...', driver, '', revenue_by_client_url, 'year='+now.strftime('%Y')+'&team[]=&sales=3&submit=')
+FF.get_and_rename_file(re.escape('_Client Sales'), '_RBS-TB')
 
 # Revenue by Staff - Total Received (by payment date)
-get_file('downloading Revenue by Staff (Total Received by payment date) CSV...', driver, '', revenue_by_client_url, 'year='+now.strftime('%Y')+'&team[]=&sales=4&submit=')
-get_and_rename_file(re.escape('_Client Sales'), '_RBS-TRPD')
+FF.get_file('downloading Revenue by Staff (Total Received by payment date) CSV...', driver, '', revenue_by_client_url, 'year='+now.strftime('%Y')+'&team[]=&sales=4&submit=')
+FF.get_and_rename_file(re.escape('_Client Sales'), '_RBS-TRPD')
 
 # WILL SKIP 'Recurring Revenue' --> Annual and Detailed for now (08Mar2012)
 
 # User summary
 # might use %2F instead of '/' ???
-get_file('downloading User Summary CSV...', driver, '', user_summary_csv_url, 'date_start='+now.strftime('01/01/%y')+'&date_end='+now.strftime('%m/%d/%y')+'&team[]=&submit=')
-get_and_rename_file('_UserSummary')
+FF.get_file('downloading User Summary CSV...', driver, '', user_summary_csv_url, 'date_start='+now.strftime('01/01/%y')+'&date_end='+now.strftime('%m/%d/%y')+'&team[]=&submit=')
+FF.get_and_rename_file('_UserSummary')
 
 # Task summary
-get_file('downloading User Summary CSV...', driver, '', task_summary_csv_url, 'start_date='+now.strftime('01/01/%y')+'&end_date='+now.strftime('%m/%d/%y')+'&task[]=&submit=')
-get_and_rename_file('_TaskSummary')
+FF.get_file('downloading User Summary CSV...', driver, '', task_summary_csv_url, 'start_date='+now.strftime('01/01/%y')+'&end_date='+now.strftime('%m/%d/%y')+'&task[]=&submit=')
+FF.get_and_rename_file('_TaskSummary')
+
+# 28Sep2012 - Josephson (TEMPORARY!)
+time.sleep(10)
+# 01Oct2012 - don't forget to log out! (TEMPORARY!)
+driver.find_element_by_id('nav-log-out').click()
+time.sleep(5)
+driver.quit()
+exit()
+# 28Sep2012
 
 
 time.sleep(15)
