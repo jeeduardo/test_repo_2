@@ -54,11 +54,11 @@ def get_file(p_disp_msg, p_driver, p_pattern, p_url, p_params=''):
 def rename_file(pattern, filename, replace_with=''):
   global backup_dirname
   patternToCheck = pattern 
+  # 02Oct2012 - replace '\-', such as the one in Recurring Revenue - Annual to '-'
+  # use re.search later
+  pattern = pattern.replace('\\-', '-')
   # 01Oct2012 - eliminate spaces in filename
-  print "pattern = %s" %(pattern)
-  mvCmd = "mv " + filename + " " + backup_dirname + "/" + base_backup_dirname.replace(' ', '') + pattern.replace(' ', '') + replace_with + "_" + datetime.now().strftime('%m-%d-%Y_%H%M%S') + ".csv"
-  print "mvCmd = %s" %(mvCmd)
-
+  mvCmd = "mv " + filename + " " + backup_dirname + os.sep + base_backup_dirname.replace(' ', '') + pattern.replace(' ', '') + replace_with + "_" + datetime.now().strftime('%m-%d-%Y_%H%M%S') + ".csv"
   logging.info('executing "' + mvCmd + '"')
   res = os.system(mvCmd)
   return res
