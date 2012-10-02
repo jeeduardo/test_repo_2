@@ -27,7 +27,7 @@ pw = cfg.get('credentials', 'pword')
 base_backup_dirname = cfg.get('settings', 'backup_dir_name')
 # 01Oct2012 - eliminate spaces in filename
 #backup_dirname = base_backup_dirname + datetime.now().strftime('_%Y-%m-%d')
-backup_dirname = base_backup_dirname.replace(' ', '') + datetime.now().strftime('_%Y-%m-%d')
+backup_dirname = base_backup_dirname.replace(' ', '') + datetime.now().strftime('_%Y-%m-%d_%H%M')
 
 # function to get CSV file
 # don't wanna keep repeating myself

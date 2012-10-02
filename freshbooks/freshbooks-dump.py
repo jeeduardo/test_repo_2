@@ -39,6 +39,9 @@ backup_dirname_rs = os.system("mkdir " + FF.backup_dirname)
 #client_csv_url = url + cfg.get('export_urls', 'client_csv_url')
 #staff_csv_url = cfg.get('export_urls', 'staff_csv_url')
 sent_invoice_csv_url = FF.get_csv_url('sent_invoice_csv_url')
+# 02Oct2012 - "header" of sent invoices
+invoice_head_csv_url = FF.get_csv_url('invoice_head_csv_url')
+# 02Oct2012
 client_csv_url = FF.get_csv_url('client_csv_url')
 staff_csv_url = FF.get_csv_url('staff_csv_url')
 
@@ -137,6 +140,9 @@ time.sleep(10)
 FF.get_file('downloading sent invoices CSV backup...', driver, '_Invoice\ Details', sent_invoice_csv_url, '')
 FF.get_and_rename_file('_Invoice\ Details')
 
+# 02Oct2012 - get the "header" of the entries from sent_invoice_csv_url
+FF.get_file('downloading sent invoices header CSV...', driver, 'Invoices', invoice_head_csv_url, '')
+FF.get_and_rename_file('Invoices')
 
 params = '&date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime('%m/%d/%y') + '&group_by=category'
 # 08Mar2012 - wacko (might need to modify this, this can be grouped into five fields actually - Category, Vendor, Client, Author, Project)
