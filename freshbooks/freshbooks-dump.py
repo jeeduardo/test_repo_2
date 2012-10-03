@@ -20,24 +20,16 @@ FF = freshbooks_functions
 # firefox profile
 fp = FF.fp
 
-# 06June2012
 # logging config
 logging.basicConfig(filename=os.getcwd() + '/freshbooks.log', level=logging.INFO, format='%(asctime)s %(levelname)s : %(message)s')
 
 logging.info('getting set configurations')
-#cfg = ConfigParser.ConfigParser()
-#cfg.read('freshbooks-dump.cfg')
-print 'Backup dir. name = %s' % (cfg.get('settings', 'backup_dir_name'))
+#print 'Backup dir. name = %s' % (cfg.get('settings', 'backup_dir_name'))
 
-# 06June2012
-# create backup directory
-#backup_dirname = "Trial\ Josephson\ \(Cascadeo\)\ -\ " + datetime.now().strftime('%Y-%m-%d')
-#backup_dirname = "Staging\ Backup\ Cascadeo\ -\ " + datetime.now().strftime('%Y-%m-%d')
 backup_dirname_rs = os.system("mkdir " + FF.backup_dirname)
+print "CSVs to be saved under %s" %(FF.backup_dirname)
+logging.info("CSVs to be saved under %s" %(FF.backup_dirname.decode('string_escape')))
 
-#sent_invoice_csv_url = url + cfg.get('export_urls', 'sent_invoice_csv_url')
-#client_csv_url = url + cfg.get('export_urls', 'client_csv_url')
-#staff_csv_url = cfg.get('export_urls', 'staff_csv_url')
 sent_invoice_csv_url = FF.get_csv_url('sent_invoice_csv_url')
 # 03Oct2012 - download XLS version of sent invoices
 sent_invoice_xls_url = FF.get_csv_url('sent_invoice_xls_url')
@@ -62,15 +54,11 @@ time_to_pay_csv_url = FF.get_csv_url('time_to_pay_csv_url')
 revenue_by_client_url = FF.get_csv_url('revenue_by_client_url')
 user_summary_csv_url = FF.get_csv_url('user_summary_csv_url')
 task_summary_csv_url = FF.get_csv_url('task_summary_csv_url')
-
-#01Oct2012 - recurring revenue URLs
 recurring_rev_annual_url = FF.get_csv_url('recurring_rev_annual_url')
 recurring_rev_detailed_url = FF.get_csv_url('recurring_rev_detailed_url')
 
-
 # currency
 ccy = cfg.get('settings', 'currency')
-
 
 now = datetime.now()
 
@@ -104,8 +92,7 @@ except Exception:
   logging.error(tb)
   print tb
   exit(1)
-#
-# temporary (28Feb2012) - Wacko
+
 time.sleep(10)
 
 FF.get_file('downloading "Clients" CSV backup...', driver, 'Clients', client_csv_url, '')
@@ -117,15 +104,9 @@ FF.get_and_rename_file('Staff')
 
 driver.find_element_by_id('nav-reports').click()
 
-# NEXT course of action please?
-#-Invoices (and its details) - Yes - both client invoices and received invoices as well as payment history 
-#- Expenses 
-#- Reports
-
-
 # my comments - wacko
 # Expenses - "broad" ones?
-# Invoices - I can only see the ones "we" have issued, not the ones "we" had received
+## Invoices - I can only see the ones "we" have issued, not the ones "we" had received
 # Reports - like what type of reports?
 
 # only thing I could do (probably for the meantime) 
@@ -150,8 +131,7 @@ params = '&date_start=' + now.strftime('01/01/%y') + '&date_end=' + now.strftime
 FF.get_file('downloading expenses (by category) CSV backup...', driver, '_Expenses', expenses_csv_url, params)
 FF.get_and_rename_file('_Expenses')
 
-# profit and loss - billed, exclude sales tax (_ProfitLoss.csv)
-# convention
+# profit and loss - billed, exclude sales tax (_ProfitLoss.csv)..below are the conventions:
 # billed - BI
 # collected - CO
 # tax excluded - TEX
@@ -277,7 +257,6 @@ FF.get_and_rename_file(re.escape('_Client Sales'), '_RBS-TB')
 FF.get_file('downloading Revenue by Staff (Total Received by payment date) CSV...', driver, '', revenue_by_client_url, 'year='+now.strftime('%Y')+'&team[]=&sales=4&submit=')
 FF.get_and_rename_file(re.escape('_Client Sales'), '_RBS-TRPD')
 
-# WILL SKIP 'Recurring Revenue' --> Annual and Detailed for now (08Mar2012)
 # 01Oct2012 - Recurring Revenue CSV reports (no params for now)
 FF.get_file('downloading Recurring Revenue (Annual) CSV...', driver, re.escape('_Recurring revenue - Annual'), recurring_rev_annual_url)
 FF.get_and_rename_file(re.escape('_Recurring revenue - Annual'))
@@ -310,11 +289,3 @@ exit(0)
 # Expenses by category url - https://wackstestcascadeo.freshbooks.com/menu.php?route=Report_Expenses&type=expense&format=csv&type=expense
 # Are the POST data/s needed for the 'Expenses' by category export?
 # AND HOW ABOUT The "OTHER" Invoices CSV export url? The one in Import & Export -> Comma Separated Values (CSV)??
-# form method is GET
-# so we can pass 'GET' parameters to the url (the driver.get function)
-#
-# have a function that will take a pattern (i.e. Staff, Invoices, Clients)
-# to search for latest file (depending on pattern)
-# and to rename that file
-# R E M E M B E R ! ! !
-# remember to send signal to KNOW if python script exited successfully or not
