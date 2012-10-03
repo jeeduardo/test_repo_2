@@ -37,7 +37,7 @@ backup_dirname = base_backup_dirname.replace(' ', '') + datetime.now().strftime(
 # @params p_url - url of file to download
 # @params p_params - parameters to pass to the url used in downloading the file
 
-def get_file(p_disp_msg, p_driver, p_pattern, p_url, p_params=''):
+def get_file(p_disp_msg, p_driver, p_pattern, p_url, p_params='', p_is_csv=True):
   global logging
   logging.info(p_disp_msg)
   try:
@@ -48,7 +48,10 @@ def get_file(p_disp_msg, p_driver, p_pattern, p_url, p_params=''):
     logging.error("Something went wrong with retrieving the CSV file. Please check.")
     exit(1)
 
-  logging.info('File saved as %s' % get_csv_filename(p_pattern))
+  #03Oct2012
+  if p_is_csv:
+    logging.info('File saved as %s' % get_csv_filename(p_pattern))
+  #03Oct2012
   return 0
 
 def rename_file(pattern, filename, replace_with=''):

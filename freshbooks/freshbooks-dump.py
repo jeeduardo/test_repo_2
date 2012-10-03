@@ -39,6 +39,8 @@ backup_dirname_rs = os.system("mkdir " + FF.backup_dirname)
 #client_csv_url = url + cfg.get('export_urls', 'client_csv_url')
 #staff_csv_url = cfg.get('export_urls', 'staff_csv_url')
 sent_invoice_csv_url = FF.get_csv_url('sent_invoice_csv_url')
+# 03Oct2012 - download XLS version of sent invoices
+sent_invoice_xls_url = FF.get_csv_url('sent_invoice_xls_url')
 # 02Oct2012 - "header" of sent invoices
 invoice_head_csv_url = FF.get_csv_url('invoice_head_csv_url')
 # 02Oct2012
@@ -102,7 +104,6 @@ except Exception:
   logging.error(tb)
   print tb
   exit(1)
-
 #
 # temporary (28Feb2012) - Wacko
 time.sleep(10)
