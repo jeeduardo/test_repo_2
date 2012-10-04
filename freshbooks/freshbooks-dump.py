@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # freshbooks_clients.py
-# dump client csv from freshbooks
+# dump data from freshbooks to CSV files
 import ConfigParser
 import selenium
 from datetime import datetime
@@ -24,10 +24,9 @@ fp = FF.fp
 logging.basicConfig(filename=os.getcwd() + '/freshbooks.log', level=logging.INFO, format='%(asctime)s %(levelname)s : %(message)s')
 
 logging.info('getting set configurations')
-#print 'Backup dir. name = %s' % (cfg.get('settings', 'backup_dir_name'))
 
 backup_dirname_rs = os.system("mkdir " + FF.backup_dirname)
-print "CSVs to be saved under %s" %(FF.backup_dirname)
+print "CSVs to be saved under %s" %(FF.backup_dirname.decode('string_escape'))
 logging.info("CSVs to be saved under %s" %(FF.backup_dirname.decode('string_escape')))
 
 sent_invoice_csv_url = FF.get_csv_url('sent_invoice_csv_url')
@@ -74,10 +73,8 @@ try:
   driver.find_element_by_id('username').send_keys(FF.username)
   driver.find_element_by_id('password').click()
   driver.find_element_by_id('password').send_keys(FF.pw)
-  # print driver.find_element_by_xpath("//input[@type='submit']")
   driver.find_element_by_xpath("//input[@type='submit']")
   #print driver.execute_script("document.getElementsByClassName('button-submit')[0].style.display='block';")
-  # print driver.find_elements_by_name('Submit')[2].click()
   driver.find_elements_by_name('Submit')[2].click()
 except selenium.common.exceptions.NoSuchElementException:
   import traceback
@@ -242,7 +239,6 @@ FF.get_and_rename_file(re.escape('_Client Sales'), '_RBC-TB')
 # i.e. RBS-TO - Revenue by Staff (Total Outstanding)
 FF.get_file('downloading Revenue by Staff (Total Received by invoice date) CSV...', driver, '', revenue_by_client_url, 'year='+now.strftime('%Y')+'&team[]=&sales=1&submit=')
 FF.get_and_rename_file(re.escape('_Client Sales'), '_RBS-TRID')
-# you can use 'driver' as a global file(?)
 
 # Revenue by Staff - Total Outstanding
 FF.get_file('downloading Revenue by Staff (Total Outstanding) CSV...', driver, '', revenue_by_client_url, 'year='+now.strftime('%Y')+'&team[]=&sales=2&submit=')

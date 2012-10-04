@@ -30,7 +30,6 @@ base_backup_dirname = cfg.get('settings', 'backup_dir_name')
 backup_dirname = base_backup_dirname.replace(' ', '') + datetime.now().strftime('_%Y-%m-%d_%H%M')
 
 # function to get CSV file
-# don't wanna keep repeating myself
 # @params p_disp_msg - message to display while downloading the file (i.e. 'downloading Tax Summary CSV (billed)...')
 # @params p_driver - instance of the Firefox driver used to get the file
 # @params p_pattern - pattern to use in displaying the name of the file downloaded and to be renamed
@@ -61,10 +60,11 @@ def rename_file(pattern, filename, replace_with=''):
   # use re.search later
   pattern = pattern.replace('\\-', '-')
   # 01Oct2012 - eliminate spaces in filename
-  mvCmd = "mv " + filename + " " + backup_dirname + os.sep + base_backup_dirname.replace(' ', '') + pattern.replace(' ', '') + replace_with + "_" + datetime.now().strftime('%m-%d-%Y_%H%M%S') + ".csv"
-  logging.info('executing "' + mvCmd + '"')
-  res = os.system(mvCmd)
-  return res
+  target_filename = base_backup_dirname.replace(' ', '') + pattern.replace(' ', '') + replace_with + "_" + datetime.now().strftime('%m-%d-%Y_%H%M%S') + ".csv"
+  mv_cmd = "mv " + filename + " " + backup_dirname + os.sep + target_filename
+  logging.info('executing "' + mv_cmd + '"')
+  res = os.system(mv_cmd)
+  return (res, target_filename)
 
 # use -lrt preferably or -rt
 # if pattern left blank, it will get the name of latest csv file
@@ -76,10 +76,11 @@ def get_csv_filename(pattern=''):
 
 def get_and_rename_file(pattern, replace_with=''):
   filename = get_csv_filename(pattern)
-  if (rename_file(pattern, filename, replace_with) == 0):
-    logging.info('File %s was successfully renamed' % filename)
+  rename_vals = rename_file(pattern, filename, replace_with)
+  if (rename_vals[0] == 0):
+    logging.info('File %s renamed to %s.' % (filename, rename_vals[1]))
   else:
-    logging.error('Something went wrong with the moving of file. Please check %s', filename)
+    logging.error('Something went wrong with the moving of file. Please check %s.', filename)
 
 
 # get url branch under the 'export_urls' section
