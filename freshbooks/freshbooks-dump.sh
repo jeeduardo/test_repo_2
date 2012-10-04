@@ -12,10 +12,11 @@ echo 'Starting freshbooks dump script'
 # check if vncserver on :64 is running
 IS_VNC_RUNNING=$(ps aux | grep "Xtightvnc" | grep -v "grep")
 if [ "$IS_VNC_RUNNING" != "" ]; then
-  echo "Xtightvnc is running"
+  echo "VNC Server is running. Proceeding with dump."
 else
-  echo "Xtightvnc server must be started first!"
-  exit -1
+  echo "VNC Server is not running. Starting VNC Server..."
+  vncserver :64
+  echo "Proceeding with dump."
 fi
 
 export DISPLAY=:64 && cd /home/ubuntu/qboe/test_repo_2/freshbooks && ./freshbooks-dump.py
