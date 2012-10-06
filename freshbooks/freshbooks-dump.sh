@@ -6,7 +6,7 @@ clear
 CURR_DAY=$(date +%d)
 CAL_DAY=$(echo `cal` | awk '{print $NF}')
 CURR_MONTH=$(date +%Y-%m)
-echo 'Starting freshbooks dump script'
+echo "Starting freshbooks dump script"
 # check if vncserver on :64 is running
 IS_VNC_RUNNING=$(ps aux | grep "Xtightvnc" | grep -v "grep")
 if [ "$IS_VNC_RUNNING" != "" ]; then

@@ -14,6 +14,8 @@ import logging
 # 28Sep2012 - include freshbooks_functions
 import freshbooks_functions
 from freshbooks_functions import cfg
+# 07Oct2012 - send email
+import sendmail
 
 # 28Sep2012
 FF = freshbooks_functions
@@ -276,6 +278,10 @@ time.sleep(5)
 driver.find_element_by_id('nav-log-out').click()
 logging.info('Data has been exported. Ending program.')
 driver.quit()
+
+# 07Oct2012 - send email
+email_msg = "The FreshBooks dump has finished. Please check path %s to check the CSV files." % (os.getcwd() + os.sep + FF.backup_dirname) 
+sendmail.email(email_msg, "josephson@cascadeo.com", cfg)
 exit(0)
 
 
