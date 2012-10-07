@@ -28,5 +28,6 @@ def email(msg, toaddr, cfg):
   print s.login(uname, pword)
   print s.sendmail(uname, toaddr, mimetext_msg.as_string())
   print s.quit()
+  exit(0)
 
 # usage: email('Some message....', 'johndoe.foobar@example.com')
