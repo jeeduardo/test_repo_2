@@ -64,7 +64,7 @@ logging.basicConfig(filename=os.getcwd() + os.sep + 'quickbooks_dump.log', level
 
 # 04Sep2012 - get configurations
 cfg = ConfigParser.ConfigParser()
-cfg.read('dump_casc_qboe_other.cfg')
+cfg.read('quickbooks-report-dump.cfg')
 
 url = cfg.get('credentials', 'url')
 username = cfg.get('credentials', 'username')
