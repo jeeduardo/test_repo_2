@@ -1,0 +1,603 @@
+2012-10-12 18:29:30,197 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-12 18:29:31,425 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-12 18:29:31,430 INFO : This is the email today.
+2012-10-12 18:29:31,430 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-12 18:29:31,573 INFO : Signing out...
+2012-10-12 18:29:31,710 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-12 18:32:51,641 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-12 18:32:52,561 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-12 18:32:52,567 INFO : This is the email today.
+2012-10-12 18:32:52,713 INFO : Signing out...
+2012-10-12 18:32:52,853 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-12 18:35:57,603 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-12 18:35:58,526 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-12 18:35:58,531 INFO : This is the email today.
+2012-10-12 18:35:58,531 INFO : Will fetch the exported data.
+2012-10-12 18:35:58,674 INFO : Signing out...
+2012-10-12 18:35:58,811 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-12 18:36:38,848 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-12 18:36:39,815 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-12 18:36:39,820 INFO : This is the email today.
+2012-10-12 18:36:39,821 INFO : Will fetch the exported data.
+2012-10-12 18:36:39,975 INFO : Signing out...
+2012-10-12 18:36:40,121 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-12 18:36:53,625 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-12 18:36:54,557 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-12 18:36:54,563 INFO : This is the email today.
+2012-10-12 18:36:54,563 INFO : Will fetch the exported data.
+2012-10-12 18:36:54,751 INFO : Signing out...
+2012-10-12 18:36:54,897 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-12 18:41:41,736 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-12 18:41:42,659 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-12 18:41:42,664 INFO : This is the email today.
+2012-10-12 18:41:42,664 INFO : Will fetch the exported data.
+2012-10-12 18:41:42,811 INFO : Signing out...
+2012-10-12 18:41:42,951 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-12 18:44:53,297 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-12 18:44:54,203 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-12 18:44:54,209 INFO : This is the email today.
+2012-10-12 18:44:54,209 INFO : Will fetch the exported data.
+2012-10-12 18:44:54,355 INFO : Signing out...
+2012-10-12 18:44:54,494 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-12 18:45:33,524 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-12 18:45:34,438 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-12 18:45:34,443 INFO : This is the email today.
+2012-10-12 18:45:34,443 INFO : Will fetch the exported data.
+2012-10-12 18:45:34,590 INFO : Signing out...
+2012-10-12 18:45:34,727 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-12 18:46:13,665 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-12 18:46:14,690 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-12 18:46:14,695 INFO : This is the email today.
+2012-10-12 18:46:14,696 INFO : Will fetch the exported data.
+2012-10-12 18:46:14,837 INFO : Signing out...
+2012-10-12 18:46:14,977 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-12 18:46:33,574 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-12 18:46:34,439 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-12 18:46:34,444 INFO : This is the email today.
+2012-10-12 18:46:34,445 INFO : Will fetch the exported data.
+2012-10-12 18:46:34,587 INFO : Signing out...
+2012-10-12 18:46:34,725 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-12 18:48:24,398 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-12 18:48:25,828 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-12 18:48:25,833 INFO : This is the email today.
+2012-10-12 18:48:25,833 INFO : Will fetch the exported data.
+2012-10-12 18:48:26,026 INFO : Signing out...
+2012-10-12 18:48:26,168 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-12 18:48:44,110 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-12 18:48:44,989 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-12 18:48:44,994 INFO : This is the email today.
+2012-10-12 18:48:44,994 INFO : Will fetch the exported data.
+2012-10-12 18:48:45,140 INFO : Signing out...
+2012-10-12 18:48:45,279 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-12 19:07:26,946 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-12 19:07:28,529 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-12 19:07:28,534 INFO : This is the email today.
+2012-10-12 19:07:28,534 INFO : Will fetch the exported data.
+2012-10-12 19:07:28,682 INFO : Signing out...
+2012-10-12 19:07:28,819 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-12 19:14:06,742 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-12 19:14:07,660 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-12 19:14:07,665 INFO : This is the email today.
+2012-10-12 19:14:07,665 INFO : Will fetch the exported data.
+2012-10-12 19:14:07,819 INFO : Signing out...
+2012-10-12 19:14:07,957 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-14 06:24:21,715 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-14 06:24:23,134 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-14 06:24:23,139 INFO : NO this is NOT the email today.
+2012-10-14 06:24:23,139 INFO : Calling script to initiate export of data.
+2012-10-14 06:24:23,285 INFO : Signing out...
+2012-10-14 06:24:23,424 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-15 11:37:51,279 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 11:37:53,159 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-15 11:37:53,164 INFO : NO this is NOT the email today.
+2012-10-15 11:37:53,165 INFO : Calling script to initiate export of data.
+2012-10-15 11:37:53,308 INFO : Signing out...
+2012-10-15 11:37:53,708 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-15 11:41:30,917 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 11:41:31,785 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-15 11:41:31,790 INFO : NO this is NOT the email today.
+2012-10-15 11:41:31,790 INFO : Calling script to initiate export of data.
+2012-10-15 11:41:31,933 INFO : Signing out...
+2012-10-15 11:41:32,074 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-15 13:41:15,882 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 13:41:17,280 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-15 13:41:17,286 INFO : NO this is NOT the email today.
+2012-10-15 13:41:17,286 INFO : Calling script to initiate export of data.
+2012-10-15 13:41:17,432 INFO : Signing out...
+2012-10-15 13:41:17,570 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-15 13:44:39,278 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 13:44:40,223 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-15 13:44:40,228 INFO : NO this is NOT the email today.
+2012-10-15 13:44:40,228 INFO : Calling script to initiate export of data.
+2012-10-15 13:44:40,375 INFO : Signing out...
+2012-10-15 13:44:40,513 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-15 13:48:27,744 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 13:49:26,352 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 13:49:27,262 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-15 13:49:27,267 INFO : NO this is NOT the email today.
+2012-10-15 13:49:27,267 INFO : Calling script to initiate export of data.
+2012-10-15 13:49:27,412 INFO : Signing out...
+2012-10-15 13:49:27,550 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-15 13:49:54,535 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 13:49:55,452 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-15 13:49:55,457 INFO : NO this is NOT the email today.
+2012-10-15 13:49:55,457 INFO : Calling script to initiate export of data.
+2012-10-15 13:49:55,604 INFO : Signing out...
+2012-10-15 13:49:55,747 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-15 13:54:04,845 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 13:54:05,722 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-15 13:54:05,727 INFO : NO this is NOT the email today.
+2012-10-15 13:54:05,727 INFO : Calling script to initiate export of data.
+2012-10-15 13:54:05,873 INFO : Signing out...
+2012-10-15 13:54:06,011 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-15 13:54:38,222 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 13:54:39,130 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-15 13:54:39,135 INFO : NO this is NOT the email today.
+2012-10-15 13:54:39,135 INFO : Calling script to initiate export of data.
+2012-10-15 13:54:39,278 INFO : Signing out...
+2012-10-15 13:54:39,415 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-15 13:55:30,999 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 13:55:32,139 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-15 13:55:32,144 INFO : NO this is NOT the email today.
+2012-10-15 13:55:32,144 INFO : Calling script to initiate export of data.
+2012-10-15 13:55:32,290 INFO : Signing out...
+2012-10-15 13:55:32,428 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-15 13:55:56,312 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 13:55:57,230 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-15 13:55:57,235 INFO : NO this is NOT the email today.
+2012-10-15 13:55:57,235 INFO : Calling script to initiate export of data.
+2012-10-15 13:55:57,380 INFO : Signing out...
+2012-10-15 13:55:57,527 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-15 13:58:28,146 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 13:58:29,027 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-15 13:58:29,032 INFO : NO this is NOT the email today.
+2012-10-15 13:58:29,032 INFO : Calling script to initiate export of data.
+2012-10-15 13:58:29,179 INFO : Signing out...
+2012-10-15 13:58:29,319 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-15 14:02:32,651 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 14:02:33,582 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-15 14:02:33,587 INFO : NO this is NOT the email today.
+2012-10-15 14:02:33,587 INFO : Calling script to initiate export of data.
+2012-10-15 14:02:33,733 INFO : Signing out...
+2012-10-15 14:02:33,873 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-15 14:31:23,961 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 14:31:25,107 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-15 14:31:25,113 INFO : This is the email today.
+2012-10-15 14:31:25,113 INFO : Will fetch the exported data.
+2012-10-15 14:31:25,113 INFO : Found email with subject "None"
+2012-10-15 14:31:25,257 INFO : Signing out...
+2012-10-15 14:31:25,397 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-15 16:11:36,907 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 16:11:38,022 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-15 16:11:38,027 INFO : This is the email today.
+2012-10-15 16:11:38,027 INFO : Will fetch the exported data.
+2012-10-15 16:11:38,194 INFO : Signing out...
+2012-10-15 16:11:38,335 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-31 16:14:09,822 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-31 16:14:10,751 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-31 16:14:10,756 INFO : NO this is NOT the email today.
+2012-10-31 16:14:10,757 INFO : Calling script to initiate export of data.
+2012-10-31 16:14:10,902 INFO : Signing out...
+2012-10-31 16:14:11,041 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-15 16:14:44,082 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-15 16:14:45,238 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-15 16:14:45,243 INFO : This is the email today.
+2012-10-15 16:14:45,243 INFO : Will fetch the exported data.
+2012-10-15 16:14:45,387 INFO : Signing out...
+2012-10-15 16:14:45,525 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-19 23:08:04,264 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-19 23:08:06,679 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download"
+2012-10-19 23:08:06,684 INFO : NO this is NOT the email today.
+2012-10-19 23:08:06,684 INFO : Calling script to initiate export of data.
+2012-10-19 23:08:06,841 INFO : Signing out...
+2012-10-19 23:08:06,986 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-19 23:10:36,419 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-19 23:10:37,407 INFO : Found email with subject "%s" but this is NOT the email today.
+2012-10-19 23:10:37,407 INFO : Calling script to initiate export of data.
+2012-10-19 23:10:37,574 INFO : Signing out...
+2012-10-19 23:10:37,858 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-19 23:11:05,916 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-19 23:11:07,182 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-19 23:11:07,182 INFO : Calling script to initiate export of data.
+2012-10-19 23:11:07,336 INFO : Signing out...
+2012-10-19 23:11:07,481 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-19 23:59:48,518 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-19 23:59:49,799 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-19 23:59:49,800 INFO : Calling script to initiate export of data.
+2012-10-19 23:59:49,953 INFO : Signing out...
+2012-10-19 23:59:50,095 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 00:00:34,347 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 00:00:35,331 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-20 00:00:35,331 INFO : Calling script to initiate export of data.
+2012-10-20 00:00:35,484 INFO : Signing out...
+2012-10-20 00:00:35,629 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 00:09:30,943 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 00:09:31,939 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-20 00:09:31,939 INFO : Calling script to initiate export of data.
+2012-10-20 00:09:32,091 INFO : Signing out...
+2012-10-20 00:09:32,237 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 00:10:21,402 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 00:10:22,373 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-20 00:10:22,373 INFO : Calling script to initiate export of data.
+2012-10-20 00:10:22,525 INFO : Signing out...
+2012-10-20 00:10:22,670 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 00:15:16,936 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 00:15:18,254 INFO : Signing out...
+2012-10-20 00:15:18,400 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 00:58:53,630 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 00:58:54,981 INFO : Signing out...
+2012-10-20 00:58:55,127 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 00:59:09,466 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 00:59:10,608 INFO : Signing out...
+2012-10-20 00:59:10,755 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 00:59:49,074 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 00:59:50,578 INFO : Signing out...
+2012-10-20 00:59:50,721 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 01:00:04,998 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 01:00:05,944 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 57, in <module>
+    mail_datetime = datetime.strptime(mail_timestamp, '%d %b %Y %I:%M:%S')
+  File "/usr/lib/python2.7/_strptime.py", line 325, in _strptime
+    (data_string, format))
+ValueError: time data '19 Oct 2012 17:12:38' does not match format '%d %b %Y %I:%M:%S'
+
+2012-10-20 01:00:05,944 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 01:00:06,095 INFO : Signing out...
+2012-10-20 01:00:06,239 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 01:01:09,660 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 01:01:10,814 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 57, in <module>
+    mail_datetime = datetime.strptime(mail_timestamp, '%d %b %Y %I:%M:%S')
+  File "/usr/lib/python2.7/_strptime.py", line 325, in _strptime
+    (data_string, format))
+ValueError: time data '19 Oct 2012 17:12:38' does not match format '%d %b %Y %I:%M:%S'
+
+2012-10-20 01:01:10,814 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 01:01:10,965 INFO : Signing out...
+2012-10-20 01:01:11,110 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 01:03:03,200 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 01:03:04,158 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-20 01:03:04,159 INFO : Calling script to initiate export of data.
+2012-10-20 01:03:04,173 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 68, in <module>
+    exit(0)
+  File "/usr/lib/python2.7/site.py", line 374, in __call__
+    raise SystemExit(code)
+SystemExit: 0
+
+2012-10-20 01:03:04,173 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 01:03:04,325 INFO : Signing out...
+2012-10-20 01:03:04,472 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 01:19:53,008 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 01:19:54,170 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-20 01:19:54,170 INFO : Calling script to initiate export of data.
+2012-10-20 01:19:54,171 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 69, in <module>
+    exit(0)
+  File "/usr/lib/python2.7/site.py", line 374, in __call__
+    raise SystemExit(code)
+SystemExit: 0
+
+2012-10-20 01:19:54,171 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 01:19:54,321 INFO : Signing out...
+2012-10-20 01:19:54,477 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 06:54:23,885 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 06:54:25,353 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 60, in <module>
+    pdt_curr_datetime = datetime.now() - timedelta(hours=7)
+NameError: name 'timedelta' is not defined
+
+2012-10-20 06:54:25,353 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 06:54:25,506 INFO : Signing out...
+2012-10-20 06:54:25,650 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 06:54:58,061 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 06:54:59,031 INFO : This is the email today.
+2012-10-20 06:54:59,037 INFO : Will fetch the exported data.
+2012-10-20 06:54:59,037 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 67, in <module>
+    exit(0)
+  File "/usr/lib/python2.7/site.py", line 374, in __call__
+    raise SystemExit(code)
+SystemExit: 0
+
+2012-10-20 06:54:59,038 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 06:54:59,192 INFO : Signing out...
+2012-10-20 06:54:59,337 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 06:55:06,330 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 06:55:07,251 INFO : This is the email today.
+2012-10-20 06:55:07,251 INFO : Will fetch the exported data.
+2012-10-20 06:55:07,252 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 67, in <module>
+    exit(0)
+  File "/usr/lib/python2.7/site.py", line 374, in __call__
+    raise SystemExit(code)
+SystemExit: 0
+
+2012-10-20 06:55:07,252 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 06:55:07,406 INFO : Signing out...
+2012-10-20 06:55:07,551 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 06:56:26,054 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 06:56:27,024 INFO : This is the email today.
+2012-10-20 06:56:27,025 INFO : Will fetch the exported data.
+2012-10-20 06:56:27,025 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 67, in <module>
+    exit(0)
+  File "/usr/lib/python2.7/site.py", line 374, in __call__
+    raise SystemExit(code)
+SystemExit: 0
+
+2012-10-20 06:56:27,025 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 06:56:27,181 INFO : Signing out...
+2012-10-20 06:56:27,327 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 06:56:59,982 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 06:57:00,954 INFO : This is the email today.
+2012-10-20 06:57:00,954 INFO : Will fetch the exported data.
+2012-10-20 06:57:00,954 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 63, in <module>
+    exit(0)
+  File "/usr/lib/python2.7/site.py", line 374, in __call__
+    raise SystemExit(code)
+SystemExit: 0
+
+2012-10-20 06:57:00,955 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 06:57:01,111 INFO : Signing out...
+2012-10-20 06:57:01,259 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 06:58:37,569 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 06:58:38,535 INFO : This is the email today.
+2012-10-20 06:58:38,535 INFO : Will fetch the exported data.
+2012-10-20 06:58:38,535 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 06:58:38,687 INFO : Signing out...
+2012-10-20 06:58:38,831 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 07:16:37,472 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 07:16:38,463 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-20 07:16:38,464 INFO : Calling script to initiate export of data.
+2012-10-20 07:16:38,464 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 07:16:38,616 INFO : Signing out...
+2012-10-20 07:16:38,760 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 07:19:32,254 INFO : Getting configurations...
+2012-10-20 07:19:53,332 INFO : Logging in as qbfb.joseph
+2012-10-20 07:20:23,363 INFO : Extracting data...
+2012-10-20 07:20:54,673 INFO : Writing data to export_company_20121020_0720.qbxml
+2012-10-20 07:20:54,674 INFO : Dump written to export_company_20121020_0720.qbxml
+2012-10-20 07:21:02,855 ERROR : Traceback (most recent call last):
+  File "./qb_export_data.py", line 68, in <module>
+    driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
+IndexError: list index out of range
+
+2012-10-20 07:21:02,856 INFO : Exporting finished successfully.
+2012-10-20 07:32:36,039 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 07:32:36,996 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-20 07:32:36,997 INFO : Calling script to initiate export of data.
+2012-10-20 07:32:36,997 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 07:32:37,153 INFO : Signing out...
+2012-10-20 07:32:37,300 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 07:34:43,752 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 07:34:44,798 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-20 07:34:44,798 INFO : Calling script to initiate export of data.
+2012-10-20 07:34:44,798 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 07:34:44,953 INFO : Signing out...
+2012-10-20 07:34:45,099 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 07:37:12,868 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 07:37:13,838 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-20 07:37:13,839 INFO : Calling script to initiate export of data.
+2012-10-20 07:37:13,839 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 07:37:13,993 INFO : Signing out...
+2012-10-20 07:37:14,137 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 07:37:21,605 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 07:37:22,554 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-20 07:37:22,554 INFO : Calling script to initiate export of data.
+2012-10-20 07:37:22,554 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 07:37:22,707 INFO : Signing out...
+2012-10-20 07:37:22,947 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 14:30:48,815 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 14:30:50,856 INFO : This is the email today.
+2012-10-20 14:30:50,856 INFO : Will fetch the exported data.
+2012-10-20 14:30:50,857 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 54, in <module>
+    mail_timestamp = msg['date'][5:25]
+TypeError: 'NoneType' object is not subscriptable
+
+2012-10-20 14:30:51,008 INFO : Signing out...
+2012-10-20 14:30:51,156 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 14:30:51,472 INFO : Getting configurations...
+2012-10-20 14:31:12,712 INFO : Logging in as qbfb.joseph
+2012-10-20 14:31:42,742 INFO : Extracting data...
+2012-10-20 14:32:13,776 INFO : Writing data to export_company_20121020_1432.qbxml
+2012-10-20 14:32:13,780 INFO : Dump written to export_company_20121020_1432.qbxml
+2012-10-20 14:32:24,471 INFO : Signing out...
+2012-10-20 14:32:25,816 INFO : Exporting finished successfully.
+2012-10-20 15:25:35,263 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 15:25:36,438 INFO : This is the email today.
+2012-10-20 15:25:36,438 INFO : Will fetch the exported data.
+2012-10-20 15:25:36,438 ERROR : Traceback (most recent call last):
+  File "./qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 15:25:36,590 INFO : Signing out...
+2012-10-20 15:25:36,736 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 15:29:05,364 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 15:29:06,432 INFO : This is the email today.
+2012-10-20 15:29:06,432 INFO : Will fetch the exported data.
+2012-10-20 15:29:06,433 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 15:29:06,587 INFO : Signing out...
+2012-10-20 15:29:06,731 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 15:29:07,036 INFO : Getting configurations...
+2012-10-20 15:29:27,190 INFO : Logging in as qbfb.joseph
+2012-10-20 15:29:57,218 INFO : Extracting data...
+2012-10-20 15:30:05,191 ERROR : Traceback (most recent call last):
+  File "./qb_export_data.py", line 55, in <module>
+    time.sleep(30)
+KeyboardInterrupt
+
+2012-10-20 15:30:05,191 INFO : Exporting finished successfully.
+2012-10-20 15:30:45,013 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-20 15:30:45,974 INFO : This is the email today.
+2012-10-20 15:30:45,974 INFO : Will fetch the exported data.
+2012-10-20 15:30:45,975 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-20 15:30:46,129 INFO : Signing out...
+2012-10-20 15:30:46,276 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-20 15:30:46,580 INFO : Getting configurations...
+2012-10-20 15:31:07,183 INFO : Logging in as qbfb.joseph
+2012-10-20 15:31:37,202 INFO : Extracting data...
+2012-10-20 15:32:08,223 INFO : Writing data to export_company_20121020_1532.qbxml
+2012-10-20 15:32:08,224 INFO : Dump written to export_company_20121020_1532.qbxml
+2012-10-20 15:32:18,950 INFO : Exporting finished successfully.
+2012-10-23 10:49:34,383 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-23 10:49:36,935 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-23 10:49:36,936 INFO : Calling script to initiate export of data.
+2012-10-23 10:49:36,936 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-23 10:49:37,085 INFO : Signing out...
+2012-10-23 10:49:37,229 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-23 10:49:42,730 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-23 10:49:43,657 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-23 10:49:43,657 INFO : Calling script to initiate export of data.
+2012-10-23 10:49:43,658 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-23 10:49:43,808 INFO : Signing out...
+2012-10-23 10:49:43,954 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-23 10:56:04,051 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-23 10:56:05,015 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-23 10:56:05,015 INFO : Calling script to initiate export of data.
+2012-10-23 10:56:05,015 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-23 10:56:05,170 INFO : Signing out...
+2012-10-23 10:56:05,315 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-23 10:59:27,131 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-23 10:59:28,348 INFO : This is the email today.
+2012-10-23 10:59:28,349 INFO : Will fetch the exported data.
+2012-10-23 10:59:28,349 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 54, in <module>
+    mail_timestamp = msg['date'][5:25]
+TypeError: 'NoneType' object is not subscriptable
+
+2012-10-23 10:59:28,501 INFO : Signing out...
+2012-10-23 10:59:28,649 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-23 10:59:28,950 INFO : Getting configurations...
+2012-10-23 10:59:49,406 INFO : Logging in as qbfb.joseph
+2012-10-23 11:00:19,432 INFO : Extracting data...
+2012-10-23 11:00:50,630 INFO : Writing data to export_company_20121023_1100.qbxml
+2012-10-23 11:00:50,630 INFO : Dump written to export_company_20121023_1100.qbxml
+2012-10-23 11:01:01,257 INFO : Exporting finished successfully.
+2012-10-23 11:09:00,879 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-23 11:09:01,908 INFO : This is the email today.
+2012-10-23 11:09:01,908 INFO : Will fetch the exported data.
+2012-10-23 11:09:01,909 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-23 11:09:02,062 INFO : Signing out...
+2012-10-23 11:09:02,206 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-23 11:09:02,482 INFO : Getting configurations...
+2012-10-23 11:09:22,819 INFO : Logging in as qbfb.joseph
+2012-10-23 11:09:52,847 INFO : Extracting data...
+2012-10-23 11:10:24,006 INFO : Writing data to export_company_20121023_1110.qbxml
+2012-10-23 11:10:24,007 INFO : Dump written to export_company_20121023_1110.qbxml
+2012-10-23 11:10:34,565 INFO : Exporting finished successfully.
+2012-10-23 11:31:40,229 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-23 11:31:41,570 INFO : This is the email today.
+2012-10-23 11:31:41,570 INFO : Will fetch the exported data.
+2012-10-23 11:31:41,570 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-23 11:31:41,720 INFO : Signing out...
+2012-10-23 11:31:41,885 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-23 11:31:42,157 INFO : Getting configurations...
+2012-10-23 11:32:02,581 INFO : Logging in as qbfb.joseph
+2012-10-23 11:32:32,608 INFO : Extracting data...
+2012-10-23 11:33:03,712 INFO : Writing data to export_company_20121023_1133.qbxml
+2012-10-23 11:33:03,713 INFO : Dump written to export_company_20121023_1133.qbxml
+2012-10-23 11:33:41,322 INFO : Signing out...
+2012-10-23 11:33:41,790 ERROR : Traceback (most recent call last):
+  File "./qb_export_data.py", line 74, in <module>
+    exit(0)
+  File "/usr/lib/python2.7/site.py", line 374, in __call__
+    raise SystemExit(code)
+SystemExit: 0
+
+2012-10-23 11:33:41,792 INFO : Exporting finished successfully.

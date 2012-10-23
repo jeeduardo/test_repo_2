@@ -64,7 +64,7 @@ logging.basicConfig(filename=os.getcwd() + os.sep + 'quickbooks_dump.log', level
 
 # 04Sep2012 - get configurations
 cfg = ConfigParser.ConfigParser()
-cfg.read('dump_casc_qboe_other.cfg')
+cfg.read('quickbooks-report-dump.cfg')
 
 url = cfg.get('credentials', 'url')
 username = cfg.get('credentials', 'username')
@@ -99,6 +99,12 @@ fp.set_preference("browser.download.dir", download_dir)#"C:\Users\josephson\Down
 fp.set_preference("browser.helperApps.neverAsk.saveToDisk", save_to_disk) #"application/vnd.ms-excel")
 
 driver = webdriver.Firefox(firefox_profile=fp)
+
+# 08Oct2012 - TEMPORARY
+os.system("python %s../utils/sendmail.py --cfg quickbooks-report-dump.cfg --subject '%s' --message '%s'" % (os.getcwd()+os.sep, "QuickBooks dump has finished", "QuickBooks dump finished."))
+exit(1)
+# 08Oct2012 - TEMPORARY
+
 driver.get(url)
 # 31Aug2012 - Josephson (testing something on clicking QBOE links)
 show_loading(10, "Loading %s" % (url))

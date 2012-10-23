@@ -280,9 +280,10 @@ logging.info('Data has been exported. Ending program.')
 driver.quit()
 
 # 07Oct2012 - send email
+subject = "FreshBooks dump finished"
 email_msg = "The FreshBooks dump has finished. Please check path %s to check the CSV files." % (os.getcwd() + os.sep + FF.backup_dirname) 
 #sendmail.email(email_msg, "josephson@cascadeo.com", cfg)
-os.system("python %s" %(os.getcwd() + os.sep + '../utils/sendmail.py'))
+os.system("python %s../utils/sendmail.py --cfg freshbooks-dump.cfg --subject '%s' --message '%s'" %(os.getcwd() + os.sep, subject, email_msg))
 exit(0)
 
 
