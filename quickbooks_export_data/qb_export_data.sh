@@ -2,7 +2,7 @@
 
 
 clear
-cd /home/ubuntu/qboe/test_repo_2/quickbooks_v2012_10_12
+cd /home/ubuntu/qboe/test_repo_2/quickbooks_export_data
 CHECK_EMAIL_RESPONSE=$(python qb_check_email.py)
 
 CURR_DATE=$(date +'%Y%m%d')
