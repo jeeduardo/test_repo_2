@@ -56,9 +56,10 @@ try:
       mail_datetime = datetime.strptime(mail_timestamp, '%d %b %Y %H:%M:%S')
       # TO-DO: use something like datetime.now() - timedelta(hours=8?) since gmail account is on PDT!
       pdt_curr_datetime = datetime.now() - timedelta(hours=7)
+      # print mail_datetime, "AND", pdt_curr_datetime
       if (mail_datetime.day == pdt_curr_datetime.day):
         print "FOUND"
-        logging.info("This is the email today.")
+        logging.info("Got the email today from QuickBooks.")
         logging.info("Will fetch the exported data.")
       else:
         print "NOT FOUND"

@@ -1,5 +1,6 @@
 #!/usr/bin/python
 from selenium import webdriver
+from datetime import datetime
 import time
 import os
 import re
@@ -32,8 +33,9 @@ def find_click(p_by='id', p_string='', p_send_keys='', p_seconds=0, p_msg_while_
   
     if p_seconds > 0:
       show_loading(p_seconds, p_msg_while_waiting)
-  except Exception, e:
-    print 'ERROR:', e
+  except:
+    import traceback
+    print traceback.format_exc()
     exit()
 
 # 25Sep2012 - function to reload 'Report List' page
@@ -60,8 +62,10 @@ def switch_frame():
 
 # 05Sep2012 - enable logging
 # 25Sep2012 - use os.sep for directory separator
-logging.basicConfig(filename=os.getcwd() + os.sep + 'quickbooks_dump.log', level=logging.INFO, format='%(asctime) %(levelname)s : %(message)s')
+#logging.basicConfig(filename=os.getcwd() + os.sep + 'quickbooks_dump.log', level=logging.INFO, format='%(asctime) %(levelname)s : %(message)s')
+logging.basicConfig(filename='quickbooks-report-dump.log', level=logging.INFO, format='%(asctime)s %(levelname)s : %(message)s')
 
+print "Setting up logging..."
 # 04Sep2012 - get configurations
 cfg = ConfigParser.ConfigParser()
 cfg.read('quickbooks-report-dump.cfg')
@@ -78,6 +82,8 @@ else:
 
 download_dir = cfg.get('prefs', 'download_dir')
 save_to_disk = cfg.get('prefs', 'save_to_disk_immed')
+#24Oct2012 - dirname
+dirname = cfg.get('prefs', 'dirname')
 
 # 24Sep2012 - get command named used to move/rename file(s) and DIRECTORY separator
 # move - for windows
@@ -85,11 +91,23 @@ save_to_disk = cfg.get('prefs', 'save_to_disk_immed')
 mv = cfg.get('prefs', 'move_command')
 sep = os.sep
 
-print mv
+# print mv
+# create download director
+datetime_now = datetime.now()
+download_dir_full_path = download_dir + sep + dirname + datetime_now.strftime('%Y-%m-%d_%H%M')
 
-# ec2-107-22-54-11.compute-1.amazonaws.com *YHyttwQNuz
+# function to move file to target directory
+def move_report_xls(report_name_prefix):
+  global mv, download_dir_download_dir_full_path, datetime_now
+  mv_cmd = "%s -v $(ls -t %s/report*.xls | head -n1) %s/%s_%s.xls" %(mv, download_dir, download_dir_full_path, report_name_prefix, datetime_now.strftime('%Y-%m-%d_%H%M'))
+  logging.info(mv_cmd)
+  return os.system(mv_cmd)
+
+logging.info("creating download directory %s" %(download_dir_full_path))
+os.system("mkdir %s" %(download_dir_full_path))
 
 # set Firefox profile
+logging.info("Loading Firefox profile...")
 fp = webdriver.FirefoxProfile()
 #fp.set_preference("browser.download.folderList",2)
 fp.set_preference("browser.download.manager.showWhenStarting", False) # False
@@ -101,8 +119,14 @@ fp.set_preference("browser.helperApps.neverAsk.saveToDisk", save_to_disk) #"appl
 driver = webdriver.Firefox(firefox_profile=fp)
 driver.get(url)
 # 31Aug2012 - Josephson (testing something on clicking QBOE links)
+# 23Oct2012 - temporary
+logging.info("Loading QuickBooks")
+# 23Oct2012 - temporary
+logging.info("Loading %s" %(url))
 show_loading(10, "Loading %s" % (url))
+#/home/ubuntu/qboe/test_repo_2/quickbooks
 
+logging.info("Logging in as %s" % (username))
 # 04Sep2012 - Josephson (testing the _find_it function)
 find_click('name', 'login', username, 2)
 
@@ -126,9 +150,11 @@ find_click('id', 'nav6', '', 10, "Getting reports")
 find_click('id', 'nav601', '', 10, "Going to 'Report List'")
 
 #show_loading(10, "Getting the Banking reports")
+logging.info("Getting the Banking reports")
 find_click('id', 'category_BANKING', '', 2, "Getting the Banking reports")
 #driver.find_element_by_id('DEPOSIT_DETAIL_reportListLink_Banking').click()
 #show_loading(10, "Getting Deposit Details")
+logging.info("Getting \"Deposit Details\" report...")
 find_click('id', 'DEPOSIT_DETAIL_reportListLink_Banking', '', 10, "Getting \"Deposit Details\" Report")
 # @TODO: set dates covered (from and to) for the report
 # Deposit Detail
@@ -144,7 +170,11 @@ home_frames = driver.find_elements_by_tag_name('iframe')
 driver.switch_to_frame(home_frames[0]) # since the page was reloaded
 #time.sleep(5)
 driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-show_loading(10, "Getting Excel version of report")
+logging.info("Getting Excel version of \"Deposit Details\" report")
+show_loading(10, "Getting Excel version of \"Deposit Details\" report")
+# move file
+move_report_xls("deposit_details")
+time.sleep(5)
 
 # 07Sep2012 - Josephson
 # Go back to 'Report List' to requet for another report...
@@ -175,14 +205,12 @@ driver.switch_to_frame(home_frames[0]) # since the page was reloaded
 excel_button = driver.find_element_by_id('button_id_b5_excel_small.gif')
 # get report
 excel_button.click()
+logging.info("Getting Excel version of Journals' report...")
 show_loading(10, "Getting Excel version of Journals' report...")
+move_report_xls("journals")
+time.sleep(5)
 
 # 17Sep2012 - Josephson (get Profit & Loss excel report)
-#find_click('id', 'nav6', '', 10, "Getting reports")
-#find_click('id', 'nav601', '', 10, "Going to 'Report List'")
-#driver.switch_to_default_content()
-#home_frames = driver.find_elements_by_tag_name('iframe')
-#driver.switch_to_frame(home_frames[0]) # since the page was reloaded
 reload_report_list()
 find_click('id', 'PANDL_reportListLink_Company', '', 10, "Getting \"Profit & Loss\" report...")
 # no need for date_macro FOR NOW
@@ -193,21 +221,22 @@ driver.switch_to_frame(home_frames[0]) # since the page was reloaded
 show_loading(5)
 excel_button = driver.find_element_by_id('button_id_b5_excel_small.gif')
 excel_button.click()
+logging.info("Getting Excel version of \"Profit & Loss\" report...")
 show_loading(10, "Getting Excel version of \"Profit & Loss\" report...")
+move_report_xls("profit_loss")
+time.sleep(5)
 
 # Profit and Loss Detail report
-#find_click('id', 'nav6', '', 10, "Getting reports")
-#find_click('id', 'nav601', '', 10, "Going to 'Report List'")
-#driver.switch_to_default_content()
-#home_frames = driver.find_elements_by_tag_name('iframe')
-#driver.switch_to_frame(home_frames[0]) # since the page was reloaded
 reload_report_list()
 find_click('id', 'PANDL_DET_reportListLink_Company', '', 20, "Getting \"Profit & Loss Detail\" report...")
 driver.switch_to_default_content()
 home_frames = driver.find_elements_by_tag_name('iframe')
 driver.switch_to_frame(home_frames[0])
 driver.find_element_by_id('button_id_b5_excel_small.gif').click()
+logging.info("Getting Excel version of \"Profit & Loss Detail\" report...")
 show_loading(10, "Getting Excel version of \"Profit & Loss Detail\" report...")
+move_report_xls("profit_loss_detail")
+time.sleep(5)
 
 
 # 18Sep2012 - Balance Sheet report
@@ -221,7 +250,10 @@ find_click('id', 'BAL_SHEET_reportListLink_Company', '', 10, "Getting \"Balance 
 driver.switch_to_default_content()
 driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 driver.find_element_by_id('button_id_b5_excel_small.gif').click()
+logging.info("Getting Excel version of \"Balance Sheet\" report...")
 show_loading(10, "Getting Excel version of \"Balance Sheet\" report...")
+move_report_xls("balance_sheet")
+time.sleep(5)
 
 #find_click('id', 'nav6', '', 10)
 reload_report_list()
@@ -229,7 +261,10 @@ find_click('id', 'BAL_SHEET_SUM_reportListLink_Company', '', 10, "Getting \"Bala
 driver.switch_to_default_content()
 driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 driver.find_element_by_id('button_id_b5_excel_small.gif').click()
+logging.info("Getting Excel version of \"Balance Sheet Summary\" report...")
 show_loading(10, "Getting Excel version of \"Balance Sheet Summary\" report...")
+move_report_xls("balance_sheet_summary")
+time.sleep(5)
 
 #find_click('id', 'nav6', '', 10)
 reload_report_list()
@@ -237,7 +272,10 @@ find_click('id', 'CASH_FLOW_reportListLink_Company', '', 15, "Getting \"Statemen
 driver.switch_to_default_content()
 driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 driver.find_element_by_id('button_id_b5_excel_small.gif').click()
+logging.info("Getting Excel version of \"Statement of Cash Flows\"")
 show_loading(10, "Getting Excel version of \"Statement of Cash Flows\"")
+move_report_xls("statement_cash_flows")
+time.sleep(5)
 
 # 20Sep2012 - Account Listing report
 #find_click('id', 'nav6', '', 10)
@@ -246,7 +284,10 @@ find_click('id', 'ACCT_LIST_reportListLink_Company', '', 15, "Getting \"Account 
 driver.switch_to_default_content()
 driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 driver.find_element_by_id('button_id_b5_excel_small.gif').click()
+logging.info("Getting excel version of \"Account Listing\"...")
 show_loading(10, "Getting excel version of \"Account Listing\"")
+move_report_xls("account_listing")
+time.sleep(5)
 
 
 # A/R Aging
@@ -262,7 +303,10 @@ show_loading(20, "Running report") # 20 - for the meantime
 driver.switch_to_default_content()
 driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 driver.find_element_by_id('button_id_b5_excel_small.gif').click()
+logging.info("Getting excel version of \"A/R Aging Summary\" report")
 show_loading(10, "Getting excel version of \"A/R Aging Summary\" report")
+move_report_xls("ar_aging_summary")
+time.sleep(5)
 
 # 27Sep2012 - A/R Aging Detail
 reload_report_list()
@@ -276,7 +320,10 @@ show_loading(20, "Running report") # 20 - for the meantime
 driver.switch_to_default_content()
 driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 driver.find_element_by_id('button_id_b5_excel_small.gif').click()
+logging.info("Getting excel version of \"A/R Aging Detail\" report")
 show_loading(10, "Getting excel version of \"A/R Aging Detail\" report")
+move_report_xls("ar_aging_detail")
+time.sleep(3)
 
 
 # Customer Balance Summary report
@@ -289,7 +336,10 @@ driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
 show_loading(20, "Running report") # 20 - for the meantime
 switch_frame()
 driver.find_element_by_id('button_id_b5_excel_small.gif').click()
+logging.info("Getting excel version of \"Customer Balance Summary\" report")
 show_loading(10, "Getting excel version of \"Customer Balance Summary\" report")
+move_report_xls("customer_balance_summary")
+time.sleep(3)
 
 
 # Customer Balance Detail report
@@ -310,6 +360,11 @@ reload_report_list()
 # @TODO: find out QuickBooks' robots.txt (how to do that?) and find out what could make my scraping illegal
 
 #driver.quit()
+time.sleep(10)
+driver.switch_to_default_content()
+driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
+time.sleep(10)
+driver.find_element_by_link_text('Sign Out').click()
 exit()
 
 

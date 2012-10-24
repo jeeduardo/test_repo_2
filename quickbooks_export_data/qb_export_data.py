@@ -71,7 +71,6 @@ try:
   logging.info("Signing out...")
   driver.find_element_by_link_text('Sign Out').click()
   driver.quit()
-  exit(0)
 except:
   import traceback
   logging.error(traceback.format_exc())

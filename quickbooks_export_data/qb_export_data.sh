@@ -3,10 +3,11 @@
 
 clear
 cd /home/ubuntu/qboe/test_repo_2/quickbooks_export_data
-CHECK_EMAIL_RESPONSE=$(python qb_check_email.py)
+#CHECK_EMAIL_RESPONSE=$(python qb_check_email.py)
 
 CURR_DATE=$(date +'%Y%m%d')
 CURR_MONTH=$(date +'%Y%m')
+CHECK_EMAIL_RESPONSE=$(cat qb_check_email_$CURR_DATE.txt)
 IS_MONTHEND=$(python /home/ubuntu/qboe/test_repo_2/utils/check_monthend.py)
 
 if [ "$CHECK_EMAIL_RESPONSE" == "FOUND" ]; then
