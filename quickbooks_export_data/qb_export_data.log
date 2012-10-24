@@ -1120,3 +1120,43 @@ IndexError: string index out of range
 
 2012-10-24 04:07:40,136 INFO : Signing out...
 2012-10-24 04:07:40,281 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-24 05:01:01,542 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-24 05:01:02,597 INFO : Got the email today from QuickBooks.
+2012-10-24 05:01:02,597 INFO : Will fetch the exported data.
+2012-10-24 05:01:02,597 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-24 05:01:02,749 INFO : Signing out...
+2012-10-24 05:01:02,895 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-24 06:01:01,499 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-24 06:01:03,027 INFO : Got the email today from QuickBooks.
+2012-10-24 06:01:03,027 INFO : Will fetch the exported data.
+2012-10-24 06:01:03,027 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-24 06:01:03,178 INFO : Signing out...
+2012-10-24 06:01:03,321 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-24 07:01:01,836 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-24 07:01:02,979 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-24 07:01:02,979 INFO : Calling script to initiate export of data.
+2012-10-24 07:01:02,979 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-24 07:01:03,127 INFO : Signing out...
+2012-10-24 07:01:03,271 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-24 08:01:01,856 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-24 08:01:03,083 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-24 08:01:03,083 INFO : Calling script to initiate export of data.
+2012-10-24 08:01:03,083 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-24 08:01:03,238 INFO : Signing out...
+2012-10-24 08:01:03,384 INFO : ('BYE', ['LOGOUT Requested'])
