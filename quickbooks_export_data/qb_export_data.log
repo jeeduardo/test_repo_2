@@ -1460,3 +1460,87 @@ IndexError: string index out of range
 
 2012-10-25 14:01:03,755 INFO : Signing out...
 2012-10-25 14:01:03,901 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-25 14:22:03,619 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-25 14:22:04,533 INFO : Found email with subject "QuickBooks Online Plus: Company Data Ready for Download" but this is NOT the email today.
+2012-10-25 14:22:04,533 INFO : Calling script to initiate export of data.
+2012-10-25 14:22:04,533 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-25 14:22:04,685 INFO : Signing out...
+2012-10-25 14:22:04,829 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-25 14:54:14,266 INFO : Proceeding in requesting for data export.
+2012-10-25 14:54:14,267 INFO : Opening firefox...
+2012-10-25 14:54:24,464 INFO : Logging in as qbfb.joseph
+2012-10-25 14:54:29,722 INFO : Requesting data...
+2012-10-25 14:55:40,703 INFO : REQUEST FOR TODAY, 2012-10-25, WRITTEN TO LOG FILE!
+2012-10-25 14:56:39,072 INFO : Proceeding in requesting for data export.
+2012-10-25 14:56:39,072 INFO : Opening firefox...
+2012-10-25 14:58:06,787 ERROR : Traceback (most recent call last):
+  File "qb_export_data_request.py", line 31, in <module>
+    exit(0)
+  File "/usr/lib/python2.7/site.py", line 374, in __call__
+    raise SystemExit(code)
+SystemExit: 0
+
+2012-10-25 14:58:06,787 INFO : Opening firefox...
+2012-10-25 14:58:17,419 INFO : Logging in as qbfb.joseph
+2012-10-25 15:01:01,643 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-25 15:01:03,625 INFO : Got the email today from QuickBooks.
+2012-10-25 15:01:03,625 INFO : Will fetch the exported data.
+2012-10-25 15:01:03,625 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 54, in <module>
+    mail_timestamp = msg['date'][5:25]
+TypeError: 'NoneType' object is not subscriptable
+
+2012-10-25 15:01:03,778 INFO : Signing out...
+2012-10-25 15:01:03,925 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-25 15:01:48,304 INFO : Request has been made already. Please wait for the email to be delivered.
+2012-10-25 15:02:03,331 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-25 15:02:04,334 INFO : Got the email today from QuickBooks.
+2012-10-25 15:02:04,334 INFO : Will fetch the exported data.
+2012-10-25 15:02:04,334 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-25 15:02:04,499 INFO : Signing out...
+2012-10-25 15:02:04,645 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-25 15:05:41,832 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-25 15:05:43,293 INFO : Got the email today from QuickBooks.
+2012-10-25 15:05:43,293 INFO : Will fetch the exported data.
+2012-10-25 15:05:43,293 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-25 15:05:43,454 INFO : Signing out...
+2012-10-25 15:05:43,601 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-25 15:05:47,769 INFO : Request has been made already. Please wait for the email to be delivered.
+2012-10-25 15:06:22,963 INFO : Request has been made already. Please wait for the email to be delivered.
+2012-10-25 15:06:53,467 INFO : Request has been made already. Please wait for the email to be delivered.
+2012-10-25 15:08:17,788 INFO : Request has been made already. Please wait for the email to be delivered.
+2012-10-25 15:09:38,497 INFO : Request has been made already. Please wait for the email to be delivered.
+2012-10-25 15:18:50,137 INFO : Request has been made already. Please wait for the email to be delivered.
+2012-10-25 15:18:50,430 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-25 15:18:51,370 INFO : Got the email today from QuickBooks.
+2012-10-25 15:18:51,371 INFO : Will fetch the exported data.
+2012-10-25 15:18:51,371 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-25 15:18:51,523 INFO : Signing out...
+2012-10-25 15:18:51,673 INFO : ('BYE', ['LOGOUT Requested'])
+2012-10-25 15:21:14,140 INFO : Request has been made already. Please wait for the email to be delivered.
+2012-10-25 15:21:14,422 INFO : Logging in as qbfb.joseph@gmail.com
+2012-10-25 15:21:15,425 INFO : Got the email today from QuickBooks.
+2012-10-25 15:21:15,426 INFO : Will fetch the exported data.
+2012-10-25 15:21:15,426 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 47, in <module>
+    msg = email.message_from_string(response_part[1])
+IndexError: string index out of range
+
+2012-10-25 15:21:15,576 INFO : Signing out...
+2012-10-25 15:21:15,724 INFO : ('BYE', ['LOGOUT Requested'])

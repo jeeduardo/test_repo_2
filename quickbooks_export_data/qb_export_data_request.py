@@ -3,7 +3,7 @@ import logging
 import time
 import os
 from selenium import webdriver
-from datetime import datetime
+from datetime import datetime, timedelta
 from re import search
 from ConfigParser import ConfigParser
 
@@ -16,19 +16,32 @@ pword = cfg.get('credentials', 'pword')
 email_address = cfg.get('email_credentials', 'username')
 export_data_request_url = cfg.get('other_settings', 'export_data_request_url') + ("&user_email=%s&user_name=%s" %(email_address, username))
 
+# setup logging
+log_filename=os.getcwd() + os.sep + cfg.get('other_settings', 'log_file')
+logging.basicConfig(filename=log_filename, level=logging.INFO, format='%(asctime)s %(levelname)s : %(message)s')
 
 # check if export request has been made already
-date_today = datetime.now().strftime('%Y%m%d')
+datetime_now = datetime.now()
+datetime_pdt = datetime_now - timedelta(hours=7)
+# date_today = datetime_now.strftime('%Y%m%d')
+# search for PDT date in log file
+grep_cmd = "grep -q \"REQUEST FOR TODAY, %s, WRITTEN TO LOG FILE\!\" %s" %(datetime_pdt.strftime('%Y-%m-%d'), log_filename)
 try:
-  infile = open('qb_export_data_request_time', 'r')
-  timestamp = infile.read()
-  infile.close()
-  if (search(date_today, timestamp)):
-    print "Request has been made already. Please wait for the email to be delivered."
-    exit(0)
-except IOError:
+  grep_rs = os.system(grep_cmd)
+except:
   import traceback
-  print traceback.format_exc()
+  print "An error was encountered. Please check %s for details." %(log_filename)
+  logging.error(traceback.format_exc())
+finally:
+  if (grep_rs == 0):
+    print "REQUESTED"
+    logging.info("Request has been made already. Please wait for the email to be delivered.")
+    exit(0)
+  else:
+    print "REQUESTING"
+    logging.info("Proceeding in requesting for data export.")
+
+logging.info("Opening firefox...")
 
 driver = webdriver.Firefox()
 driver.get(url)
@@ -41,29 +54,32 @@ ppword.click()
 # ppword.clear()
 ppword.send_keys(pword)
 time.sleep(2)
+logging.info("Logging in as %s" %(username))
 driver.find_element_by_id('LoginButton').click()
 
 driver.switch_to_default_content()
 driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 
 # print "export_data_request_url: %s" %export_data_request_url
-print "Requesting data..."
+logging.info("Requesting data...")
 time.sleep(10)
 driver.get(export_data_request_url)
 
 time.sleep(60)
 # write the timestamp for the request (to make sure that the request made for the day will not be forgotten)
-outfile = open('qb_export_data_request_time', 'w')
-outfile.write(date_today)
-outfile.close()
-print "Request for today has been recorded."
+# 25Oct2012 - write to log file
+#outfile = open('qb_export_data_request_time', 'w')
+#outfile.write(date_today)
+#outfile.close()
+logging.info("Request for today has been recorded.")
+logging.info("REQUEST FOR TODAY, %s, WRITTEN TO LOG FILE!" %(datetime_pdt.strftime('%Y-%m-%d')))
 
 driver.get(url)
 time.sleep(30)
 driver.switch_to_default_content()
 driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 time.sleep(2)
-print "Signing out"
+logging.info("Signing out")
 driver.find_element_by_link_text('Sign Out').click()
 time.sleep(10)
 driver.quit()
