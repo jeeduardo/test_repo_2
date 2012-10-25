@@ -38,7 +38,8 @@ def find_click(p_by='id', p_string='', p_send_keys='', p_seconds=0, p_msg_while_
       show_loading(p_seconds, p_msg_while_waiting)
   except:
     import traceback
-    print traceback.format_exc()
+    # print traceback.format_exc()
+    logging.error(traceback.format_exc())
     exit()
 
 # 25Sep2012 - function to reload 'Report List' page
@@ -113,6 +114,8 @@ os.system("mkdir %s" %(download_dir_full_path))
 def get_report(report_link_id, p_send_keys, p_seconds, report_name, date_macro_name, report_name_prefix):
   global driver
   try:
+    print "Getting report named \"%s\"" %(report_name)
+    reload_report_list()
     find_click('id', report_link_id, p_send_keys, p_seconds, "Getting \"%s\" report" %(report_name))
     switch_frame()
     if (date_macro_name <> ""):
@@ -178,349 +181,173 @@ find_click('id', 'nav601', '', 10, "Going to 'Report List'")
 
 #show_loading(10, "Getting the Banking reports")
 logging.info("Getting the Banking reports")
-find_click('id', 'category_BANKING', '', 2, "Getting the Banking reports")
-#driver.find_element_by_id('DEPOSIT_DETAIL_reportListLink_Banking').click()
-#show_loading(10, "Getting Deposit Details")
-logging.info("Getting \"Deposit Details\" report...")
-find_click('id', 'DEPOSIT_DETAIL_reportListLink_Banking', '', 10, "Getting \"Deposit Details\" Report")
-# @TODO: set dates covered (from and to) for the report
-# Deposit Detail
 
-date_macro = driver.find_element_by_id('date_macro')
-date_macro.find_element_by_xpath("//option[@value='all']").click()
-driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
-show_loading(20, "Running report") # 20 - for the meantime
-driver.switch_to_default_content()
-show_loading(5)
-home_frames = driver.find_elements_by_tag_name('iframe')
-driver.switch_to_frame(home_frames[0]) # since the page was reloaded
-#time.sleep(5)
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting Excel version of \"Deposit Details\" report")
-show_loading(10, "Getting Excel version of \"Deposit Details\" report")
-# move file
-move_report_xls("deposit_details")
-time.sleep(5)
+# use get_report instead
+# Deposit Details
+get_report('DEPOSIT_DETAIL_reportListLink_Banking', '', 10, "Deposit Details", 'date_macro', "deposit_details") 
 
+# find_click('id', 'category_BANKING', '', 2, "Getting the Banking reports")
 # 24Oct2012 - temporary
 reload_report_list()
-get_report('AP_AGING_reportListLink_Vendors', '', 10, "A/P Aging Summary", 'date_macro', 'ap_aging_summary')
 
-# logging out
-time.sleep(10)
-switch_frame()
-driver.find_element_by_link_text('Sign Out').click()
-time.sleep(5)
-driver.quit()
-exit(0)
-# 24Oct2012 - temporary ^ 
+# Journal
+get_report('JOURNAL_reportListLink_Accountant & Taxes', '', 10, "Journal", 'date_macro', "journals")
 
-# 07Sep2012 - Josephson
-# Go back to 'Report List' to requet for another report...
-# 'Accountant and Taxes' - category_ACCOUNTANT
-# The rest:
-# category_COMPANY, category_CUSTOMERS, category_SALES, category_VENDORS, category_EMPLOYEES, PAYROLL, LISTS
-# Journal report - JOURNAL_reportListLink_Accountant & Taxes
-# 25Sep2012 - implement reload_report_list
-reload_report_list()
-find_click('id', 'JOURNAL_reportListLink_Accountant & Taxes', '', 10, "Getting Journal report...") # << change to &amp; ??
+# Profit & Loss
+get_report('PANDL_reportListLink_Company', '', 10, "Profit & Loss", '', "profit_loss")
 
-driver.switch_to_default_content()
-home_frames = driver.find_elements_by_tag_name('iframe')
-driver.switch_to_frame(home_frames[0]) # since the page was reloaded
-date_macro = driver.find_element_by_id('date_macro')
-date_macro.find_element_by_xpath("//option[@value='all']").click()
-driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
-show_loading(20, "Running report") # 20 - for the meantime
-# driver.switch_to_default_content()
-driver.switch_to_default_content()
-show_loading(5)
+# Profit & Loss Detail
+get_report('PANDL_DET_reportListLink_Company', '', 10, "Profit & Loss Detail", '', "profit_loss_detail")
 
-home_frames = driver.find_elements_by_tag_name('iframe')
-driver.switch_to_frame(home_frames[0]) # since the page was reloaded
-#time.sleep(5)
-excel_button = driver.find_element_by_id('button_id_b5_excel_small.gif')
-# get report
-excel_button.click()
-logging.info("Getting Excel version of Journals' report...")
-show_loading(10, "Getting Excel version of Journals' report...")
-move_report_xls("journals")
-time.sleep(5)
+# Balance Sheet
+get_report('BAL_SHEET_reportListLink_Company', '', 10, "Balance Sheet", '', "balance_sheet")
 
-# 17Sep2012 - Josephson (get Profit & Loss excel report)
-reload_report_list()
-find_click('id', 'PANDL_reportListLink_Company', '', 10, "Getting \"Profit & Loss\" report...")
-# no need for date_macro FOR NOW
-show_loading(10, "Running report")
-driver.switch_to_default_content()
-home_frames = driver.find_elements_by_tag_name('iframe')
-driver.switch_to_frame(home_frames[0]) # since the page was reloaded
-show_loading(5)
-excel_button = driver.find_element_by_id('button_id_b5_excel_small.gif')
-excel_button.click()
-logging.info("Getting Excel version of \"Profit & Loss\" report...")
-show_loading(10, "Getting Excel version of \"Profit & Loss\" report...")
-move_report_xls("profit_loss")
-time.sleep(5)
+# Balance Sheet Summary
+get_report('BAL_SHEET_SUM_reportListLink_Company', '', 10, "Balance Sheet Summary", '', "balance_sheet_summary")
 
-# Profit and Loss Detail report
-reload_report_list()
-find_click('id', 'PANDL_DET_reportListLink_Company', '', 20, "Getting \"Profit & Loss Detail\" report...")
-driver.switch_to_default_content()
-home_frames = driver.find_elements_by_tag_name('iframe')
-driver.switch_to_frame(home_frames[0])
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting Excel version of \"Profit & Loss Detail\" report...")
-show_loading(10, "Getting Excel version of \"Profit & Loss Detail\" report...")
-move_report_xls("profit_loss_detail")
-time.sleep(5)
-
-
-# 18Sep2012 - Balance Sheet report
-#find_click('id', 'nav6', '', 10, "Getting reports")
-#find_click('id', 'nav601', '', 10, "Going to 'Report List'")
-#driver.switch_to_default_content()
-#home_frames = driver.find_elements_by_tag_name('iframe')
-#driver.switch_to_frame(home_frames[0]) # since the page was reloaded
-reload_report_list()
-find_click('id', 'BAL_SHEET_reportListLink_Company', '', 10, "Getting \"Balance Sheet\" report")
-driver.switch_to_default_content()
-driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting Excel version of \"Balance Sheet\" report...")
-show_loading(10, "Getting Excel version of \"Balance Sheet\" report...")
-move_report_xls("balance_sheet")
-time.sleep(5)
-
-#find_click('id', 'nav6', '', 10)
-reload_report_list()
-find_click('id', 'BAL_SHEET_SUM_reportListLink_Company', '', 10, "Getting \"Balance Sheet Summary\" report")
-driver.switch_to_default_content()
-driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting Excel version of \"Balance Sheet Summary\" report...")
-show_loading(10, "Getting Excel version of \"Balance Sheet Summary\" report...")
-move_report_xls("balance_sheet_summary")
-time.sleep(5)
-
-#find_click('id', 'nav6', '', 10)
-reload_report_list()
-find_click('id', 'CASH_FLOW_reportListLink_Company', '', 15, "Getting \"Statement of Cash Flows\" report")
-driver.switch_to_default_content()
-driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting Excel version of \"Statement of Cash Flows\"")
-show_loading(10, "Getting Excel version of \"Statement of Cash Flows\"")
-move_report_xls("statement_cash_flows")
-time.sleep(5)
-
-# 20Sep2012 - Account Listing report
-#find_click('id', 'nav6', '', 10)
-reload_report_list()
-find_click('id', 'ACCT_LIST_reportListLink_Company', '', 15, "Getting \"Account Listing\" report")
-driver.switch_to_default_content()
-driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting excel version of \"Account Listing\"...")
-show_loading(10, "Getting excel version of \"Account Listing\"")
-move_report_xls("account_listing")
-time.sleep(5)
-
+# Statement of Cash Flows
+get_report('CASH_FLOW_reportListLink_Company', '', 10, "Statement of Cash Flows", '', "statement_cash_flows")
 
 # A/R Aging
-#find_click('id', 'nav6', '', 10)
-reload_report_list()
-find_click('id', 'AR_AGING_reportListLink_Customers', '', 15, "Getting \"A/R Aging Summary\" report")
-driver.switch_to_default_content()
-driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
-date_macro = driver.find_element_by_id('date_macro')
-date_macro.find_element_by_xpath("//option[@value='all']").click()
-driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
-show_loading(20, "Running report") # 20 - for the meantime
-driver.switch_to_default_content()
-driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting excel version of \"A/R Aging Summary\" report")
-show_loading(10, "Getting excel version of \"A/R Aging Summary\" report")
-move_report_xls("ar_aging_summary")
-time.sleep(5)
+get_report('AR_AGING_reportListLink_Customers', '', 10, "A/R Aging Summary", 'date_macro', "ar_aging_summary")
 
-# 27Sep2012 - A/R Aging Detail
-proceed_ar_aging_detail = raw_input("proceed w/ A/R Aging Detail? (y/n)")
-if (proceed_ar_aging_detail == 'y'):
-  reload_report_list()
-  find_click('id', 'AR_AGING_DET_reportListLink_Customers', '', 15, "Getting \"A/R Aging Detail\" report")
-  driver.switch_to_default_content()
-  driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
-  date_macro = driver.find_element_by_id('date_macro')
-  date_macro.find_element_by_xpath("//option[@value='all']").click()
-  driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
-  show_loading(20, "Running report") # 20 - for the meantime
-  driver.switch_to_default_content()
-  driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
-  driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-  logging.info("Getting excel version of \"A/R Aging Detail\" report")
-  show_loading(10, "Getting excel version of \"A/R Aging Detail\" report")
-  move_report_xls("ar_aging_detail")
-  time.sleep(3)
+# A/R Aging Detail
+get_report('AR_AGING_DET_reportListLink_Customers', '', 10, "A/R Aging Detail", 'date_macro', "ar_aging_detail")
 
+# Customer Balance Summary
+get_report('CUST_BAL_reportListLink_Customers', '', 10, "Customer Balance Summary", 'date_macro', "customer_balance_summary")
 
-# Customer Balance Summary report
-reload_report_list()
-find_click('id', 'CUST_BAL_reportListLink_Customers', '', 15, "Getting \"Customer Balance Summary\" report")
-switch_frame()
-date_macro = driver.find_element_by_id('date_macro')
-date_macro.find_element_by_xpath("//option[@value='all']").click()
-driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
-show_loading(20, "Running report") # 20 - for the meantime
-switch_frame()
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting excel version of \"Customer Balance Summary\" report")
-show_loading(10, "Getting excel version of \"Customer Balance Summary\" report")
-move_report_xls("customer_balance_summary")
-time.sleep(3)
+# Customer Balance Detail
+get_report('CUST_BAL_DET_reportListLink_Customers', '', 10, "Customer Balance Detail", '', "customer_balance_detail")
 
-
-# Customer Balance Detail report
-reload_report_list()
-find_click('id', 'CUST_BAL_DET_reportListLink_Customers', '', 15, "Getting \"Customer Balance Detail\" report")
-switch_frame()
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting Excel version of the \"Customer Balance Detail\" report")
-show_loading(10, "Getting Excel version of the \"Customer Balance Detail\" report")
-move_report_xls("customer_balance_detail")
-time.sleep(3)
-
-reload_report_list()
-find_click('id', 'COLLECTIONS_reportListLink_Customers', '', 15, "Getting \"Collections\" report")
-switch_frame()
-date_macro = driver.find_element_by_id('date_macro')
-date_macro.find_element_by_xpath("//option[@value='all']").click()
-driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
-show_loading(10, "Running report") # 10 - since Internet's faster
-switch_frame()
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting Excel version of \"Collections\" report")
-show_loading(10, "Getting Excel version of \"Collections\" report")
-move_report_xls("collections")
-time.sleep(3)
+# Collections
+get_report('COLLECTIONS_reportListLink_Customers', '', 10, "Collections", 'date_macro', "collections")
 
 # Income by Customer Summary
-reload_report_list()
-find_click('id', 'CUST_INC_reportListLink_Customers', '', 5, "Getting \"Income by Customer Summary\" report")
-switch_frame()
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting Excel version of the \"Income by Customer Summary\" report")
-show_loading(5, "Getting Excel version of the \"Income by Customer Summary\" report")
-move_report_xls("income_by_customer_summary")
-time.sleep(3)
+get_report('CUST_INC_reportListLink_Customers', '', 10, "Income by Customer Summary", '', "income_by_cust_summary")
 
 # Transaction List by Customer
-reload_report_list()
-find_click('id', 'TX_LIST_BY_CUST_reportListLink_Customers', '', 5, "Getting \"Transaction List by Customer\" report")
-switch_frame()
-date_macro = driver.find_element_by_id('date_macro')
-date_macro.find_element_by_xpath("//option[@value='all']").click()
-driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
-show_loading(5, "Running report")
-switch_frame()
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting Excel version of \"Transaction List by Customer\" report")
-show_loading(10, "Getting Excel version of \"Transaction List by Customer\" report")
-move_report_xls("txn_list_by_customer")
-time.sleep(3)
+get_report('TX_LIST_BY_CUST_reportListLink_Customers', '', 10, "Transaction List by Customer", 'date_macro', "txn_list_by_customer")
 
 # Sales by Customer Summary
-reload_report_list()
-find_click('id', 'CUST_SALES_reportListLink_Customers', '', 5, "Getting \"Sales by Customer Summary\" report")
-switch_frame()
-date_macro = driver.find_element_by_id('date_macro')
-date_macro.find_element_by_xpath("//option[@value='all']").click()
-driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
-show_loading(5, "Running report")
-switch_frame()
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting Excel version of \"Sales by Customer Summary\" report")
-show_loading(5, "Getting Excel version of \"Sales by Customer Summary\" report")
-move_report_xls("sales_by_customer_summary")
-time.sleep(3)
+get_report('CUST_SALES_reportListLink_Customers', '', 10, "Sales by Customer Summary", 'date_macro', "sales_by_customer_summary")
 
 # Sales by Customer Detail
-reload_report_list()
-find_click('id', 'CUST_SALES_DET_reportListLink_Customers', '', 5, "Getting \"Sales by Customer Detail\" report")
-switch_frame()
-date_macro = driver.find_element_by_id('date_macro')
-date_macro.find_element_by_xpath("//option[@value='all']").click()
-driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
-show_loading(5, "Running report") # 20 - for the meantime
-switch_frame()
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting Excel version of \"Sales by Customer Detail\" report")
-show_loading(5, "Getting Excel version of \"Sales by Customer Detail\" report")
-move_report_xls("sales_by_customer_detail")
-time.sleep(3)
+get_report('CUST_SALES_DET_reportListLink_Customers', '', 10, "Sales by Customer Detail", 'date_macro', "sales_by_customer_detail")
 
 # Invoice List
-reload_report_list()
-find_click('id', 'INVOICE_LIST_reportListLink_Customers', '', 5, "Getting \"Invoice List\" report")
-switch_frame()
-date_macro = driver.find_element_by_id('date_macro')
-date_macro.find_element_by_xpath("//option[@value='all']").click()
-driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
-show_loading(5, "Running report")
-switch_frame()
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting Excel version of \"Invoice List\" report")
-show_loading(10, "Getting Excel version of \"Invoice List\" report")
-move_report_xls("invoice_list")
-time.sleep(3)
+get_report('INVOICE_LIST_reportListLink_Customers', '', 10, "Invoice List", 'date_macro', "invoice_list")
 
 # Statement List
-reload_report_list()
-find_click('id', 'STATEMENT_INVOICE_reportListLink_Customers', '', 5, "Getting \"Statement List\" report")
-switch_frame()
-date_macro = driver.find_element_by_id('stmtdate_macro')
-date_macro.find_element_by_xpath("//option[@value='all']").click()
-driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
-show_loading(5, "Running report")
-switch_frame()
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting Excel version of \"Statement List\" report")
-show_loading(10, "Getting Excel version of \"Statement List\" report")
-move_report_xls("statement_list")
-time.sleep(3)
+get_report('STATEMENT_INVOICE_reportListLink_Customers', '', 10, "Statement List", 'stmtdate_macro', "statement_list")
 
 # Sales by Product/Service Summary
-reload_report_list()
-find_click('id', 'ITEM_SALES_reportListLink_Sales', '', 5, "Getting \"Sales by Product/Service Summary\" report")
-switch_frame()
-date_macro = driver.find_element_by_id('date_macro')
-date_macro.find_element_by_xpath("//option[@value='all']").click()
-driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
-show_loading(10, "Running report")
-switch_frame()
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting Excel version of \"Sales by Product/Service Summary\" report")
-show_loading(5, "Getting Excel version of \"Sales by Product/Service Summary\" report")
-# move file
-move_report_xls("sales_product_service_summary")
-time.sleep(3)
+get_report('ITEM_SALES_reportListLink_Sales', '', 10, "Sales by Product/Service Summary", 'date_macro', "sales_product_service_summary")
 
 # Sales by Product/Service Detail
-reload_report_list()
-find_click('id', 'ITEM_SALES_DET_reportListLink_Sales', '', 5, "Getting \"Sales by Product/Service Detail\" report")
-switch_frame()
-date_macro = driver.find_element_by_id('date_macro')
-date_macro.find_element_by_xpath("//option[@value='all']").click()
-driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
-show_loading(10, "Running report")
-switch_frame()
-driver.find_element_by_id('button_id_b5_excel_small.gif').click()
-logging.info("Getting Excel version of \"Sales by Product/Service Detail\" report")
-show_loading(5, "Getting Excel version of \"Sales by Product/Service Detail\" report")
-# move file
-move_report_xls("sales_product_service_detail")
-time.sleep(3)
+get_report('ITEM_SALES_DET_reportListLink_Sales', '', 10, "Sales by Product/Service Detail", 'date_macro', "sales_product_service_detail")
+
+# logging out
+# time.sleep(10)
+# switch_frame()
+# driver.find_element_by_link_text('Sign Out').click()
+# time.sleep(5)
+# exit(0)
+# 24Oct2012 - temporary ^ 
+
+# A/P Aging Summary
+get_report('AP_AGING_reportListLink_Vendors', '', 10, "A/P Aging Summary", 'date_macro', 'ap_aging_summary')
+
+# A/P Aging Detail
+get_report('AP_AGING_DET_reportListLink_Vendors', '', 10, "A/P Aging Detail", 'date_macro', 'ap_aging_detail')
+
+# Vendor Balance Summary
+get_report('VEND_BAL_reportListLink_Vendors', '', 10, "Vendor Balance Summary", 'date_macro', 'vendor_bal_summary')
+
+# Vendor Balance Detail
+get_report('VEND_BAL_DET_reportListLink_Vendors', '', 10, "Vendor Balance Detail", 'date_macro', 'vendor_bal_detail')
+
+# Unpaid Bills
+get_report('UNPAID_BILLS_reportListLink_Vendors', '', 10, "Unpaid Bills", '', 'unpaid_bills')
+
+# Expenses by Vendor Summary
+get_report('VEND_EXP_reportListLink_Vendors', '', 10, "Expense by Vendor Summary", '', 'exp_by_vendor')
+
+# Bill Payment List
+get_report('BILL_PAY_LIST_reportListLink_Vendors', '', 10, "Bill Payment List", 'date_macro', 'bill_pay_list')
+
+# Transaction List by Vendor
+get_report('TX_LIST_BY_VENDOR_reportListLink_Vendors', '', 10, "Transaction List by Vendor", 'date_macro', 'txn_list_by_vendor')
+
+# Vendor Contact List
+get_report('VEND_CONTACT_reportListLink_Vendors', '', 10, "Vendor Contact List", '', "vendor_contact_list")
+
+# Purchases by Vendor Detail
+get_report('VENDOR_PURCHASE_DET_reportListLink_Vendors', '', 10, "Purchases by Vendor Detail", 'date_macro', "vendor_purchase_det")
+
+# Purchases by Product/Service Detail
+get_report('ITEM_PURCHASE_DET_reportListLink_Vendors', '', 10, "Purchases by Product/Service Detail", 'date_macro', "item_purchase_det")
+
+# Open Purchase Order List
+get_report('OPEN_PO_LIST_reportListLink_Vendors', '', 10, "Open Purchase Order List", '', "open_po_list")
+
+# BANKING reports
+# Check Detail
+get_report('CHECK_DETAIL_reportListLink_Banking', '', 10, "Check Detail", 'date_macro', "check_detail")
+
+# Reconciliation Report << SKIP for NOW? It has no Excel version
+# get_report('RECONCILE_REPORTS_reportListLink_Banking', '', 10, "Reconciliation Reports", '', "reconciliation_rpts")
+
+# Deposit Details here?
+
+# ACCOUNTANT & TAXES report
+# Trial Balance
+get_report('TRIAL_BAL_reportListLink_Accountant & Taxes', '', 10, "Trial Balance", 'date_macro', "trial_balance")
+
+# General Ledger
+get_report('GEN_LEDGER_reportListLink_Accountant & Taxes', '', 10, "General Ledger", 'date_macro', "general_ledger")
+
+# Transaction Detail by Account
+get_report('TX_DET_BY_ACCT_reportListLink_Accountant & Taxes', '', 10, "Transaction Detail by Account", 'date_macro', "txn_detail_by_acct")
+
+# Transaction List by Date
+get_report('TX_LIST_BY_DATE_reportListLink_Accountant & Taxes', '', 10, "Transaction List by Date", 'date_macro', "txn_list_by_date")
+
+# Transaction List with Splits
+get_report('TX_LIST_WITH_SPLITS_reportListLink_Accountant & Taxes', '', 10, "Transaction List with Splits", 'date_macro', "txn_list_with_splits")
+
+# Recent Transactions
+get_report('RECENT_TX_reportListLink_Accountant & Taxes', '', 10, "Recent Transactions", 'moddate_macro', "recent_txn")
+
+# PAYROLL reports not yet included
+# LISTS reports
+# Customer Phone List
+get_report('CUST_PHONE_reportListLink_Lists', '', 10, "Customer Phone List", '', "cust_phone_list")
+
+# Customer Contact List
+get_report('CUST_CONTACT_reportListLink_Lists', '', 10, "Customer Contact List", '', "cust_contact_list")
+
+# Vendor Phone List
+get_report('VEND_PHONE_reportListLink_Lists', '', 10, "Vendor Phone List", '', "vend_phone_list")
+
+# Vendor Contact List
+get_report('VEND_CONTACT_reportListLink_Lists', '', 10, "Vendor Contact List", '', "vend_contact_list")
+
+# Account Listing
+get_report('ACCT_LIST_reportListLink_Lists', '', 10, "Account Listing", '', "acct_listing")
+
+# Product/Service List
+get_report('ITEM_PRICE_reportListLink_Lists', '', 10, "Product/Service List", '', "product_service_list")
+
+# Payment Method Listing
+get_report('PAYMENTMETHOD_LIST_reportListLink_Lists', '', 10, "Payment Method Listing", '', "pay_method_listing")
+
+# Terms Listing
+get_report('TERM_LIST_reportListLink_Lists', '', 10, "Terms Listing", '', "terms_listing")
+
+# Recurring Template Listing
+get_report('MEM_TXN_REPORT_reportListLink_Lists', '', 10, "Recurring Template Listing", '', "rcrring_templ_listing")
+
 # proposed function
 # get_report(report_link_id='ITEM_SALES_DET_reportListLink_Sales', p_send_keys='', p_seconds=5, report_name="Sales by Product/Service Detail", date_macro_name='date_macro', report_name_prefix='sales_product_service_detail')
 
@@ -533,8 +360,9 @@ driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 time.sleep(10)
 driver.find_element_by_link_text('Sign Out').click()
 time.sleep(5)
+print "Waiting for browser to close..."
+logging.info("Closing browser.")
 driver.quit()
-exit()
 
 
 # http://stackoverflow.com/questions/6363966/problem-with-iframes-in-selenium
@@ -581,3 +409,24 @@ exit()
 # Skip the first 4 reports listed. They're redundant
 #	>> ITEM_SALES_reportListLink_Sales (Sales by Product/Service Summary)
 #	>> ITEM_SALES_DET_reportListLink_Sales (Sales by Product/Service Detail)
+# Vendors
+#	>> AP_AGING_reportListLink_Vendors (A/P Aging Summary)
+#	>> AP_AGING_DET_reportListLink_Vendors (A/P Aging Detail)
+#	>> VEND_BAL_reportListLink_Vendors (Vendor Balance Summary)
+#	>> VEND_BAL_DET_reportListLink_Vendors (Vendor Balance Detail)
+#	>> UNPAID_BILLS_reportListLink_Vendors (Unpaid Bills)
+#	>> VEND_EXP_reportListLink_Vendors (Expense by Vendor Summary)
+#	>> BILL_PAY_LIST_reportListLink_Vendors (Bill Payment List)
+#	>> TX_LIST_BY_VENDOR_reportListLink_Vendors (Transaction List by Vendor)
+#	reportListLink
+#	>> VEND_CONTACT_reportListLink_Vendors (Vendor Contract List)
+#	>> VENDOR_PURCHASE_DET_reportListLink_Vendors (Purchases by Vendor Detail)
+#	>> ITEM_PURCHASE_DET_reportListLink_Vendors (Purchases by Product/Service Detail)
+#	>> OPEN_PO_LIST_reportListLink_Vendors (Open Purchase Order List)
+# SKIP THE FOLLOWING ENTITIES FOR NOW!
+# Employees
+# Payroll
+# Banking
+#	>> CHECK_DETAIL_reportListLink_Banking (Check Detail)
+#	>> DEPOSIT_DETAIL_reportListLink_Banking (Deposit Detail) - the first report scraped
+#	>> RECONCILE_REPORTS_reportListLink_Banking (Reconciliation Reports)
