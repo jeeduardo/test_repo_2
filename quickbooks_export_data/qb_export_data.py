@@ -2,7 +2,7 @@
 from selenium import webdriver
 import os
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 import ConfigParser
 
@@ -53,7 +53,7 @@ try:
   time.sleep(30)
   
   xml_dump = driver.page_source
-  outfile_filename = "export_company_" + datetime.now().strftime('%Y%m%d_%H%M') + ".qbxml"
+  outfile_filename = "export_company_" + (datetime.now()-timedelta(hours=7)).strftime('%Y%m%d_%H%M') + ".qbxml"
   outfile = open(outfile_filename, 'w')
   logging.info("Writing data to %s" %(outfile_filename))
   outfile.write(xml_dump)
@@ -70,6 +70,7 @@ try:
   print "Signing out..."
   logging.info("Signing out...")
   driver.find_element_by_link_text('Sign Out').click()
+  # time.sleep(5)
   driver.quit()
 except:
   import traceback
@@ -77,4 +78,6 @@ except:
   exit(1)
 finally:
   logging.info("Exporting finished successfully.")
+  logging.info("Exiting...")
+  # TO-DO: inform people that QuickBooks dump has finished
   exit(0)
