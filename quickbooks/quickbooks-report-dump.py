@@ -60,7 +60,6 @@ def reload_report_list():
 def switch_frame():
   global driver
   # below 'print' is TEMPORARY
-  print "switching to menu/link frame..."
   driver.switch_to_default_content()
   driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 
@@ -430,3 +429,5 @@ driver.quit()
 #	>> CHECK_DETAIL_reportListLink_Banking (Check Detail)
 #	>> DEPOSIT_DETAIL_reportListLink_Banking (Deposit Detail) - the first report scraped
 #	>> RECONCILE_REPORTS_reportListLink_Banking (Reconciliation Reports)
+# Payroll
+
