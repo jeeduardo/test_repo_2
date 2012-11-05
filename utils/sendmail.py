@@ -16,7 +16,8 @@ def email(cfg, subject, message):
   # for the meantime
   if cfg:
     c = ConfigParser.ConfigParser()
-    c.read(cfg)
+    print cfg
+    print c.read(cfg)
     c.get('email', 'sender_uname')
 
   # global cfg

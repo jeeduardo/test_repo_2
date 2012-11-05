@@ -50,12 +50,13 @@ try:
       body = get_body(payload)
   
       # if (re.search(search_term, subject)):
+      # get datetime in PDT
+      pdt_curr_datetime = datetime.now() - timedelta(hours=7)
       #logging.info("Found email with subject \"%s\"" %(subject))
-      mail_timestamp = msg['date'][5:25]
+      # limit not set to 25 because date could be from 1-9
+      mail_timestamp = msg['date'][5:23+len(str(int(pdt_curr_datetime.strftime('%d'))))]
       # check if this was sent within the day
       mail_datetime = datetime.strptime(mail_timestamp, '%d %b %Y %H:%M:%S')
-      # TO-DO: use something like datetime.now() - timedelta(hours=8?) since gmail account is on PDT!
-      pdt_curr_datetime = datetime.now() - timedelta(hours=7)
       # print mail_datetime, "AND", pdt_curr_datetime
       if (mail_datetime.day == pdt_curr_datetime.day):
         print "FOUND"

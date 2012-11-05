@@ -6,6 +6,15 @@ clear
 CURR_MONTH=$(date +"%Y-%m")
 declare -i IS_MONTHEND
 IS_MONTHEND=$(python /home/ubuntu/qboe/test_repo_2/utils/check_monthend.py)
+
+INSTANCE_ID="i-5c7f3121"
+# check if this is the instance id
+if [ "$INSTANCE_ID" != "`curl -s http://169.254.169.254/latest/meta-data/instance-id`" ]; then
+  echo "This is not SPOF_LASTPASS_DR.cascadeo.com. Aborting FreshBooks data dump."
+  exit -1
+fi
+
+
 # 08Oct2012
 echo "Starting freshbooks dump script"
 # check if vncserver on :64 is running

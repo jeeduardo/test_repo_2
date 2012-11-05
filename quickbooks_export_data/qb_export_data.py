@@ -67,10 +67,14 @@ try:
   driver.switch_to_default_content()
   driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
   time.sleep(2)
+  os.system("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Data Dump has been extracted.\" --message \"Please check file %s for its contents.\"" %(os.getcwd(), os.getcwd()+os.sep+'qb_export_data.cfg', outfile_filename))
+  logging.info("running this command - python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Data Dump has been extracted.\" --message \"Please check file %s for its contents.\"" %(os.getcwd(), os.getcwd()+os.sep+'qb_export_data.cfg', outfile_filename))
   print "Signing out..."
   logging.info("Signing out...")
   driver.find_element_by_link_text('Sign Out').click()
   # time.sleep(5)
+  # send email
+
   driver.quit()
 except:
   import traceback

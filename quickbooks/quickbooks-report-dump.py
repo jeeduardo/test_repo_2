@@ -190,7 +190,7 @@ get_report('DEPOSIT_DETAIL_reportListLink_Banking', '', 10, "Deposit Details", '
 reload_report_list()
 
 # Journal
-get_report('JOURNAL_reportListLink_Accountant & Taxes', '', 10, "Journal", 'date_macro', "journals")
+get_report('JOURNAL_reportListLink_Accountant &amp; Taxes', '', 10, "Journal", 'date_macro', "journals")
 
 # Profit & Loss
 get_report('PANDL_reportListLink_Company', '', 10, "Profit & Loss", '', "profit_loss")
@@ -301,22 +301,22 @@ get_report('CHECK_DETAIL_reportListLink_Banking', '', 10, "Check Detail", 'date_
 
 # ACCOUNTANT & TAXES report
 # Trial Balance
-get_report('TRIAL_BAL_reportListLink_Accountant & Taxes', '', 10, "Trial Balance", 'date_macro', "trial_balance")
+get_report('TRIAL_BAL_reportListLink_Accountant &amp; Taxes', '', 10, "Trial Balance", 'date_macro', "trial_balance")
 
 # General Ledger
-get_report('GEN_LEDGER_reportListLink_Accountant & Taxes', '', 10, "General Ledger", 'date_macro', "general_ledger")
+get_report('GEN_LEDGER_reportListLink_Accountant &amp; Taxes', '', 10, "General Ledger", 'date_macro', "general_ledger")
 
 # Transaction Detail by Account
-get_report('TX_DET_BY_ACCT_reportListLink_Accountant & Taxes', '', 10, "Transaction Detail by Account", 'date_macro', "txn_detail_by_acct")
+get_report('TX_DET_BY_ACCT_reportListLink_Accountant &amp; Taxes', '', 10, "Transaction Detail by Account", 'date_macro', "txn_detail_by_acct")
 
 # Transaction List by Date
-get_report('TX_LIST_BY_DATE_reportListLink_Accountant & Taxes', '', 10, "Transaction List by Date", 'date_macro', "txn_list_by_date")
+get_report('TX_LIST_BY_DATE_reportListLink_Accountant &amp; Taxes', '', 10, "Transaction List by Date", 'date_macro', "txn_list_by_date")
 
 # Transaction List with Splits
-get_report('TX_LIST_WITH_SPLITS_reportListLink_Accountant & Taxes', '', 10, "Transaction List with Splits", 'date_macro', "txn_list_with_splits")
+get_report('TX_LIST_WITH_SPLITS_reportListLink_Accountant &amp; Taxes', '', 10, "Transaction List with Splits", 'date_macro', "txn_list_with_splits")
 
 # Recent Transactions
-get_report('RECENT_TX_reportListLink_Accountant & Taxes', '', 10, "Recent Transactions", 'moddate_macro', "recent_txn")
+get_report('RECENT_TX_reportListLink_Accountant &amp; Taxes', '', 10, "Recent Transactions", 'moddate_macro', "recent_txn")
 
 # PAYROLL reports not yet included
 # LISTS reports
@@ -352,7 +352,6 @@ get_report('MEM_TXN_REPORT_reportListLink_Lists', '', 10, "Recurring Template Li
 
 # @TODO: find out QuickBooks' robots.txt (how to do that?) and find out what could make my scraping illegal
 
-#driver.quit()
 time.sleep(10)
 driver.switch_to_default_content()
 driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
@@ -361,6 +360,8 @@ driver.find_element_by_link_text('Sign Out').click()
 time.sleep(5)
 print "Waiting for browser to close..."
 logging.info("Closing browser.")
+# TO-DO: send email
+os.system("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report Dump has finished.\" --message \"Please check folder %s for the report files.\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg', download_dir_full_path))
 driver.quit()
 
 
