@@ -169,6 +169,9 @@ find_click('id', 'LoginButton', '', 30, "Logging in and loading home page. ")
 home_frames = driver.find_elements_by_tag_name('iframe')
 driver.switch_to_frame(home_frames[0])
 show_loading(10)
+driver.find_element_by_xpath("//span[@title='Cancel']").click()
+time.sleep(3)
+
 # 'Reports' tab
 
 #driver.find_element_by_id('nav6').click() 
