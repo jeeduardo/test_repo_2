@@ -126,6 +126,7 @@ def get_report(report_link_id, p_send_keys, p_seconds, report_name, date_macro_n
 
     driver.find_element_by_id('button_id_b5_excel_small.gif').click()
     logging.info("Getting Excel version of \"%s\" report" %(report_name))
+
     show_loading(5, "Getting Excel version of \"%s\" report" %(report_name))
     # move file
     move_report_xls(report_name_prefix)
@@ -179,6 +180,34 @@ find_click('id', 'nav6', '', 10, "Getting reports")
 find_click('id', 'nav601', '', 10, "Going to 'Report List'")
 
 #show_loading(10, "Getting the Banking reports")
+# 07Nov2012 - temporary!
+try:
+  reload_report_list()
+  print "PAYROLL SUMMARY!"
+  find_click('id', 'PC_PAYSTUBS_reportListLink_Payroll', '', 10)
+  driver.switch_to_default_content()
+  # switch_frame()
+  dt_range = driver.find_element_by_xpath("//select[@name='shortCut']")
+  dt_range.find_element_by_xpath("//option[@value='0']").click()
+  time.sleep(3)
+  driver.find_element_by_id('updateReportSubmit').click()
+  print "updating report..."
+  time.sleep(5)
+except:
+  import traceback
+  logging.error(traceback.format_exc())
+  html_file = open('html_during_' + datetime_now.strftime('%Y-%m-%d_%H%M%S'), 'w')
+  html_file.write(driver.page_source)
+  html_file.close()
+  exit(1)
+
+exit(0)
+
+
+
+# 07Nov2012 - temporary!
+
+
 logging.info("Getting the Banking reports")
 
 # use get_report instead
@@ -186,7 +215,55 @@ logging.info("Getting the Banking reports")
 get_report('DEPOSIT_DETAIL_reportListLink_Banking', '', 10, "Deposit Details", 'date_macro', "deposit_details") 
 
 # find_click('id', 'category_BANKING', '', 2, "Getting the Banking reports")
-# 24Oct2012 - temporary
+# 06Nov2012 - PAYROLL reports
+# Payroll not yet setup, listing only link IDs for the meantime
+# Payroll Summary
+#'PC_PAYSTUBS_reportListLink_Payroll'
+
+# Payroll Details 
+#'PC_PAYCHECKS_reportListLink_Payroll'
+
+# Payroll Deductions/Contributions
+# 'PC_DEDUCTIONS_reportListLink_Payroll'
+
+# Last Paycheck
+#'PC_PAYSTUB_reportListLink_Payroll'
+
+# Employee Details
+#'PC_EMPLOYEE_DETAILS_reportListLink_Payroll'
+
+# Paycheck List
+#'PC_CHECK_REGISTER_reportListLink_Payroll'
+
+# Payroll Tax Liability
+#'PC_TAX_LIABILITY_reportListLink_Payroll
+
+# Payroll Tax and Wage Summary
+#'PC_WAGE_REPORT_reportListLink_Payroll
+
+# Total Pay
+#'PC_TOTAL_PAY_reportListLink_Payroll
+
+# Payroll Tax Payments
+#'PC_TAX_ELEMENTS
+
+# Workers' Compensation
+#'PC_WORKERS_COMP
+
+# Vacation and Sick Leave
+#'PC_PTO
+
+# Payroll Billing Summary
+#'PC_BILLING
+
+# Total Payroll Cost
+#'PC_TOTAL_COST
+
+# 
+# Retierment Plans
+#'PC_RETIREMENT_PLANS
+
+# 06Nov2012
 reload_report_list()
 
 # Journal
