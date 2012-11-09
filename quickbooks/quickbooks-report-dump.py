@@ -187,12 +187,12 @@ home_frames = driver.find_elements_by_tag_name('iframe')
 driver.switch_to_frame(home_frames[0])
 show_loading(10)
 # driver.find_element_by_xpath("//span[@title='Cancel']").click()
+
+
+# 09Nov20012 - get cookies; to be deleted later for logout
+cookies = driver.get_cookies()
 show_loading(3)
-
-# 'Reports' tab
-
-#driver.find_element_by_id('nav6').click() 
-#show_loading(10, "Getting reports")
+# 09Nov20012
 find_click('id', 'nav6', '', 10, "Getting reports")
 
 # the 'Report List' submenu
@@ -421,6 +421,10 @@ try:
   # Retirement Plans
   retirement_plans_url = cfg.get('payroll_reports_url', 'retirement_plans_url') %(year_str, year_str)
   get_payroll_report(retirement_plans_url, "Retirement Plans", "Retirement_Plans")
+  print "Deleting cookies..."
+  for i in range(0, len(cookies)):
+    driver.delete_cookie(cookies[i]['name'])
+
 except:
 
   import traceback
@@ -433,19 +437,18 @@ except:
   exit(1)
 # 09Nov2012
 
-reload_report_list()
-show_loading(10)
-driver.switch_to_default_content()
-driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
-show_loading(10)
-
-driver.find_element_by_link_text('Sign Out').click()
+#reload_report_list()
+#show_loading(10)
+#driver.switch_to_default_content()
+#driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
+#show_loading(10)
+#
 show_loading(5)
 print "Waiting for browser to close..."
 logging.info("Closing browser.")
+driver.quit()
 # TO-DO: send email
 os.system("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report Dump has finished.\" --message \"Please check folder %s for the report files.\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg', download_dir_full_path))
-driver.quit()
 
 
 # http://stackoverflow.com/questions/6363966/problem-with-iframes-in-selenium
