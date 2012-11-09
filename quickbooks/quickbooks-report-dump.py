@@ -16,8 +16,6 @@ def show_loading(p_seconds = 60, p_msg_while_waiting=''):
   loading_cmd = ''
   for i in range(1, p_seconds+1):
     loading_cmd = loading_cmd + "echo -n '.'; sleep 1; "
-#    print '.',
-#    time.sleep(1)
   os.system(loading_cmd)
   print
 
@@ -135,6 +133,25 @@ def get_report(report_link_id, p_send_keys, p_seconds, report_name, date_macro_n
     import traceback
     logging.error(traceback.format_exc())
   return 0
+
+# 08Nov2012 - get payroll reports
+def get_payroll_report(payroll_report_url, caption, file_prefix):
+  global mv, download_dir, download_dir_full_path, datetime_now
+  print "Getting report for \"%s\" summary in %s" %(caption, payroll_report_url)
+  logging.info("Getting report for \"%s\" in %s" %(caption, payroll_report_url))
+  driver.get(payroll_report_url)
+  show_loading(10)
+  p = os.popen("ls -t %s/*.xls | head -n1" %(download_dir))
+  fr = re.escape(p.readline().strip())
+  # move file to download_dir_full_path
+  mv_cmd = "%s -v %s %s/%s_%s.xls" %(mv, fr, download_dir_full_path, file_prefix, datetime_now.strftime('%Y-%m-%d_%H%M'))
+  p.close()
+  logging.info(mv_cmd)
+  print mv_cmd
+  os.system(mv_cmd)
+
+  return 0
+
 # set Firefox profile
 logging.info("Loading Firefox profile...")
 fp = webdriver.FirefoxProfile()
@@ -169,8 +186,8 @@ find_click('id', 'LoginButton', '', 30, "Logging in and loading home page. ")
 home_frames = driver.find_elements_by_tag_name('iframe')
 driver.switch_to_frame(home_frames[0])
 show_loading(10)
-driver.find_element_by_xpath("//span[@title='Cancel']").click()
-time.sleep(3)
+# driver.find_element_by_xpath("//span[@title='Cancel']").click()
+show_loading(3)
 
 # 'Reports' tab
 
@@ -182,34 +199,6 @@ find_click('id', 'nav6', '', 10, "Getting reports")
 # driver.find_element_by_id('nav601').click()
 find_click('id', 'nav601', '', 10, "Going to 'Report List'")
 
-#show_loading(10, "Getting the Banking reports")
-# 07Nov2012 - temporary!
-try:
-  reload_report_list()
-  print "PAYROLL SUMMARY!"
-  find_click('id', 'PC_PAYSTUBS_reportListLink_Payroll', '', 10)
-  driver.switch_to_default_content()
-  # switch_frame()
-  dt_range = driver.find_element_by_xpath("//select[@name='shortCut']")
-  dt_range.find_element_by_xpath("//option[@value='0']").click()
-  time.sleep(3)
-  driver.find_element_by_id('updateReportSubmit').click()
-  print "updating report..."
-  time.sleep(5)
-except:
-  import traceback
-  logging.error(traceback.format_exc())
-  html_file = open('html_during_' + datetime_now.strftime('%Y-%m-%d_%H%M%S'), 'w')
-  html_file.write(driver.page_source)
-  html_file.close()
-  exit(1)
-
-exit(0)
-
-
-
-# 07Nov2012 - temporary!
-
 
 logging.info("Getting the Banking reports")
 
@@ -218,55 +207,6 @@ logging.info("Getting the Banking reports")
 get_report('DEPOSIT_DETAIL_reportListLink_Banking', '', 10, "Deposit Details", 'date_macro', "deposit_details") 
 
 # find_click('id', 'category_BANKING', '', 2, "Getting the Banking reports")
-# 06Nov2012 - PAYROLL reports
-# Payroll not yet setup, listing only link IDs for the meantime
-# Payroll Summary
-#'PC_PAYSTUBS_reportListLink_Payroll'
-
-# Payroll Details 
-#'PC_PAYCHECKS_reportListLink_Payroll'
-
-# Payroll Deductions/Contributions
-# 'PC_DEDUCTIONS_reportListLink_Payroll'
-
-# Last Paycheck
-#'PC_PAYSTUB_reportListLink_Payroll'
-
-# Employee Details
-#'PC_EMPLOYEE_DETAILS_reportListLink_Payroll'
-
-# Paycheck List
-#'PC_CHECK_REGISTER_reportListLink_Payroll'
-
-# Payroll Tax Liability
-#'PC_TAX_LIABILITY_reportListLink_Payroll
-
-# Payroll Tax and Wage Summary
-#'PC_WAGE_REPORT_reportListLink_Payroll
-
-# Total Pay
-#'PC_TOTAL_PAY_reportListLink_Payroll
-
-# Payroll Tax Payments
-#'PC_TAX_ELEMENTS
-
-# Workers' Compensation
-#'PC_WORKERS_COMP
-
-# Vacation and Sick Leave
-#'PC_PTO
-
-# Payroll Billing Summary
-#'PC_BILLING
-
-# Total Payroll Cost
-#'PC_TOTAL_COST
-
-# 
-# Retierment Plans
-#'PC_RETIREMENT_PLANS
-
-# 06Nov2012
 reload_report_list()
 
 # Journal
@@ -325,14 +265,6 @@ get_report('ITEM_SALES_reportListLink_Sales', '', 10, "Sales by Product/Service 
 
 # Sales by Product/Service Detail
 get_report('ITEM_SALES_DET_reportListLink_Sales', '', 10, "Sales by Product/Service Detail", 'date_macro', "sales_product_service_detail")
-
-# logging out
-# time.sleep(10)
-# switch_frame()
-# driver.find_element_by_link_text('Sign Out').click()
-# time.sleep(5)
-# exit(0)
-# 24Oct2012 - temporary ^ 
 
 # A/P Aging Summary
 get_report('AP_AGING_reportListLink_Vendors', '', 10, "A/P Aging Summary", 'date_macro', 'ap_aging_summary')
@@ -432,12 +364,83 @@ get_report('MEM_TXN_REPORT_reportListLink_Lists', '', 10, "Recurring Template Li
 
 # @TODO: find out QuickBooks' robots.txt (how to do that?) and find out what could make my scraping illegal
 
-time.sleep(10)
+# 09Nov2012
+try:
+  reload_report_list()
+  year_str = str(datetime_now.year)
+
+  # Payroll Summary
+  payroll_summary_url = cfg.get('payroll_reports_url', 'payroll_summary_url') %("01/01/"+year_str, "12/31/"+year_str)
+  get_payroll_report(payroll_summary_url, "Payroll Summary", "Payroll_Summary")
+
+  # Payroll Details
+  payroll_details_url = cfg.get('payroll_reports_url', 'payroll_details_url') %(year_str, year_str)
+  get_payroll_report(payroll_details_url, "Payroll Details", "Payroll_Details")
+
+  # Payroll Deductions/Contributions
+  deducts_contribs_url = cfg.get('payroll_reports_url', 'deducts_contribs_url') %(year_str, year_str)
+  get_payroll_report(deducts_contribs_url, "Payroll Deductions/Contributions", "Deductions_Contributions")
+
+  # Skipping "Last Paycheck" report (because it appears to only print rhe most recent paycheck - as the report name implies!
+  # Employee Details
+  employee_details_url = cfg.get('payroll_reports_url', 'employee_details_url') %(year_str, datetime_now.strftime("%m/%d/%Y"))
+  get_payroll_report(employee_details_url, "Employee Details", "Employee_Details")
+  
+  # Tax Liability
+  tax_liability_url = cfg.get('payroll_reports_url', 'tax_liability_url') %(year_str, year_str)
+  get_payroll_report(tax_liability_url, "Tax Liability", "Tax_Liability")
+
+  # Payroll Tax and Wage Summary
+  tax_wage_summary_url = cfg.get('payroll_reports_url', 'tax_wage_summary_url') %(year_str, year_str)
+  get_payroll_report(tax_wage_summary_url, "Payroll Tax and Wage Summary", "Tax_Wage_Summary")
+
+  # Total Pay
+  total_pay_url = cfg.get('payroll_reports_url', 'total_pay_url') %(year_str, year_str)
+  get_payroll_report(total_pay_url, "Total Pay", "Total_Pay")
+
+  # Payroll Tax Payments
+  tax_payments_url = cfg.get('payroll_reports_url', 'tax_payments_url') %(year_str, year_str)
+  get_payroll_report(tax_payments_url, "Payroll Tax Payments", "Tax_Payments")
+
+  # Workers' Compensation
+  workers_comp_url = cfg.get('payroll_reports_url', 'workers_comp_url') %(year_str, year_str)
+  get_payroll_report(workers_comp_url, "Workers' Compensation", "Workers_Compensation")
+
+  # Vacation and Sick Leave
+  vl_sl_url = cfg.get('payroll_reports_url', 'vl_sl_url') %(year_str, year_str)
+  get_payroll_report(vl_sl_url, "Vacation and Sick Leave", "Vacation_Sick_Leave")
+
+  # Billing Summary
+  billing_summary_url = cfg.get('payroll_reports_url', 'billing_summary_url') %(year_str, year_str)
+  get_payroll_report(billing_summary_url, "Billing Summary", "Billing_Summary")
+
+  # Total Cost
+  total_cost_url = cfg.get('payroll_reports_url', 'total_cost_url') %(year_str, year_str)
+  get_payroll_report(total_cost_url, "Total Cost", "Total_Cost")
+
+  # Retirement Plans
+  retirement_plans_url = cfg.get('payroll_reports_url', 'retirement_plans_url') %(year_str, year_str)
+  get_payroll_report(retirement_plans_url, "Retirement Plans", "Retirement_Plans")
+except:
+
+  import traceback
+  tb = traceback.format_exc()
+  logging.error(tb)
+  print tb
+  html_file = open('html_during_' + datetime_now.strftime('%Y-%m-%d_%H%M%S'), 'w')
+  html_file.write(driver.page_source.encode('ascii', 'ignore'))
+  html_file.close()
+  exit(1)
+# 09Nov2012
+
+reload_report_list()
+show_loading(10)
 driver.switch_to_default_content()
 driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
-time.sleep(10)
+show_loading(10)
+
 driver.find_element_by_link_text('Sign Out').click()
-time.sleep(5)
+show_loading(5)
 print "Waiting for browser to close..."
 logging.info("Closing browser.")
 # TO-DO: send email
