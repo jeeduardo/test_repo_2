@@ -40,3 +40,29 @@ TypeError: 'NoneType' object is not subscriptable
 2012-11-07 04:59:48,678 INFO : Signing out...
 2012-11-07 04:59:49,424 INFO : Exporting finished successfully.
 2012-11-07 04:59:49,425 INFO : Exiting...
+2012-11-13 03:37:06,828 INFO : Proceeding in requesting for data export.
+2012-11-13 03:37:06,829 INFO : Opening firefox...
+2012-11-13 03:37:18,879 INFO : Logging in as qbfb.joseph
+2012-11-13 03:37:28,898 INFO : Requesting data...
+2012-11-13 03:38:39,870 INFO : Request for today has been recorded.
+2012-11-13 03:38:39,870 INFO : REQUEST FOR TODAY, 2012-11-12, WRITTEN TO LOG FILE!
+2012-11-13 03:44:05,010 INFO : Request has been made already. Please wait for the email to be delivered.
+2012-11-13 03:44:05,398 INFO : Logging in as qbfb.joseph@gmail.com
+2012-11-13 03:44:06,569 INFO : Got the email today from QuickBooks.
+2012-11-13 03:44:06,569 INFO : Will fetch the exported data.
+2012-11-13 03:44:06,570 ERROR : Traceback (most recent call last):
+  File "qb_check_email.py", line 57, in <module>
+    mail_timestamp = msg['date'][5:23+len(str(int(pdt_curr_datetime.strftime('%d'))))]
+TypeError: 'NoneType' object is not subscriptable
+
+2012-11-13 03:44:06,960 INFO : Signing out...
+2012-11-13 03:44:07,182 INFO : ('BYE', ['LOGOUT Requested'])
+2012-11-13 03:44:07,843 INFO : Getting configurations...
+2012-11-13 03:44:38,322 INFO : Logging in as qbfb.joseph
+2012-11-13 03:45:08,349 INFO : Extracting data...
+2012-11-13 03:45:39,408 INFO : Writing data to export_company_20121112_2045.qbxml
+2012-11-13 03:45:39,408 INFO : Dump written to export_company_20121112_2045.qbxml
+2012-11-13 03:46:19,946 INFO : running this command - python /home/ubuntu/qboe/test_repo_2/quickbooks_export_data/../utils/sendmail.py --cfg /home/ubuntu/qboe/test_repo_2/quickbooks_export_data/qb_export_data.cfg --subject "QuickBooks Data Dump has been extracted." --message "Please check file export_company_20121112_2045.qbxml for its contents."
+2012-11-13 03:46:19,947 INFO : Signing out...
+2012-11-13 03:46:20,697 INFO : Exporting finished successfully.
+2012-11-13 03:46:20,697 INFO : Exiting...

@@ -43,44 +43,53 @@ finally:
 
 logging.info("Opening firefox...")
 
-driver = webdriver.Firefox()
-driver.get(url)
-login = driver.find_element_by_name('login')
-login.click()
-# login.clear()
-login.send_keys(username)
-ppword = driver.find_element_by_name('password')
-ppword.click()
-# ppword.clear()
-ppword.send_keys(pword)
-time.sleep(2)
-logging.info("Logging in as %s" %(username))
-driver.find_element_by_id('LoginButton').click()
-
-driver.switch_to_default_content()
-driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
-
-# print "export_data_request_url: %s" %export_data_request_url
-logging.info("Requesting data...")
-time.sleep(10)
-driver.get(export_data_request_url)
-
-time.sleep(60)
-# write the timestamp for the request (to make sure that the request made for the day will not be forgotten)
-# 25Oct2012 - write to log file
-#outfile = open('qb_export_data_request_time', 'w')
-#outfile.write(date_today)
-#outfile.close()
-logging.info("Request for today has been recorded.")
-logging.info("REQUEST FOR TODAY, %s, WRITTEN TO LOG FILE!" %(datetime_pdt.strftime('%Y-%m-%d')))
-
-driver.get(url)
-time.sleep(30)
-driver.switch_to_default_content()
-driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
-time.sleep(2)
-logging.info("Signing out")
-driver.find_element_by_link_text('Sign Out').click()
-time.sleep(10)
-driver.quit()
-exit(0)
+try:
+  driver = webdriver.Firefox()
+  driver.get(url)
+  login = driver.find_element_by_name('login')
+  login.click()
+  # login.clear()
+  login.send_keys(username)
+  ppword = driver.find_element_by_name('password')
+  ppword.click()
+  # ppword.clear()
+  ppword.send_keys(pword)
+  time.sleep(2)
+  logging.info("Logging in as %s" %(username))
+  driver.find_element_by_id('LoginButton').click()
+  
+  driver.switch_to_default_content()
+  driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
+  
+  # print "export_data_request_url: %s" %export_data_request_url
+  logging.info("Requesting data...")
+  time.sleep(10)
+  driver.get(export_data_request_url)
+  
+  time.sleep(60)
+  # write the timestamp for the request (to make sure that the request made for the day will not be forgotten)
+  # 25Oct2012 - write to log file
+  #outfile = open('qb_export_data_request_time', 'w')
+  #outfile.write(date_today)
+  #outfile.close()
+  logging.info("Request for today has been recorded.")
+  logging.info("REQUEST FOR TODAY, %s, WRITTEN TO LOG FILE!" %(datetime_pdt.strftime('%Y-%m-%d')))
+  
+  driver.get(url)
+  time.sleep(30)
+  driver.switch_to_default_content()
+  driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
+  time.sleep(2)
+  logging.info("Signing out")
+  driver.find_element_by_link_text('Sign Out').click()
+  time.sleep(10)
+  driver.quit()
+except:
+  import traceback
+  tb = traceback.format_exc()
+  print "-----THERE WAS AN ERROR-----"
+  print tb
+  logging.error(tb)
+  exit(1)
+finally:
+  exit(0)

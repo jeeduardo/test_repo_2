@@ -61,9 +61,8 @@ def switch_frame():
   driver.switch_to_default_content()
   driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 
-# 05Sep2012 - enable logging
-# 25Sep2012 - use os.sep for directory separator
-#logging.basicConfig(filename=os.getcwd() + os.sep + 'quickbooks_dump.log', level=logging.INFO, format='%(asctime) %(levelname)s : %(message)s')
+# 09Nov2012 - just send an emial notifying that the script has started
+os.system("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report Dump has started.\" --message \"We shall notify you later of the details.\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg'))
 logging.basicConfig(filename='quickbooks-report-dump.log', level=logging.INFO, format='%(asctime)s %(levelname)s : %(message)s')
 
 print "Setting up logging..."
@@ -162,7 +161,14 @@ fp.set_preference("browser.download.dir", download_dir)#"C:\Users\josephson\Down
 # 03Sept2012 - Josephson (file type="application/vnd.ms-excel")
 fp.set_preference("browser.helperApps.neverAsk.saveToDisk", save_to_disk) #"application/vnd.ms-excel")
 
-driver = webdriver.Firefox(firefox_profile=fp)
+try:
+  driver = webdriver.Firefox(firefox_profile=fp)
+except:
+  import traceback
+  tb = traceback.format_exc()
+  print tb
+  logging.error(tb)
+  exit(1)
 driver.get(url)
 # 31Aug2012 - Josephson (testing something on clicking QBOE links)
 # 23Oct2012 - temporary
@@ -446,9 +452,11 @@ except:
 show_loading(5)
 print "Waiting for browser to close..."
 logging.info("Closing browser.")
-driver.quit()
 # TO-DO: send email
+logging.info("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report Dump has finished.\" --message \"Please check folder %s for the report files.\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg', download_dir_full_path))
 os.system("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report Dump has finished.\" --message \"Please check folder %s for the report files.\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg', download_dir_full_path))
+show_loading(10)
+driver.quit()
 
 
 # http://stackoverflow.com/questions/6363966/problem-with-iframes-in-selenium
@@ -467,30 +475,9 @@ os.system("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report
 # Firebug Inspect Element nav6 - Reports tab link
 
 
+# 12Nov2012 - removing some notes
 # 17Sep2012
 #----------------------------------------------------------------
-# Other reports:
-# category_COMPANY 
-#	>> PANDL_reportListLink_Company (Profit & Loss)
-# 	>> PANDL_DET_reportListLink_Company (Profit & Loss Detail)
-# 	>> BAL_SHEET_reportListLink_Company (Balance Sheet)
-# 	>> BAL_SHEET_SUM_reportListLink_Company (Balance Sheet Summary)
-#	>> CASH_FLOW_reportListLink_Company (Statement of Cash Flows)
-#	>> ACCT_LIST_reportListLink_Company (Account Listing)
-#	>> COMP_SNAPSHOT_reportListLink_Company (Company Snapshot)
-#	>> SCORECARD_reportListLink_Company (Scorecard)
-# Customers
-#	>> AR_AGING_reportListLink_Customers (A/R Aging Summary) * has date_macro
-#	>> AR_AGING_DET_reportListLink_Customers (A/R Aging Detail) * has date_macro
-#	>> CUST_BAL_reportListLink_Customers (Customer Balance Summary)
-#	>> CUST_BAL_DET_reportListLink_Customers (Customer Balance Detail)
-#	>> COLLECTIONS_reportListLink_Customers (Collections Report)
-#	>> CUST_INC_reportListLink_Customers (Income by Customer Summary)
-#	>> TX_LIST_BY_CUST_reportListLink_Customers (Transaction List by Customer)
-#	>> CUST_SALES_reportListLink_Customers (Sales by Customer Summary)
-#	>> CUST_SALES_DET_reportListLink_Customers (Sales by Customer Detail)
-#	>> INVOICE_LIST_reportListLink_Customers (Invoice List)
-#	>> STATEMENT_INVOICE_reportListLink_Customers (Invoice List)
 # Sales
 # Skip the first 4 reports listed. They're redundant
 #	>> ITEM_SALES_reportListLink_Sales (Sales by Product/Service Summary)

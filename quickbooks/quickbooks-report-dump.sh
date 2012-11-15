@@ -14,4 +14,7 @@ cd /home/ubuntu/qboe/test_repo_2/quickbooks
 export DISPLAY=:64
 python quickbooks-report-dump.py
 
+echo "Closing firefox session."
+sleep 5
+ps ax | grep firefox | awk '{print $1}' | xargs kill -9
 exit 0

@@ -69,7 +69,7 @@ def rename_file(pattern, filename, replace_with=''):
 # use -lrt preferably or -rt
 # if pattern left blank, it will get the name of latest csv file
 def get_csv_filename(pattern=''):
-  p = os.popen("ls -t " + base_backup_dirname + pattern + "*.csv | head -1")
+  p = os.popen("ls -t " + base_backup_dirname + pattern + "*.csv | head -n1")
   filename = p.readline().strip()
   p.close()
   return re.escape(filename)
