@@ -81,9 +81,13 @@ try:
 except selenium.common.exceptions.NoSuchElementException:
   import traceback
   err_msg = "Either network speed is TOO SLOW or such element doesn't exist in the page. Please check the site manually."
-  logging.error(traceback.format_exc())
+  tb = traceback.format_exc()
+  logging.error(tb)
   logging.error(err_msg)
   print err_msg
+  err_email_msg = "\
+Hi,<br /> \
+<p>Something seems to be wrong with the FreshBooks dump automation. Please check. Below is the traceback:</p><br />%s" %(tb)
   exit(1)
 except Exception:
   import traceback

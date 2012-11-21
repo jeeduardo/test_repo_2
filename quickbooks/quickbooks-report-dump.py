@@ -8,9 +8,7 @@ import ConfigParser
 import logging
 import platform
 
-# 04Sep2012 - Josephson
 # print dots . . .  to screen with given no. of seconds
-# and also with message to display
 def show_loading(p_seconds = 60, p_msg_while_waiting=''):
   print p_msg_while_waiting
   loading_cmd = ''
@@ -19,6 +17,7 @@ def show_loading(p_seconds = 60, p_msg_while_waiting=''):
   os.system(loading_cmd)
   print
 
+# clicks a web element
 def find_click(p_by='id', p_string='', p_send_keys='', p_seconds=0, p_msg_while_waiting='Loading'):
   global driver
   try:
@@ -36,9 +35,12 @@ def find_click(p_by='id', p_string='', p_send_keys='', p_seconds=0, p_msg_while_
       show_loading(p_seconds, p_msg_while_waiting)
   except:
     import traceback
-    # print traceback.format_exc()
-    logging.error(traceback.format_exc())
-    exit()
+    tb = traceback.format_exc()
+    logging.error(tb)
+    error_email_msg = "The following error was encountered while the script was running:\n %s" %(tb)
+    print error_email_msg
+    send_mail("QuickBooks: Error in report scraping", error_email_msg)
+    # exit()
 
 # 25Sep2012 - function to reload 'Report List' page
 # go to 'Reports'
@@ -130,7 +132,12 @@ def get_report(report_link_id, p_send_keys, p_seconds, report_name, date_macro_n
     time.sleep(3)
   except:
     import traceback
-    logging.error(traceback.format_exc())
+    tb = traceback.format_exc()
+    logging.error(tb)
+    err_email_msg = "Hi,\n\n\
+Something went wrong with extracting a report of %s. Please check. \
+Below are the error details:\n\n%s" %(report_name, tb)
+    send_mail("QuickBooks: ERROR in extracting reports", err_email_msg)
   return 0
 
 # 08Nov2012 - get payroll reports
@@ -151,6 +158,14 @@ def get_payroll_report(payroll_report_url, caption, file_prefix):
 
   return 0
 
+# function to send email
+def send_mail(subject, msg):
+  print "Sending email..."
+  logging.info("sending email...")
+  os.system("python %s/../utils/sendmail.py --cfg %s --subject \"%s\" --message \"%s\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg', subject, msg))
+
+
+
 # set Firefox profile
 logging.info("Loading Firefox profile...")
 fp = webdriver.FirefoxProfile()
@@ -170,10 +185,7 @@ except:
   logging.error(tb)
   exit(1)
 driver.get(url)
-# 31Aug2012 - Josephson (testing something on clicking QBOE links)
-# 23Oct2012 - temporary
 logging.info("Loading QuickBooks")
-# 23Oct2012 - temporary
 logging.info("Loading %s" %(url))
 show_loading(10, "Loading %s" % (url))
 #/home/ubuntu/qboe/test_repo_2/quickbooks
@@ -207,6 +219,11 @@ find_click('id', 'nav601', '', 10, "Going to 'Report List'")
 
 
 logging.info("Getting the Banking reports")
+
+# 21Nov2012 - Josephson (testing email error alert)
+# get_report('BLABLA_reportListLink_Blabla', '', 10, "Blablahbloh DETAILS", '', 'blablahbloh')
+# exit(1)
+# 21Nov2012
 
 # use get_report instead
 # Deposit Details
@@ -440,26 +457,25 @@ except:
   html_file = open('html_during_' + datetime_now.strftime('%Y-%m-%d_%H%M%S'), 'w')
   html_file.write(driver.page_source.encode('ascii', 'ignore'))
   html_file.close()
-  exit(1)
-# 09Nov2012
+  # TO-DO: send ERROR email if something wrong happens
+  # send error email
 
-#reload_report_list()
-#show_loading(10)
-#driver.switch_to_default_content()
-#driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
-#show_loading(10)
-#
+  err_email_msg = "Hi,\n\nThere has been an error while scraping for the QuickBooks reports.\nPlease see below stack trace for details:\n\n%s" %(tb)
+  send_mail("ERROR in QuickBooks Report Dump automation.", err_email_msg)
+
+  exit(1)
+
 show_loading(5)
 print "Waiting for browser to close..."
 logging.info("Closing browser.")
 # TO-DO: send email
-logging.info("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report Dump has finished.\" --message \"Please check folder %s for the report files.\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg', download_dir_full_path))
-os.system("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report Dump has finished.\" --message \"Please check folder %s for the report files.\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg', download_dir_full_path))
+# logging.info("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report Dump has finished.\" --message \"Please check folder %s for the report files.\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg', download_dir_full_path))
+# os.system("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report Dump has finished.\" --message \"Please check folder %s for the report files.\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg', download_dir_full_path))
+send_mail("QuickBooks Report Dump has finished.", "Please check folder %s for the report files." %(download_dir_full_path))
 show_loading(10)
 driver.quit()
 
 
-# http://stackoverflow.com/questions/6363966/problem-with-iframes-in-selenium
 
 # "Banking" link in "Reports" tab
 # to access "Banking" link

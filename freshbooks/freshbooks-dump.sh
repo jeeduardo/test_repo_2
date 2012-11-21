@@ -31,7 +31,7 @@ export DISPLAY=:64 && cd /home/ubuntu/qboe/test_repo_2/freshbooks && ./freshbook
 # 03Oct2012 - archive files
 if [ $IS_MONTHEND -eq 1 ]; then
   echo "Archiving CSV backups for this month..."
-  tar czvf freshbooks_dump_$CURR_MONTH.tar.gz QB-FreshbooksCascadeoStaging_$CURR_MONTH-*
-  rm -rf QB-FreshbooksCascadeoStaging_$CURR_MONTH-*/
+  tar czvf freshbooks_dump_$CURR_MONTH.tar.gz QB-FreshbooksCascadeoStaging_$CURR_MONTH-* --remove-files
+  # rm -rf QB-FreshbooksCascadeoStaging_$CURR_MONTH-*/
 fi
 exit 0
