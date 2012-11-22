@@ -404,7 +404,7 @@ try:
   deducts_contribs_url = cfg.get('payroll_reports_url', 'deducts_contribs_url') %(year_str, year_str)
   get_payroll_report(deducts_contribs_url, "Payroll Deductions/Contributions", "Deductions_Contributions")
 
-  # Skipping "Last Paycheck" report (because it appears to only print rhe most recent paycheck - as the report name implies!
+  # Skipping "Last Paycheck" report (because it appears to only print rhe most recent paycheck - as the report name implies
   # Employee Details
   employee_details_url = cfg.get('payroll_reports_url', 'employee_details_url') %(year_str, datetime_now.strftime("%m/%d/%Y"))
   get_payroll_report(employee_details_url, "Employee Details", "Employee_Details")
