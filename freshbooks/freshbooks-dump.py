@@ -14,8 +14,6 @@ import logging
 # 28Sep2012 - include freshbooks_functions
 import freshbooks_functions
 from freshbooks_functions import cfg
-# 07Oct2012 - send email
-import sendmail
 
 # 28Sep2012
 FF = freshbooks_functions

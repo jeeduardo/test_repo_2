@@ -4,11 +4,6 @@ import ConfigParser
 from email.mime.text import MIMEText
 
 
-#cfg = ConfigParser.ConfigParser()
-#
-#cfg.read('lpdump.cfg')
-
-
 # 'encrypted' SECRET + generated random key, not yet to be sent
 # added enc_filename (for the subject)
 

@@ -8,6 +8,10 @@ import ConfigParser
 import logging
 import platform
 
+import sys
+sys.path.append(os.getcwd() + '/../utils')
+import enc_pwd
+
 # print dots . . .  to screen with given no. of seconds
 def show_loading(p_seconds = 60, p_msg_while_waiting=''):
   print p_msg_while_waiting
@@ -68,13 +72,15 @@ os.system("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report
 logging.basicConfig(filename='quickbooks-report-dump.log', level=logging.INFO, format='%(asctime)s %(levelname)s : %(message)s')
 
 print "Setting up logging..."
-# 04Sep2012 - get configurations
+
+# get configurations
+cfg_file = 'quickbooks-report-dump.cfg'
 cfg = ConfigParser.ConfigParser()
-cfg.read('quickbooks-report-dump.cfg')
+cfg.read(cfg_file)
 
 url = cfg.get('credentials', 'url')
 username = cfg.get('credentials', 'username')
-ppword = cfg.get('credentials', 'ppword')
+ppword = enc_pwd.decrypt_pword(cfg.get('credentials', 'ppword'), os.getcwd() + os.sep)
 
 show_when_starting = cfg.get('prefs', 'show_when_starting')
 if show_when_starting == 0:

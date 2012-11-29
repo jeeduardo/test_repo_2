@@ -7,6 +7,10 @@ import pdb
 from selenium import webdriver
 from datetime import datetime
 import traceback
+# for password
+import sys
+sys.path.append(os.getcwd() + '/../utils')
+import enc_pwd
 
 # 01Oct2012 - raise Exception if config file doesn't exist
 try:
@@ -23,7 +27,8 @@ cfg = ConfigParser.ConfigParser()
 cfg.read('freshbooks-dump.cfg')
 url = cfg.get('credentials', 'main_url')
 username = cfg.get('credentials', 'username')
-pw = cfg.get('credentials', 'pword')
+# pw = cfg.get('credentials', 'pword')
+pw = enc_pwd.decrypt_pword(cfg.get('credentials', 'pword'), os.getcwd() + os.sep)
 base_backup_dirname = cfg.get('settings', 'backup_dir_name')
 # 01Oct2012 - eliminate spaces in filename
 #backup_dirname = base_backup_dirname + datetime.now().strftime('_%Y-%m-%d')
