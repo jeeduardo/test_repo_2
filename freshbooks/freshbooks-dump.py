@@ -14,6 +14,9 @@ import logging
 # 28Sep2012 - include freshbooks_functions
 import freshbooks_functions
 from freshbooks_functions import cfg
+import sys
+sys.path.append(os.getcwd()+'/../utils')
+import sendmail
 
 # 28Sep2012
 FF = freshbooks_functions
@@ -287,9 +290,10 @@ logging.info('Data has been exported. Ending program.')
 
 # 07Oct2012 - send email
 subject = "FreshBooks dump finished"
-email_msg = "The FreshBooks dump has finished. Please check path %s to check the CSV files." % (os.getcwd() + os.sep + FF.backup_dirname) 
+email_msg = "The FreshBooks dump script has finished. Please check path %s for the CSV files." % (os.getcwd() + os.sep + FF.backup_dirname) 
 #sendmail.email(email_msg, "josephson@cascadeo.com", cfg)
-os.system("python %s../utils/sendmail.py --cfg freshbooks-dump.cfg --subject '%s' --message '%s'" %(os.getcwd() + os.sep, subject, email_msg))
+# os.system("python %s../utils/sendmail.py --cfg freshbooks-dump.cfg --subject '%s' --message '%s'" %(os.getcwd() + os.sep, subject, email_msg))
+sendmail.email('freshbooks-dump.cfg', subject, email_msg)
 exit(0)
 
 

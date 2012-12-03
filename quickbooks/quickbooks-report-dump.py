@@ -11,6 +11,16 @@ import platform
 import sys
 sys.path.append(os.getcwd() + '/../utils')
 import enc_pwd
+import sendmail
+
+# setup logging
+logging.basicConfig(filename='quickbooks-report-dump.log', level=logging.INFO, format='%(asctime)s %(levelname)s : %(message)s')
+
+# function to send email
+def send_mail(subject, msg):
+  print "Sending email..."
+  logging.info("sending email...")
+  sendmail.email(os.getcwd()+os.sep+'quickbooks-report-dump.cfg', subject, msg)
 
 # print dots . . .  to screen with given no. of seconds
 def show_loading(p_seconds = 60, p_msg_while_waiting=''):
@@ -67,9 +77,7 @@ def switch_frame():
   driver.switch_to_default_content()
   driver.switch_to_frame(driver.find_elements_by_tag_name('iframe')[0])
 
-# 09Nov2012 - just send an emial notifying that the script has started
-os.system("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report Dump has started.\" --message \"We shall notify you later of the details.\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg'))
-logging.basicConfig(filename='quickbooks-report-dump.log', level=logging.INFO, format='%(asctime)s %(levelname)s : %(message)s')
+send_mail("QuickBooks report dump has started", "The QuickBooks report dump script has started. We shall email you again for details.")
 
 print "Setting up logging..."
 
@@ -82,12 +90,6 @@ url = cfg.get('credentials', 'url')
 username = cfg.get('credentials', 'username')
 ppword = enc_pwd.decrypt_pword(cfg.get('credentials', 'ppword'), os.getcwd() + os.sep)
 
-show_when_starting = cfg.get('prefs', 'show_when_starting')
-if show_when_starting == 0:
-  bool_show_when_starting = False
-else:
-  bool_show_when_starting = True
-
 download_dir = cfg.get('prefs', 'download_dir')
 save_to_disk = cfg.get('prefs', 'save_to_disk_immed')
 #24Oct2012 - dirname
@@ -99,12 +101,11 @@ dirname = cfg.get('prefs', 'dirname')
 mv = cfg.get('prefs', 'move_command')
 sep = os.sep
 
-# print mv
-# create download director
+# create download directory
 datetime_now = datetime.now()
 download_dir_full_path = download_dir + sep + dirname + datetime_now.strftime('%Y-%m-%d_%H%M')
 
-# function to move file to target directory
+# move file to target directory
 def move_report_xls(report_name_prefix):
   global mv, download_dir_download_dir_full_path, datetime_now
   mv_cmd = "%s -v $(ls -t %s/report*.xls | head -n1) %s/%s_%s.xls" %(mv, download_dir, download_dir_full_path, report_name_prefix, datetime_now.strftime('%Y-%m-%d_%H%M'))
@@ -164,12 +165,6 @@ def get_payroll_report(payroll_report_url, caption, file_prefix):
 
   return 0
 
-# function to send email
-def send_mail(subject, msg):
-  print "Sending email..."
-  logging.info("sending email...")
-  os.system("python %s/../utils/sendmail.py --cfg %s --subject \"%s\" --message \"%s\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg', subject, msg))
-
 
 
 # set Firefox profile
@@ -225,11 +220,6 @@ find_click('id', 'nav601', '', 10, "Going to 'Report List'")
 
 
 logging.info("Getting the Banking reports")
-
-# 21Nov2012 - Josephson (testing email error alert)
-# get_report('BLABLA_reportListLink_Blabla', '', 10, "Blablahbloh DETAILS", '', 'blablahbloh')
-# exit(1)
-# 21Nov2012
 
 # use get_report instead
 # Deposit Details
