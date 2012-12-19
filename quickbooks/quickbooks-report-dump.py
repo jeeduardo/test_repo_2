@@ -116,11 +116,15 @@ logging.info("creating download directory %s" %(download_dir_full_path))
 os.system("mkdir %s" %(download_dir_full_path))
 
 # get report - D.R.Y
-def get_report(report_link_id, p_send_keys, p_seconds, report_name, date_macro_name, report_name_prefix):
+# deprecate p_send_keys and pass '' instead on find_click?
+#def get_report(report_link_id, p_send_keys, p_seconds, report_name, date_macro_name, report_name_prefix):
+def get_report(report_link_id, p_seconds, report_name, date_macro_name, report_name_prefix):
   global driver
   try:
     print "Getting report named \"%s\"" %(report_name)
     reload_report_list()
+    # 13Dec2012 - initialize p_send_keys to blank
+    p_send_keys = ''
     find_click('id', report_link_id, p_send_keys, p_seconds, "Getting \"%s\" report" %(report_name))
     switch_frame()
     if (date_macro_name <> ""):
@@ -225,107 +229,108 @@ logging.info("Getting the Banking reports")
 # Deposit Details
 # EXCEPTION handling test - 10Dec2012
 try:
-  get_report('DEPOSIT_DETAIL_reportListLink_Banking', '', 10, "Deposit Details", 'date_macro', "deposit_details") 
+  get_report('DEPOSIT_DETAIL_reportListLink_Banking', 10, "Deposit Details", 'date_macro', "deposit_details") 
   
   # find_click('id', 'category_BANKING', '', 2, "Getting the Banking reports")
   reload_report_list()
   
   # Journal
-  get_report('JOURNAL_reportListLink_Accountant &amp; Taxes', '', 10, "Journal", 'date_macro', "journals")
+  get_report('JOURNAL_reportListLink_Accountant &amp; Taxes', 10, "Journal", 'date_macro', "journals")
   
   # Profit & Loss
-  get_report('PANDL_reportListLink_Company', '', 10, "Profit & Loss", '', "profit_loss")
+  get_report('PANDL_reportListLink_Company', 10, "Profit & Loss", '', "profit_loss")
   
   # Profit & Loss Detail
-  get_report('PANDL_DET_reportListLink_Company', '', 10, "Profit & Loss Detail", '', "profit_loss_detail")
+  get_report('PANDL_DET_reportListLink_Company', 10, "Profit & Loss Detail", '', "profit_loss_detail")
   
   # Balance Sheet
-  get_report('BAL_SHEET_reportListLink_Company', '', 10, "Balance Sheet", '', "balance_sheet")
+  get_report('BAL_SHEET_reportListLink_Company', 10, "Balance Sheet", '', "balance_sheet")
   
   # Balance Sheet Summary
-  get_report('BAL_SHEET_SUM_reportListLink_Company', '', 10, "Balance Sheet Summary", '', "balance_sheet_summary")
+  get_report('BAL_SHEET_SUM_reportListLink_Company', 10, "Balance Sheet Summary", '', "balance_sheet_summary")
   
   # Statement of Cash Flows
-  get_report('CASH_FLOW_reportListLink_Company', '', 10, "Statement of Cash Flows", '', "statement_cash_flows")
+  # 17Dec2012 - TEST ERROR here!
+  get_report('CASH_FLOW_reportListLink_Company', 10, "Statement of Cash Flows", '', "statement_cash_flows")
   
   # A/R Aging
-  get_report('AR_AGING_reportListLink_Customers', '', 10, "A/R Aging Summary", 'date_macro', "ar_aging_summary")
+  get_report('AR_AGING_reportListLink_Customers', 10, "A/R Aging Summary", 'date_macro', "ar_aging_summary")
   
   # A/R Aging Detail
-  get_report('AR_AGING_DET_reportListLink_Customers', '', 10, "A/R Aging Detail", 'date_macro', "ar_aging_detail")
+  get_report('AR_AGING_DET_reportListLink_Customers', 10, "A/R Aging Detail", 'date_macro', "ar_aging_detail")
   
   # Customer Balance Summary
-  get_report('CUST_BAL_reportListLink_Customers', '', 10, "Customer Balance Summary", 'date_macro', "customer_balance_summary")
+  get_report('CUST_BAL_reportListLink_Customers', 10, "Customer Balance Summary", 'date_macro', "customer_balance_summary")
   
   # Customer Balance Detail
-  get_report('CUST_BAL_DET_reportListLink_Customers', '', 10, "Customer Balance Detail", '', "customer_balance_detail")
+  get_report('CUST_BAL_DET_reportListLink_Customers', 10, "Customer Balance Detail", '', "customer_balance_detail")
   
   # Collections
-  get_report('COLLECTIONS_reportListLink_Customers', '', 10, "Collections", 'date_macro', "collections")
+  get_report('COLLECTIONS_reportListLink_Customers', 10, "Collections", 'date_macro', "collections")
   
   # Income by Customer Summary
-  get_report('CUST_INC_reportListLink_Customers', '', 10, "Income by Customer Summary", '', "income_by_cust_summary")
+  get_report('CUST_INC_reportListLink_Customers', 10, "Income by Customer Summary", '', "income_by_cust_summary")
   
   # Transaction List by Customer
-  get_report('TX_LIST_BY_CUST_reportListLink_Customers', '', 10, "Transaction List by Customer", 'date_macro', "txn_list_by_customer")
+  get_report('TX_LIST_BY_CUST_reportListLink_Customers', 10, "Transaction List by Customer", 'date_macro', "txn_list_by_customer")
   
   # Sales by Customer Summary
-  get_report('CUST_SALES_reportListLink_Customers', '', 10, "Sales by Customer Summary", 'date_macro', "sales_by_customer_summary")
+  get_report('CUST_SALES_reportListLink_Customers', 10, "Sales by Customer Summary", 'date_macro', "sales_by_customer_summary")
   
   # Sales by Customer Detail
-  get_report('CUST_SALES_DET_reportListLink_Customers', '', 10, "Sales by Customer Detail", 'date_macro', "sales_by_customer_detail")
+  get_report('CUST_SALES_DET_reportListLink_Customers', 10, "Sales by Customer Detail", 'date_macro', "sales_by_customer_detail")
   
   # Invoice List
-  get_report('INVOICE_LIST_reportListLink_Customers', '', 10, "Invoice List", 'date_macro', "invoice_list")
+  get_report('INVOICE_LIST_reportListLink_Customers', 10, "Invoice List", 'date_macro', "invoice_list")
   
   # Statement List
-  get_report('STATEMENT_INVOICE_reportListLink_Customers', '', 10, "Statement List", 'stmtdate_macro', "statement_list")
+  get_report('STATEMENT_INVOICE_reportListLink_Customers', 10, "Statement List", 'stmtdate_macro', "statement_list")
   
   # Sales by Product/Service Summary
-  get_report('ITEM_SALES_reportListLink_Sales', '', 10, "Sales by Product/Service Summary", 'date_macro', "sales_product_service_summary")
+  get_report('ITEM_SALES_reportListLink_Sales', 10, "Sales by Product/Service Summary", 'date_macro', "sales_product_service_summary")
   
   # Sales by Product/Service Detail
-  get_report('ITEM_SALES_DET_reportListLink_Sales', '', 10, "Sales by Product/Service Detail", 'date_macro', "sales_product_service_detail")
+  get_report('ITEM_SALES_DET_reportListLink_Sales', 10, "Sales by Product/Service Detail", 'date_macro', "sales_product_service_detail")
   
   # A/P Aging Summary
-  get_report('AP_AGING_reportListLink_Vendors', '', 10, "A/P Aging Summary", 'date_macro', 'ap_aging_summary')
+  get_report('AP_AGING_reportListLink_Vendors', 10, "A/P Aging Summary", 'date_macro', 'ap_aging_summary')
   
   # A/P Aging Detail
-  get_report('AP_AGING_DET_reportListLink_Vendors', '', 10, "A/P Aging Detail", 'date_macro', 'ap_aging_detail')
+  get_report('AP_AGING_DET_reportListLink_Vendors', 10, "A/P Aging Detail", 'date_macro', 'ap_aging_detail')
   
   # Vendor Balance Summary
-  get_report('VEND_BAL_reportListLink_Vendors', '', 10, "Vendor Balance Summary", 'date_macro', 'vendor_bal_summary')
+  get_report('VEND_BAL_reportListLink_Vendors', 10, "Vendor Balance Summary", 'date_macro', 'vendor_bal_summary')
   
   # Vendor Balance Detail
-  get_report('VEND_BAL_DET_reportListLink_Vendors', '', 10, "Vendor Balance Detail", 'date_macro', 'vendor_bal_detail')
+  get_report('VEND_BAL_DET_reportListLink_Vendors', 10, "Vendor Balance Detail", 'date_macro', 'vendor_bal_detail')
   
   # Unpaid Bills
-  get_report('UNPAID_BILLS_reportListLink_Vendors', '', 10, "Unpaid Bills", '', 'unpaid_bills')
+  get_report('UNPAID_BILLS_reportListLink_Vendors', 10, "Unpaid Bills", '', 'unpaid_bills')
   
   # Expenses by Vendor Summary
-  get_report('VEND_EXP_reportListLink_Vendors', '', 10, "Expense by Vendor Summary", '', 'exp_by_vendor')
+  get_report('VEND_EXP_reportListLink_Vendors', 10, "Expense by Vendor Summary", '', 'exp_by_vendor')
   
   # Bill Payment List
-  get_report('BILL_PAY_LIST_reportListLink_Vendors', '', 10, "Bill Payment List", 'date_macro', 'bill_pay_list')
+  get_report('BILL_PAY_LIST_reportListLink_Vendors', 10, "Bill Payment List", 'date_macro', 'bill_pay_list')
   
   # Transaction List by Vendor
-  get_report('TX_LIST_BY_VENDOR_reportListLink_Vendors', '', 10, "Transaction List by Vendor", 'date_macro', 'txn_list_by_vendor')
+  get_report('TX_LIST_BY_VENDOR_reportListLink_Vendors', 10, "Transaction List by Vendor", 'date_macro', 'txn_list_by_vendor')
   
   # Vendor Contact List
-  get_report('VEND_CONTACT_reportListLink_Vendors', '', 10, "Vendor Contact List", '', "vendor_contact_list")
+  get_report('VEND_CONTACT_reportListLink_Vendors', 10, "Vendor Contact List", '', "vendor_contact_list")
   
   # Purchases by Vendor Detail
-  get_report('VENDOR_PURCHASE_DET_reportListLink_Vendors', '', 10, "Purchases by Vendor Detail", 'date_macro', "vendor_purchase_det")
+  get_report('VENDOR_PURCHASE_DET_reportListLink_Vendors', 10, "Purchases by Vendor Detail", 'date_macro', "vendor_purchase_det")
   
   # Purchases by Product/Service Detail
-  get_report('ITEM_PURCHASE_DET_reportListLink_Vendors', '', 10, "Purchases by Product/Service Detail", 'date_macro', "item_purchase_det")
+  get_report('ITEM_PURCHASE_DET_reportListLink_Vendors', 10, "Purchases by Product/Service Detail", 'date_macro', "item_purchase_det")
   
   # Open Purchase Order List
-  get_report('OPEN_PO_LIST_reportListLink_Vendors', '', 10, "Open Purchase Order List", '', "open_po_list")
+  get_report('OPEN_PO_LIST_reportListLink_Vendors', 10, "Open Purchase Order List", '', "open_po_list")
   
   # BANKING reports
   # Check Detail
-  get_report('CHECK_DETAIL_reportListLink_Banking', '', 10, "Check Detail", 'date_macro', "check_detail")
+  get_report('CHECK_DETAIL_reportListLink_Banking', 10, "Check Detail", 'date_macro', "check_detail")
   
   # Reconciliation Report << SKIP for NOW? It has no Excel version
   # get_report('RECONCILE_REPORTS_reportListLink_Banking', '', 10, "Reconciliation Reports", '', "reconciliation_rpts")
@@ -334,53 +339,54 @@ try:
   
   # ACCOUNTANT & TAXES report
   # Trial Balance
-  get_report('TRIAL_BAL_reportListLink_Accountant &amp; Taxes', '', 10, "Trial Balance", 'date_macro', "trial_balance")
+  get_report('TRIAL_BAL_reportListLink_Accountant &amp; Taxes', 10, "Trial Balance", 'date_macro', "trial_balance")
   
   # General Ledger
-  get_report('GEN_LEDGER_reportListLink_Accountant &amp; Taxes', '', 10, "General Ledger", 'date_macro', "general_ledger")
+  get_report('GEN_LEDGER_reportListLink_Accountant &amp; Taxes', 10, "General Ledger", 'date_macro', "general_ledger")
   
   # Transaction Detail by Account
-  get_report('TX_DET_BY_ACCT_reportListLink_Accountant &amp; Taxes', '', 10, "Transaction Detail by Account", 'date_macro', "txn_detail_by_acct")
+  get_report('TX_DET_BY_ACCT_reportListLink_Accountant &amp; Taxes', 10, "Transaction Detail by Account", 'date_macro', "txn_detail_by_acct")
   
   # Transaction List by Date
-  get_report('TX_LIST_BY_DATE_reportListLink_Accountant &amp; Taxes', '', 10, "Transaction List by Date", 'date_macro', "txn_list_by_date")
+  get_report('TX_LIST_BY_DATE_reportListLink_Accountant &amp; Taxes', 10, "Transaction List by Date", 'date_macro', "txn_list_by_date")
   
   # Transaction List with Splits
-  get_report('TX_LIST_WITH_SPLITS_reportListLink_Accountant &amp; Taxes', '', 10, "Transaction List with Splits", 'date_macro', "txn_list_with_splits")
+  get_report('TX_LIST_WITH_SPLITS_reportListLink_Accountant &amp; Taxes', 10, "Transaction List with Splits", 'date_macro', "txn_list_with_splits")
   
   # Recent Transactions
-  get_report('RECENT_TX_reportListLink_Accountant &amp; Taxes', '', 10, "Recent Transactions", 'moddate_macro', "recent_txn")
+  get_report('RECENT_TX_reportListLink_Accountant &amp; Taxes', 10, "Recent Transactions", 'moddate_macro', "recent_txn")
   
   # PAYROLL reports not yet included
   # LISTS reports
   # Customer Phone List
-  get_report('CUST_PHONE_reportListLink_Lists', '', 10, "Customer Phone List", '', "cust_phone_list")
+  get_report('CUST_PHONE_reportListLink_Lists', 10, "Customer Phone List", '', "cust_phone_list")
   
   # Customer Contact List
-  get_report('CUST_CONTACT_reportListLink_Lists', '', 10, "Customer Contact List", '', "cust_contact_list")
+  get_report('CUST_CONTACT_reportListLink_Lists', 10, "Customer Contact List", '', "cust_contact_list")
   
   # Vendor Phone List
-  get_report('VEND_PHONE_reportListLink_Lists', '', 10, "Vendor Phone List", '', "vend_phone_list")
+  get_report('VEND_PHONE_reportListLink_Lists', 10, "Vendor Phone List", '', "vend_phone_list")
   
   # Vendor Contact List
-  get_report('VEND_CONTACT_reportListLink_Lists', '', 10, "Vendor Contact List", '', "vend_contact_list")
+  get_report('VEND_CONTACT_reportListLink_Lists', 10, "Vendor Contact List", '', "vend_contact_list")
   
   # Account Listing
-  get_report('ACCT_LIST_reportListLink_Lists', '', 10, "Account Listing", '', "acct_listing")
+  get_report('ACCT_LIST_reportListLink_Lists', 10, "Account Listing", '', "acct_listing")
   
   # Product/Service List
-  get_report('ITEM_PRICE_reportListLink_Lists', '', 10, "Product/Service List", '', "product_service_list")
+  get_report('ITEM_PRICE_reportListLink_Lists', 10, "Product/Service List", '', "product_service_list")
   
   # Payment Method Listing
-  get_report('PAYMENTMETHOD_LIST_reportListLink_Lists', '', 10, "Payment Method Listing", '', "pay_method_listing")
+  get_report('PAYMENTMETHOD_LIST_reportListLink_Lists', 10, "Payment Method Listing", '', "pay_method_listing")
   
   # Terms Listing
-  get_report('TERM_LIST_reportListLink_Lists', '', 10, "Terms Listing", '', "terms_listing")
+  get_report('TERM_LIST_reportListLink_Lists', 10, "Terms Listing", '', "terms_listing")
   
   # Recurring Template Listing
-  get_report('MEM_TXN_REPORT_reportListLink_Lists', '', 10, "Recurring Template Listing", '', "rcrring_templ_listing")
+  get_report('MEM_TXN_REPORT_reportListLink_Lists', 10, "Recurring Template Listing", '', "rcrring_templ_listing")
 except:
   print "Program's exiting. Please see email for details."
+  logging.error("Program's exiting. Please see email for details")
   exit(1)
 # EXCEPTION handling test - 10Dec2012
 
