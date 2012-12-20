@@ -1,9 +1,11 @@
 #!/bin/bash -x
 
 clear
+# instance id where the script resides (to find out - curl -s http://169.254.169.254/latest/meta-data/instance-id)
 INSTANCE_ID="i-5c7f3121"
 CURR_MONTH=$(date +"%Y-%m")
 #check if monthend
+# change the directory path depending on the location of the machine
 IS_MONTHEND=$(python /home/ubuntu/qboe/test_repo_2/utils/check_monthend.py)
 # archive if it's monthend already (0 for the meantime)
 if [ $IS_MONTHEND -eq 1 ]; then

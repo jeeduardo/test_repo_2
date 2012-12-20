@@ -19,7 +19,7 @@ logging.basicConfig(filename='quickbooks-report-dump.log', level=logging.INFO, f
 # function to send email
 def send_mail(subject, msg):
   print "Sending email..."
-  logging.info("sending email...")
+  logging.info("sending email with subject %s..." %(subject))
   sendmail.email(os.getcwd()+os.sep+'quickbooks-report-dump.cfg', subject, msg)
 
 # print dots . . .  to screen with given no. of seconds
