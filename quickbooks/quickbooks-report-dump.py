@@ -13,8 +13,38 @@ sys.path.append(os.getcwd() + '/../utils')
 import enc_pwd
 import sendmail
 
+# setup spr_client
+import gdata.spreadsheet
+import gdata.spreadsheet.text_db
+import gdata.auth
+
 # setup logging
+print "Setting up logging..."
 logging.basicConfig(filename='quickbooks-report-dump.log', level=logging.INFO, format='%(asctime)s %(levelname)s : %(message)s')
+
+# get configurations
+cfg_file = 'quickbooks-report-dump.cfg'
+cfg = ConfigParser.ConfigParser()
+cfg.read(cfg_file)
+
+# move the credentials to config
+spr_client = gdata.spreadsheet.service.SpreadsheetsService()
+spr_client.email = cfg.get('gdata_credentials', 'gdata_username')
+spr_client.password = cfg.get('gdata_credentials', 'gdata_pword')
+logging.info("Logging in to google spreadsheet app.")
+
+
+spr_client.ProgrammaticLogin()
+
+spreadsheet_key = '0AjKELoU3HY0HdEx4MzR1eE1aWUFaem1QZ2VUc0NlVVE'
+# default
+wfeed = spr_client.GetWorksheetsFeed(key=spreadsheet_key)
+for wksht in wfeed.entry:
+  wksht_id = wksht.id.text.split('/')[-1]
+
+feed = spr_client.GetListFeed(spreadsheet_key, wksht_id)
+hdr_record = gdata.spreadsheet.text_db.Record(row_entry=feed.entry[0])
+offset = 1 + len(hdr_record.content)
 
 # function to send email
 def send_mail(subject, msg):
@@ -79,13 +109,6 @@ def switch_frame():
 
 send_mail("QuickBooks report dump has started", "The QuickBooks report dump script has started. We shall email you again for details.")
 
-print "Setting up logging..."
-
-# get configurations
-cfg_file = 'quickbooks-report-dump.cfg'
-cfg = ConfigParser.ConfigParser()
-cfg.read(cfg_file)
-
 url = cfg.get('credentials', 'url')
 username = cfg.get('credentials', 'username')
 ppword = enc_pwd.decrypt_pword(cfg.get('credentials', 'ppword'), os.getcwd() + os.sep)
@@ -119,7 +142,7 @@ os.system("mkdir %s" %(download_dir_full_path))
 # deprecate p_send_keys and pass '' instead on find_click?
 #def get_report(report_link_id, p_send_keys, p_seconds, report_name, date_macro_name, report_name_prefix):
 def get_report(report_link_id, p_seconds, report_name, date_macro_name, report_name_prefix):
-  global driver
+  global driver, row_no
   try:
     print "Getting report named \"%s\"" %(report_name)
     reload_report_list()
@@ -140,36 +163,67 @@ def get_report(report_link_id, p_seconds, report_name, date_macro_name, report_n
     show_loading(5, "Getting Excel version of \"%s\" report" %(report_name))
     # move file
     move_report_xls(report_name_prefix)
+    logging.info("Updating accounting sheet for %s report." %(report_name))
+    update_acct_cell(row_no, "OK", report_link_id, report_name)
+    row_no += 1
     time.sleep(3)
   except:
-    import traceback
-    tb = traceback.format_exc()
-    logging.error(tb)
-    err_email_msg = "Hi,\n\n\
-Something went wrong with extracting a report of %s. Please check. \
-Below are the error details:\n\n%s" %(report_name, tb)
-    send_mail("QuickBooks: ERROR in extracting reports", err_email_msg)
+#    import traceback
+#    tb = traceback.format_exc()
+#    logging.error(tb)
+#    err_email_msg = "Hi,\n\n\
+#Something went wrong with extracting a report of %s. Please check. \
+#Below are the error details:\n\n%s" %(report_name, tb)
+#    send_mail("QuickBooks: ERROR in extracting reports", err_email_msg)
     raise Exception("Something went wrong in scraping the reports.")
   return 0
 
 # 08Nov2012 - get payroll reports
 def get_payroll_report(payroll_report_url, caption, file_prefix):
-  global mv, download_dir, download_dir_full_path, datetime_now
-  print "Getting report for \"%s\" summary in %s" %(caption, payroll_report_url)
-  logging.info("Getting report for \"%s\" in %s" %(caption, payroll_report_url))
-  driver.get(payroll_report_url)
-  show_loading(10)
-  p = os.popen("ls -t %s/*.xls | head -n1" %(download_dir))
-  fr = re.escape(p.readline().strip())
-  # move file to download_dir_full_path
-  mv_cmd = "%s -v %s %s/%s_%s.xls" %(mv, fr, download_dir_full_path, file_prefix, datetime_now.strftime('%Y-%m-%d_%H%M'))
-  p.close()
-  logging.info(mv_cmd)
-  print mv_cmd
-  os.system(mv_cmd)
+  global mv, download_dir, download_dir_full_path, datetime_now, row_no
+  try:
+    print "Getting report for \"%s\" summary in %s" %(caption, payroll_report_url)
+    logging.info("Getting report for \"%s\" in %s" %(caption, payroll_report_url))
+    driver.get(payroll_report_url)
+    # 29Dec2012 - dummy error
+    show_loading(10)
+    p = os.popen("ls -t %s/*.xls | head -n1" %(download_dir))
+    fr = re.escape(p.readline().strip())
+    # move file to download_dir_full_path
+    mv_cmd = "%s -v %s %s/%s_%s.xls" %(mv, fr, download_dir_full_path, file_prefix, datetime_now.strftime('%Y-%m-%d_%H%M'))
+    p.close()
+    logging.info(mv_cmd)
+    print mv_cmd
+    os.system(mv_cmd)
+    logging.info("Updating accounting sheet for %s report" % (caption))
+    update_acct_cell(row_no, "OK", "", caption)
+    row_no += 1
+  except:
+    import traceback
+    tb = traceback.format_exc()
+    logging.error("ERROR occured on Quickbooks report dump:\n")
+    logging.error(tb)
+    print tb
+    err_email_msg = "ERROR occured on Quickbooks report dump:\n%s" %(tb)
+    send_mail("Error on Quickbooks report dump.", err_email_msg)
+    raise Exception("Error on QuickBooks report dump.")
 
   return 0
 
+
+def update_acct_cell(row_no, status, report_link_id, report_name):
+  global spr_client, offset, wksht_id
+  spreadsheet_id = '0AjKELoU3HY0HdEx4MzR1eE1aWUFaem1QZ2VUc0NlVVE'
+  # wksht_id = 'od7'
+
+  # 27Dec2012 - 2 lines below are temporary
+  print "Updating worksheet id %s" %(wksht_id)
+
+  if (datetime.now().day == 1):
+    spr_client.UpdateCell(row_no, 1, report_link_id, spreadsheet_id, wksht_id)
+    spr_client.UpdateCell(row_no, 2, report_name, spreadsheet_id, wksht_id)
+
+  return spr_client.UpdateCell(row_no, offset, status, spreadsheet_id, wksht_id)
 
 
 # set Firefox profile
@@ -229,6 +283,21 @@ logging.info("Getting the Banking reports")
 # Deposit Details
 # EXCEPTION handling test - 10Dec2012
 try:
+  # add new sheet if it's the beginning of month
+  if (datetime.now().day == 1):
+    spr_client.AddWorksheet(datetime_now.strftime('%m-%Y'), 64, 34, spreadsheet_key)
+    wfeed = spr_client.GetWorksheetsFeed(key=spreadsheet_key)
+    for wksht in wfeed.entry:
+      wksht_id = wksht.id.text.split('/')[-1]
+
+    offset = 4
+    spr_client.UpdateCell(2, 1, "Report Id", spreadsheet_key, wksht_id)
+    spr_client.UpdateCell(2, 2, "Report", spreadsheet_key, wksht_id)
+    spr_client.UpdateCell(2, 3, "Remarks", spreadsheet_key, wksht_id)
+
+  spr_client.UpdateCell(2, offset, datetime_now.strftime('%Y-%m-%d'), spreadsheet_key, wksht_id)
+  row_no = 3
+
   get_report('DEPOSIT_DETAIL_reportListLink_Banking', 10, "Deposit Details", 'date_macro', "deposit_details") 
   
   # find_click('id', 'category_BANKING', '', 2, "Getting the Banking reports")
@@ -383,8 +452,12 @@ try:
   get_report('TERM_LIST_reportListLink_Lists', 10, "Terms Listing", '', "terms_listing")
   
   # Recurring Template Listing
-  get_report('MEM_TXN_REPORT_reportListLink_Lists', 10, "Recurring Template Listing", '', "rcrring_templ_listing")
+  get_report('MEM_TXN_REPORT_reportListLink_Lists', 10, "Recurring Template Listing", '', "recrring_templ_listing")
 except:
+  import traceback
+  tb = traceback.format_exc()
+  print tb
+  logging.error(tb)
   print "Program's exiting. Please see email for details."
   logging.error("Program's exiting. Please see email for details")
   exit(1)
@@ -395,6 +468,8 @@ except:
 
 
 # 09Nov2012
+# TO-DO: downloading reports based from a google spreadsheet
+# TO-DO: accounting of payroll reports
 try:
   reload_report_list()
   year_str = str(datetime_now.year)
