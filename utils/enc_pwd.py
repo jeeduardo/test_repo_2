@@ -10,63 +10,44 @@ from ConfigParser import ConfigParser
 
 # key_dir - directory where the private key will be stored
 # defaults to current path if not supplied
+# TO-DO: don't write within the target config file's file hierarchy
 def encrypt_pword(pword, key_dir=None):
 
   # set to current path if dir wasn't supplied
   if (key_dir == None):
     key_dir = os.getcwd() + os.sep
-#
-#  privkey_filename = "%s/privkey.pem" %(key_dir)
-#  pubkey_filename = "%s/pubkey.pem" %(key_dir)
-#
-#  # generate private pubkey key pair
-#  if (os.path.exists(privkey_filename) and time.strftime('%m%d%Y', time.localtime()) == time.strftime('%m%d%Y', time.localtime(os.path.getctime(privkey_filename)))):
-#    print "Key/s exist for the day. I'm not creating one."
-#  else:
-#    # use os.path.dirname(os.path.realpath(incomplete_path_to_file))
-#    os.system("openssl genrsa -out %s 512" %(privkey_filename))
-#
-#
-#  os.system("pyrsa-priv2pub -i %s -o %s" %(privkey_filename, pubkey_filename))
-#  
-#  with open(pubkey_filename, 'r') as pubkey_file:
-#    pubkey_data = pubkey_file.read()
-#  pubkey_file.close()
-#
-#  pub = rsa.PublicKey.load_pkcs1(pubkey_data)
-#  enc_pword = rsa.encrypt(pword, pub)
-#  b64_enc_pword = base64.b64encode(enc_pword)
-#  os.system("rm -f %s" %(pubkey_filename))
-#  p = os.popen("echo $(cut -c1 < %s) | sed 's/[\ |-]//g'" %(privkey_filename))
-#  pphrase = p.read().strip()
-#  enc_p = os.popen("echo '%s' | openssl enc -aes-256-cbc -a -salt -pass pass:%s" %(b64_enc_pword, pphrase))
-#  aes_enc_pword = enc_p.read().strip()
-#
-#  # chmod private key file
-#  import stat
-#  os.chmod(privkey_filename, stat.S_IREAD + stat.S_IWRITE)
-#
-  # 31Dec2012 - new approach to encrypting password
-  # using a data bag
-  data_bag_filename = "/tmp/data_bag_%s" % (datetime.now().strftime('%Y%m%d'))
-  cmd = "openssl rand -base64 512 | tr -d '\r\n' > %s" %(data_bag_filename)
-  #p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
-  p = os.popen(cmd)
-  infile = open(data_bag_filename, 'r')
-  key = infile.read()
-  infile.close()
-  b64_enc_pword = base64.b64encode(pword)
 
-  import re
-  print re.escape(b64_enc_pword)
+  privkey_filename = "%s/privkey.pem" %(key_dir)
+  pubkey_filename = "%s/pubkey.pem" %(key_dir)
 
-  # enc_p = os.popen("echo '%s' | openssl enc -aes-256-cbc -a -salt -pass file:%s" %(b64_enc_pword, data_bag_filename))
-  enc_p = os.popen("echo '%s' | openssl enc -aes-256-cbc -a -salt -pass pass:%s" %(b64_enc_pword, key))
-  aes_enc_pword = enc_p.read()
-  #31Dec2012
+  # generate private pubkey key pair
+  if (os.path.exists(privkey_filename) and time.strftime('%m%d%Y', time.localtime()) == time.strftime('%m%d%Y', time.localtime(os.path.getctime(privkey_filename)))):
+    print "Key/s exist for the day. I'm not creating one."
+  else:
+    # use os.path.dirname(os.path.realpath(incomplete_path_to_file))
+    os.system("openssl genrsa -out %s 512" %(privkey_filename))
+
+
+  os.system("pyrsa-priv2pub -i %s -o %s" %(privkey_filename, pubkey_filename))
   
-  return aes_enc_pword
-  # return aes_enc_pword.replace('\n', '')
+  with open(pubkey_filename, 'r') as pubkey_file:
+    pubkey_data = pubkey_file.read()
+  pubkey_file.close()
+
+  pub = rsa.PublicKey.load_pkcs1(pubkey_data)
+  enc_pword = rsa.encrypt(pword, pub)
+  b64_enc_pword = base64.b64encode(enc_pword)
+  os.system("rm -f %s" %(pubkey_filename))
+  p = os.popen("echo $(cut -c1 < %s) | sed 's/[\ |-]//g'" %(privkey_filename))
+  pphrase = p.read().strip()
+  enc_p = os.popen("echo '%s' | openssl enc -aes-256-cbc -a -salt -pass pass:%s" %(b64_enc_pword, pphrase))
+  aes_enc_pword = enc_p.read().strip()
+
+  # chmod private key file
+  import stat
+  os.chmod(privkey_filename, stat.S_IREAD + stat.S_IWRITE)
+
+  return aes_enc_pword.replace('\n', '')
 
 
 def decrypt_pword(p_pword, key_dir=None):

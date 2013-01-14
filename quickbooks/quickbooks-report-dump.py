@@ -36,7 +36,7 @@ logging.info("Logging in to google spreadsheet app.")
 
 spr_client.ProgrammaticLogin()
 
-spreadsheet_key = '0AjKELoU3HY0HdEx4MzR1eE1aWUFaem1QZ2VUc0NlVVE'
+spreadsheet_key = cfg.get('gdata_credentials', 'spreadsheet_key')
 # default
 wfeed = spr_client.GetWorksheetsFeed(key=spreadsheet_key)
 for wksht in wfeed.entry:
