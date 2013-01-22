@@ -5,6 +5,10 @@ import time
 from datetime import datetime, timedelta
 import logging
 import ConfigParser
+import sys
+sys.path.append(os.getcwd() + '/../utils')
+import enc_pwd
+# import sendmail
 
 # set up logging and parse the config
 cfg = ConfigParser.ConfigParser()
@@ -14,7 +18,8 @@ logging.info("Getting configurations...")
 
 url = cfg.get('credentials', 'url')
 username = cfg.get('credentials', 'username')
-pword = cfg.get('credentials', 'pword')
+# 16Jan2013
+pword = enc_pwd.decrypt_pword(cfg.get('credentials', 'pword'), os.getcwd()+os.sep)
 
 base_export_url = "https://qbo.intuit.com/qbo36-pprdqboas30m/export/download?file=true&timestamp="
 

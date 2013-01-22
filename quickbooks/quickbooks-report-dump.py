@@ -30,9 +30,8 @@ cfg.read(cfg_file)
 # move the credentials to config
 spr_client = gdata.spreadsheet.service.SpreadsheetsService()
 spr_client.email = cfg.get('gdata_credentials', 'gdata_username')
-spr_client.password = cfg.get('gdata_credentials', 'gdata_pword')
+spr_client.password = enc_pwd.decrypt_pword(cfg.get('gdata_credentials', 'gdata_pword'), os.getcwd()+os.sep)
 logging.info("Logging in to google spreadsheet app.")
-
 
 spr_client.ProgrammaticLogin()
 
@@ -154,7 +153,8 @@ def get_report(report_link_id, p_seconds, report_name, date_macro_name, report_n
       date_macro = driver.find_element_by_id(date_macro_name)
       date_macro.find_element_by_xpath("//option[@value='all']").click()
       driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
-      show_loading(10, "Running report")
+      # 21Jan2013 - change from 10 to p_seconds
+      show_loading(p_seconds, "Running report")
       switch_frame()
 
     driver.find_element_by_id('button_id_b5_excel_small.gif').click()
@@ -175,6 +175,9 @@ def get_report(report_link_id, p_seconds, report_name, date_macro_name, report_n
 #Something went wrong with extracting a report of %s. Please check. \
 #Below are the error details:\n\n%s" %(report_name, tb)
 #    send_mail("QuickBooks: ERROR in extracting reports", err_email_msg)
+    update_acct_cell(row_no, "ERROR. See email for details", report_link_id, report_name)
+    row_no += 1
+    time.sleep(3)
     raise Exception("Something went wrong in scraping the reports.")
   return 0
 
@@ -182,7 +185,7 @@ def get_report(report_link_id, p_seconds, report_name, date_macro_name, report_n
 def get_payroll_report(payroll_report_url, caption, file_prefix):
   global mv, download_dir, download_dir_full_path, datetime_now, row_no
   try:
-    print "Getting report for \"%s\" summary in %s" %(caption, payroll_report_url)
+    print "Getting report for \"%s\" summary" %(caption)
     logging.info("Getting report for \"%s\" in %s" %(caption, payroll_report_url))
     driver.get(payroll_report_url)
     # 29Dec2012 - dummy error
@@ -255,9 +258,9 @@ logging.info("Logging in as %s" % (username))
 find_click('name', 'login', username, 2)
 
 find_click('name', 'password', ppword, 2)
-#driver.find_element_by_id('LoginButton').click()
-# reducing waiting time to 30 as network speed is A-OK
-find_click('id', 'LoginButton', '', 30, "Logging in and loading home page. ")
+# login_wait_time - set time (in seconds) to wait for loading the home page completely
+login_wait_time = int(cfg.get('prefs', 'login_wait_time'))
+find_click('id', 'LoginButton', '', login_wait_time, "Logging in and loading home page. ")
 
 
 # go to first frame, click the 'Reports' tab
@@ -298,161 +301,165 @@ try:
   spr_client.UpdateCell(2, offset, datetime_now.strftime('%Y-%m-%d'), spreadsheet_key, wksht_id)
   row_no = 3
 
-  get_report('DEPOSIT_DETAIL_reportListLink_Banking', 10, "Deposit Details", 'date_macro', "deposit_details") 
+  # 22Jan2013 - report_wait_time - to replace 2nd parameter with this
+  report_wait_time = int(cfg.get('prefs', 'report_wait_time'))
+
+  get_report('DEPOSIT_DETAIL_reportListLink_Banking', report_wait_time, "Deposit Details", 'date_macro', "deposit_details") 
   
   # find_click('id', 'category_BANKING', '', 2, "Getting the Banking reports")
   reload_report_list()
   
   # Journal
-  get_report('JOURNAL_reportListLink_Accountant &amp; Taxes', 10, "Journal", 'date_macro', "journals")
+  get_report('JOURNAL_reportListLink_Accountant &amp; Taxes', report_wait_time, "Journal", 'date_macro', "journals")
   
   # Profit & Loss
-  get_report('PANDL_reportListLink_Company', 10, "Profit & Loss", '', "profit_loss")
+  # 21Jan2013 - in an attempt to simulate an error, i'd change 10 seconds (parameter 2) to 1
+  get_report('PANDL_reportListLink_Company', report_wait_time, "Profit & Loss", '', "profit_loss")
   
   # Profit & Loss Detail
-  get_report('PANDL_DET_reportListLink_Company', 10, "Profit & Loss Detail", '', "profit_loss_detail")
+  get_report('PANDL_DET_reportListLink_Company', report_wait_time, "Profit & Loss Detail", '', "profit_loss_detail")
   
   # Balance Sheet
-  get_report('BAL_SHEET_reportListLink_Company', 10, "Balance Sheet", '', "balance_sheet")
+  get_report('BAL_SHEET_reportListLink_Company', report_wait_time, "Balance Sheet", '', "balance_sheet")
   
   # Balance Sheet Summary
-  get_report('BAL_SHEET_SUM_reportListLink_Company', 10, "Balance Sheet Summary", '', "balance_sheet_summary")
+  get_report('BAL_SHEET_SUM_reportListLink_Company', report_wait_time, "Balance Sheet Summary", '', "balance_sheet_summary")
   
   # Statement of Cash Flows
   # 17Dec2012 - TEST ERROR here!
-  get_report('CASH_FLOW_reportListLink_Company', 10, "Statement of Cash Flows", '', "statement_cash_flows")
+  get_report('CASH_FLOW_reportListLink_Company', report_wait_time, "Statement of Cash Flows", '', "statement_cash_flows")
   
   # A/R Aging
-  get_report('AR_AGING_reportListLink_Customers', 10, "A/R Aging Summary", 'date_macro', "ar_aging_summary")
+  get_report('AR_AGING_reportListLink_Customers', report_wait_time, "A/R Aging Summary", 'date_macro', "ar_aging_summary")
   
   # A/R Aging Detail
-  get_report('AR_AGING_DET_reportListLink_Customers', 10, "A/R Aging Detail", 'date_macro', "ar_aging_detail")
+  get_report('AR_AGING_DET_reportListLink_Customers', report_wait_time, "A/R Aging Detail", 'date_macro', "ar_aging_detail")
   
   # Customer Balance Summary
-  get_report('CUST_BAL_reportListLink_Customers', 10, "Customer Balance Summary", 'date_macro', "customer_balance_summary")
+  get_report('CUST_BAL_reportListLink_Customers', report_wait_time, "Customer Balance Summary", 'date_macro', "customer_balance_summary")
   
   # Customer Balance Detail
-  get_report('CUST_BAL_DET_reportListLink_Customers', 10, "Customer Balance Detail", '', "customer_balance_detail")
+  get_report('CUST_BAL_DET_reportListLink_Customers', report_wait_time, "Customer Balance Detail", '', "customer_balance_detail")
   
   # Collections
-  get_report('COLLECTIONS_reportListLink_Customers', 10, "Collections", 'date_macro', "collections")
+  get_report('COLLECTIONS_reportListLink_Customers', report_wait_time, "Collections", 'date_macro', "collections")
   
   # Income by Customer Summary
-  get_report('CUST_INC_reportListLink_Customers', 10, "Income by Customer Summary", '', "income_by_cust_summary")
+  get_report('CUST_INC_reportListLink_Customers', report_wait_time, "Income by Customer Summary", '', "income_by_cust_summary")
   
   # Transaction List by Customer
-  get_report('TX_LIST_BY_CUST_reportListLink_Customers', 10, "Transaction List by Customer", 'date_macro', "txn_list_by_customer")
+  get_report('TX_LIST_BY_CUST_reportListLink_Customers', report_wait_time, "Transaction List by Customer", 'date_macro', "txn_list_by_customer")
   
   # Sales by Customer Summary
-  get_report('CUST_SALES_reportListLink_Customers', 10, "Sales by Customer Summary", 'date_macro', "sales_by_customer_summary")
+  get_report('CUST_SALES_reportListLink_Customers', report_wait_time, "Sales by Customer Summary", 'date_macro', "sales_by_customer_summary")
   
   # Sales by Customer Detail
-  get_report('CUST_SALES_DET_reportListLink_Customers', 10, "Sales by Customer Detail", 'date_macro', "sales_by_customer_detail")
+  get_report('CUST_SALES_DET_reportListLink_Customers', report_wait_time, "Sales by Customer Detail", 'date_macro', "sales_by_customer_detail")
   
   # Invoice List
-  get_report('INVOICE_LIST_reportListLink_Customers', 10, "Invoice List", 'date_macro', "invoice_list")
+  get_report('INVOICE_LIST_reportListLink_Customers', report_wait_time, "Invoice List", 'date_macro', "invoice_list")
   
   # Statement List
-  get_report('STATEMENT_INVOICE_reportListLink_Customers', 10, "Statement List", 'stmtdate_macro', "statement_list")
+  get_report('STATEMENT_INVOICE_reportListLink_Customers', report_wait_time, "Statement List", 'stmtdate_macro', "statement_list")
   
   # Sales by Product/Service Summary
-  get_report('ITEM_SALES_reportListLink_Sales', 10, "Sales by Product/Service Summary", 'date_macro', "sales_product_service_summary")
+  get_report('ITEM_SALES_reportListLink_Sales', report_wait_time, "Sales by Product/Service Summary", 'date_macro', "sales_product_service_summary")
   
   # Sales by Product/Service Detail
-  get_report('ITEM_SALES_DET_reportListLink_Sales', 10, "Sales by Product/Service Detail", 'date_macro', "sales_product_service_detail")
+  get_report('ITEM_SALES_DET_reportListLink_Sales', report_wait_time, "Sales by Product/Service Detail", 'date_macro', "sales_product_service_detail")
   
   # A/P Aging Summary
-  get_report('AP_AGING_reportListLink_Vendors', 10, "A/P Aging Summary", 'date_macro', 'ap_aging_summary')
+  get_report('AP_AGING_reportListLink_Vendors', report_wait_time, "A/P Aging Summary", 'date_macro', 'ap_aging_summary')
   
   # A/P Aging Detail
-  get_report('AP_AGING_DET_reportListLink_Vendors', 10, "A/P Aging Detail", 'date_macro', 'ap_aging_detail')
+  get_report('AP_AGING_DET_reportListLink_Vendors', report_wait_time, "A/P Aging Detail", 'date_macro', 'ap_aging_detail')
   
   # Vendor Balance Summary
-  get_report('VEND_BAL_reportListLink_Vendors', 10, "Vendor Balance Summary", 'date_macro', 'vendor_bal_summary')
+  get_report('VEND_BAL_reportListLink_Vendors', report_wait_time, "Vendor Balance Summary", 'date_macro', 'vendor_bal_summary')
   
   # Vendor Balance Detail
-  get_report('VEND_BAL_DET_reportListLink_Vendors', 10, "Vendor Balance Detail", 'date_macro', 'vendor_bal_detail')
+  get_report('VEND_BAL_DET_reportListLink_Vendors', report_wait_time, "Vendor Balance Detail", 'date_macro', 'vendor_bal_detail')
   
   # Unpaid Bills
-  get_report('UNPAID_BILLS_reportListLink_Vendors', 10, "Unpaid Bills", '', 'unpaid_bills')
+  get_report('UNPAID_BILLS_reportListLink_Vendors', report_wait_time, "Unpaid Bills", '', 'unpaid_bills')
   
   # Expenses by Vendor Summary
-  get_report('VEND_EXP_reportListLink_Vendors', 10, "Expense by Vendor Summary", '', 'exp_by_vendor')
+  get_report('VEND_EXP_reportListLink_Vendors', report_wait_time, "Expense by Vendor Summary", '', 'exp_by_vendor')
   
   # Bill Payment List
-  get_report('BILL_PAY_LIST_reportListLink_Vendors', 10, "Bill Payment List", 'date_macro', 'bill_pay_list')
+  get_report('BILL_PAY_LIST_reportListLink_Vendors', report_wait_time, "Bill Payment List", 'date_macro', 'bill_pay_list')
   
   # Transaction List by Vendor
-  get_report('TX_LIST_BY_VENDOR_reportListLink_Vendors', 10, "Transaction List by Vendor", 'date_macro', 'txn_list_by_vendor')
+  get_report('TX_LIST_BY_VENDOR_reportListLink_Vendors', report_wait_time, "Transaction List by Vendor", 'date_macro', 'txn_list_by_vendor')
   
   # Vendor Contact List
-  get_report('VEND_CONTACT_reportListLink_Vendors', 10, "Vendor Contact List", '', "vendor_contact_list")
+  get_report('VEND_CONTACT_reportListLink_Vendors', report_wait_time, "Vendor Contact List", '', "vendor_contact_list")
   
   # Purchases by Vendor Detail
-  get_report('VENDOR_PURCHASE_DET_reportListLink_Vendors', 10, "Purchases by Vendor Detail", 'date_macro', "vendor_purchase_det")
+  get_report('VENDOR_PURCHASE_DET_reportListLink_Vendors', report_wait_time, "Purchases by Vendor Detail", 'date_macro', "vendor_purchase_det")
   
   # Purchases by Product/Service Detail
-  get_report('ITEM_PURCHASE_DET_reportListLink_Vendors', 10, "Purchases by Product/Service Detail", 'date_macro', "item_purchase_det")
+  get_report('ITEM_PURCHASE_DET_reportListLink_Vendors', report_wait_time, "Purchases by Product/Service Detail", 'date_macro', "item_purchase_det")
   
   # Open Purchase Order List
-  get_report('OPEN_PO_LIST_reportListLink_Vendors', 10, "Open Purchase Order List", '', "open_po_list")
+  get_report('OPEN_PO_LIST_reportListLink_Vendors', report_wait_time, "Open Purchase Order List", '', "open_po_list")
   
   # BANKING reports
   # Check Detail
-  get_report('CHECK_DETAIL_reportListLink_Banking', 10, "Check Detail", 'date_macro', "check_detail")
+  get_report('CHECK_DETAIL_reportListLink_Banking', report_wait_time, "Check Detail", 'date_macro', "check_detail")
   
   # Reconciliation Report << SKIP for NOW? It has no Excel version
-  # get_report('RECONCILE_REPORTS_reportListLink_Banking', '', 10, "Reconciliation Reports", '', "reconciliation_rpts")
+  # get_report('RECONCILE_REPORTS_reportListLink_Banking', '', report_wait_time, "Reconciliation Reports", '', "reconciliation_rpts")
   
   # Deposit Details here?
   
   # ACCOUNTANT & TAXES report
   # Trial Balance
-  get_report('TRIAL_BAL_reportListLink_Accountant &amp; Taxes', 10, "Trial Balance", 'date_macro', "trial_balance")
+  get_report('TRIAL_BAL_reportListLink_Accountant &amp; Taxes', report_wait_time, "Trial Balance", 'date_macro', "trial_balance")
   
   # General Ledger
-  get_report('GEN_LEDGER_reportListLink_Accountant &amp; Taxes', 10, "General Ledger", 'date_macro', "general_ledger")
+  get_report('GEN_LEDGER_reportListLink_Accountant &amp; Taxes', report_wait_time, "General Ledger", 'date_macro', "general_ledger")
   
   # Transaction Detail by Account
-  get_report('TX_DET_BY_ACCT_reportListLink_Accountant &amp; Taxes', 10, "Transaction Detail by Account", 'date_macro', "txn_detail_by_acct")
+  get_report('TX_DET_BY_ACCT_reportListLink_Accountant &amp; Taxes', report_wait_time, "Transaction Detail by Account", 'date_macro', "txn_detail_by_acct")
   
   # Transaction List by Date
-  get_report('TX_LIST_BY_DATE_reportListLink_Accountant &amp; Taxes', 10, "Transaction List by Date", 'date_macro', "txn_list_by_date")
+  get_report('TX_LIST_BY_DATE_reportListLink_Accountant &amp; Taxes', report_wait_time, "Transaction List by Date", 'date_macro', "txn_list_by_date")
   
   # Transaction List with Splits
-  get_report('TX_LIST_WITH_SPLITS_reportListLink_Accountant &amp; Taxes', 10, "Transaction List with Splits", 'date_macro', "txn_list_with_splits")
+  get_report('TX_LIST_WITH_SPLITS_reportListLink_Accountant &amp; Taxes', report_wait_time, "Transaction List with Splits", 'date_macro', "txn_list_with_splits")
   
   # Recent Transactions
-  get_report('RECENT_TX_reportListLink_Accountant &amp; Taxes', 10, "Recent Transactions", 'moddate_macro', "recent_txn")
+  get_report('RECENT_TX_reportListLink_Accountant &amp; Taxes', report_wait_time, "Recent Transactions", 'moddate_macro', "recent_txn")
   
   # PAYROLL reports not yet included
   # LISTS reports
   # Customer Phone List
-  get_report('CUST_PHONE_reportListLink_Lists', 10, "Customer Phone List", '', "cust_phone_list")
+  get_report('CUST_PHONE_reportListLink_Lists', report_wait_time, "Customer Phone List", '', "cust_phone_list")
   
   # Customer Contact List
-  get_report('CUST_CONTACT_reportListLink_Lists', 10, "Customer Contact List", '', "cust_contact_list")
+  get_report('CUST_CONTACT_reportListLink_Lists', report_wait_time, "Customer Contact List", '', "cust_contact_list")
   
   # Vendor Phone List
-  get_report('VEND_PHONE_reportListLink_Lists', 10, "Vendor Phone List", '', "vend_phone_list")
+  get_report('VEND_PHONE_reportListLink_Lists', report_wait_time, "Vendor Phone List", '', "vend_phone_list")
   
   # Vendor Contact List
-  get_report('VEND_CONTACT_reportListLink_Lists', 10, "Vendor Contact List", '', "vend_contact_list")
+  get_report('VEND_CONTACT_reportListLink_Lists', report_wait_time, "Vendor Contact List", '', "vend_contact_list")
   
   # Account Listing
-  get_report('ACCT_LIST_reportListLink_Lists', 10, "Account Listing", '', "acct_listing")
+  get_report('ACCT_LIST_reportListLink_Lists', report_wait_time, "Account Listing", '', "acct_listing")
   
   # Product/Service List
-  get_report('ITEM_PRICE_reportListLink_Lists', 10, "Product/Service List", '', "product_service_list")
+  get_report('ITEM_PRICE_reportListLink_Lists', report_wait_time, "Product/Service List", '', "product_service_list")
   
   # Payment Method Listing
-  get_report('PAYMENTMETHOD_LIST_reportListLink_Lists', 10, "Payment Method Listing", '', "pay_method_listing")
+  get_report('PAYMENTMETHOD_LIST_reportListLink_Lists', report_wait_time, "Payment Method Listing", '', "pay_method_listing")
   
   # Terms Listing
-  get_report('TERM_LIST_reportListLink_Lists', 10, "Terms Listing", '', "terms_listing")
+  get_report('TERM_LIST_reportListLink_Lists', report_wait_time, "Terms Listing", '', "terms_listing")
   
   # Recurring Template Listing
-  get_report('MEM_TXN_REPORT_reportListLink_Lists', 10, "Recurring Template Listing", '', "recrring_templ_listing")
+  get_report('MEM_TXN_REPORT_reportListLink_Lists', report_wait_time, "Recurring Template Listing", '', "recrring_templ_listing")
 except:
   import traceback
   tb = traceback.format_exc()
@@ -536,7 +543,7 @@ except:
   tb = traceback.format_exc()
   logging.error(tb)
   print tb
-  html_file = open('html_during_' + datetime_now.strftime('%Y-%m-%d_%H%M%S'), 'w')
+  html_file = open('html_' + datetime_now.strftime('%Y-%m-%d_%H%M%S'), 'w')
   html_file.write(driver.page_source.encode('ascii', 'ignore'))
   html_file.close()
   # TO-DO: send ERROR email if something wrong happens
@@ -554,6 +561,23 @@ logging.info("Closing browser.")
 # logging.info("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report Dump has finished.\" --message \"Please check folder %s for the report files.\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg', download_dir_full_path))
 # os.system("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report Dump has finished.\" --message \"Please check folder %s for the report files.\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg', download_dir_full_path))
 send_mail("QuickBooks Report Dump has finished.", "Please check folder %s for the report files." %(download_dir_full_path))
+# 21Jan2013 temporary
+# calculate dump size
+# download directory BA accounting
+dd_ba_dict = {'date':datetime_now.strftime("%m/%d/%Y"), 'directoryname':os.path.split(download_dir_full_path)[1],'error':'None'}
+
+print "download_dir_full_path = %s" % (download_dir_full_path)
+total_dump_size = 0L
+for dirpath, dirnames, filenames in os.walk(download_dir_full_path):
+  for f in filenames:
+    fp = os.path.join(dirpath, f)
+    total_dump_size += os.path.getsize(fp)
+
+# print "total_dump_size =", str(float(total_dump_size))
+dd_ba_dict['size'] = str(float(total_dump_size)/1024.0) + " KB"
+dd_ba_key = '0AjKELoU3HY0HdGw2MlFSN01lelRDd3I4bVJ6czJSSnc'
+spr_client.InsertRow(dd_ba_dict, dd_ba_key, 'od6')
+# 21Jan2013
 show_loading(10)
 driver.quit()
 

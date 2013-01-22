@@ -24,6 +24,7 @@ def email(cfg, subject, message):
   # global cfg
   uname = c.get('email', 'sender_uname')
   pword = enc_pwd.decrypt_pword(c.get('email', 'sender_pword'), os.path.dirname(os.path.realpath(cfg))+os.sep)
+
   # pword = c.get('email', 'sender_pword')
   toaddr = c.get('email', 'toaddr')
 
