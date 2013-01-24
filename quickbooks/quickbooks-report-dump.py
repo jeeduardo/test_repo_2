@@ -18,6 +18,9 @@ import gdata.spreadsheet
 import gdata.spreadsheet.text_db
 import gdata.auth
 
+# setup time the backup has started
+dd_ba_start = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
+
 # setup logging
 print "Setting up logging..."
 logging.basicConfig(filename='quickbooks-report-dump.log', level=logging.INFO, format='%(asctime)s %(levelname)s : %(message)s')
@@ -566,7 +569,6 @@ send_mail("QuickBooks Report Dump has finished.", "Please check folder %s for th
 # download directory BA accounting
 dd_ba_dict = {'date':datetime_now.strftime("%m/%d/%Y"), 'directoryname':os.path.split(download_dir_full_path)[1],'error':'None'}
 
-print "download_dir_full_path = %s" % (download_dir_full_path)
 total_dump_size = 0L
 for dirpath, dirnames, filenames in os.walk(download_dir_full_path):
   for f in filenames:
@@ -574,7 +576,10 @@ for dirpath, dirnames, filenames in os.walk(download_dir_full_path):
     total_dump_size += os.path.getsize(fp)
 
 # print "total_dump_size =", str(float(total_dump_size))
-dd_ba_dict['size'] = str(float(total_dump_size)/1024.0) + " KB"
+total_dump_size_kb = float(total_dump_size)/1024.0
+dd_ba_dict['size'] =  "%.2f KB" %(total_dump_size_kb)
+dd_ba_dict['start'] = dd_ba_start
+dd_ba_dict['end'] = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
 dd_ba_key = '0AjKELoU3HY0HdGw2MlFSN01lelRDd3I4bVJ6czJSSnc'
 spr_client.InsertRow(dd_ba_dict, dd_ba_key, 'od6')
 # 21Jan2013
