@@ -33,7 +33,9 @@ cfg.read(cfg_file)
 # move the credentials to config
 spr_client = gdata.spreadsheet.service.SpreadsheetsService()
 spr_client.email = cfg.get('gdata_credentials', 'gdata_username')
-spr_client.password = enc_pwd.decrypt_pword(cfg.get('gdata_credentials', 'gdata_pword'), os.getcwd()+os.sep)
+# spr_client.password = enc_pwd.decrypt_pword(cfg.get('gdata_credentials', 'gdata_pword'), os.getcwd()+os.sep)
+spr_client.password = os.popen("./../utils/encpwd/read_cfg_pwd.sh ../../quickbooks/quickbooks-report-dump.cfg gdata_credentials gdata_pword").readline().strip()
+
 logging.info("Logging in to google spreadsheet app.")
 
 spr_client.ProgrammaticLogin()
@@ -84,6 +86,10 @@ def find_click(p_by='id', p_string='', p_send_keys='', p_seconds=0, p_msg_while_
     tb = traceback.format_exc()
     logging.error(tb)
     error_email_msg = "The following error was encountered while the script was running:\n %s" %(tb)
+    # 31Jan2013
+    print "p_string = %s" %p_string
+    return False
+    # 31Jan2013 ^
     print error_email_msg
     send_mail("QuickBooks: Error in report scraping", error_email_msg)
     # exit()
@@ -113,7 +119,8 @@ send_mail("QuickBooks report dump has started", "The QuickBooks report dump scri
 
 url = cfg.get('credentials', 'url')
 username = cfg.get('credentials', 'username')
-ppword = enc_pwd.decrypt_pword(cfg.get('credentials', 'ppword'), os.getcwd() + os.sep)
+time.sleep(3)
+ppword = os.popen("./../utils/encpwd/read_cfg_pwd.sh ../../quickbooks/quickbooks-report-dump.cfg credentials ppword").readline().strip()
 
 download_dir = cfg.get('prefs', 'download_dir')
 save_to_disk = cfg.get('prefs', 'save_to_disk_immed')
@@ -124,11 +131,11 @@ dirname = cfg.get('prefs', 'dirname')
 # move - for windows
 # mv - for linux/unix
 mv = cfg.get('prefs', 'move_command')
-sep = os.sep
+# sep = os.sep
 
 # create download directory
 datetime_now = datetime.now()
-download_dir_full_path = download_dir + sep + dirname + datetime_now.strftime('%Y-%m-%d_%H%M')
+download_dir_full_path = download_dir + os.sep + dirname + datetime_now.strftime('%Y-%m-%d_%H%M')
 
 # move file to target directory
 def move_report_xls(report_name_prefix):
@@ -171,9 +178,9 @@ def get_report(report_link_id, p_seconds, report_name, date_macro_name, report_n
     row_no += 1
     time.sleep(3)
   except:
-#    import traceback
-#    tb = traceback.format_exc()
-#    logging.error(tb)
+    import traceback
+    tb = traceback.format_exc()
+    logging.error(tb)
 #    err_email_msg = "Hi,\n\n\
 #Something went wrong with extracting a report of %s. Please check. \
 #Below are the error details:\n\n%s" %(report_name, tb)
@@ -291,6 +298,8 @@ logging.info("Getting the Banking reports")
 try:
   # add new sheet if it's the beginning of month
   if (datetime.now().day == 1):
+    logging.info("Adding new worksheet for the month of %s" %(datetime_now.strftime('%B')))
+    print "Adding new worksheet for the month of %s" %(datetime_now.strftime('%B'))
     spr_client.AddWorksheet(datetime_now.strftime('%m-%Y'), 64, 34, spreadsheet_key)
     wfeed = spr_client.GetWorksheetsFeed(key=spreadsheet_key)
     for wksht in wfeed.entry:
@@ -307,6 +316,7 @@ try:
   # 22Jan2013 - report_wait_time - to replace 2nd parameter with this
   report_wait_time = int(cfg.get('prefs', 'report_wait_time'))
 
+  # 05Feb2013 - from date_macro to low_date
   get_report('DEPOSIT_DETAIL_reportListLink_Banking', report_wait_time, "Deposit Details", 'date_macro', "deposit_details") 
   
   # find_click('id', 'category_BANKING', '', 2, "Getting the Banking reports")
@@ -470,16 +480,15 @@ except:
   logging.error(tb)
   print "Program's exiting. Please see email for details."
   logging.error("Program's exiting. Please see email for details")
+  err_email_msg = "There has been a problem with the script:\n%s" %(tb)
+  send_mail("ERROR in QuickBooks Report Dump automation.", err_email_msg)
   exit(1)
-# EXCEPTION handling test - 10Dec2012
-
 # proposed function
 # get_report(report_link_id='ITEM_SALES_DET_reportListLink_Sales', p_send_keys='', p_seconds=5, report_name="Sales by Product/Service Detail", date_macro_name='date_macro', report_name_prefix='sales_product_service_detail')
 
 
 # 09Nov2012
 # TO-DO: downloading reports based from a google spreadsheet
-# TO-DO: accounting of payroll reports
 try:
   reload_report_list()
   year_str = str(datetime_now.year)

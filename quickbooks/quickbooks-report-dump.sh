@@ -10,7 +10,8 @@ IS_MONTHEND=$(python /home/ubuntu/qboe/test_repo_2/utils/check_monthend.py)
 # archive if it's monthend already (0 for the meantime)
 if [ $IS_MONTHEND -eq 1 ]; then
   echo "Archiving dumps for this month..."
-  tar czvf /home/ubuntu/Downloads/quickbooks_report_dump_$CURR_MONTH.tar.gz /home/ubuntu/Downloads/quickbooks_report_dump_$CURR_MONTH-* --remove-files
+  tar czvf /home/ubuntu/Downloads/quickbooks_report_dump_$CURR_MONTH.tar.gz /home/ubuntu/Downloads/quickbooks_report_dump_$CURR_MONTH-*
+  rm -rf /home/ubuntu/Downloads/quickbooks_report_dump_$CURR_MONTH-*/
 fi
 
 # check if this is the instance id
