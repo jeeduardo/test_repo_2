@@ -159,7 +159,7 @@ def get_report(report_link_id, p_seconds, report_name, date_macro_name, report_n
     p_send_keys = ''
     find_click('id', report_link_id, p_send_keys, p_seconds, "Getting \"%s\" report" %(report_name))
     switch_frame()
-    if (date_macro_name <> ""):
+    if (date_macro_name <> "" and date_macro_name <> None):
       date_macro = driver.find_element_by_id(date_macro_name)
       date_macro.find_element_by_xpath("//option[@value='all']").click()
       driver.find_element_by_id('button_id_b5_run_report_small.gif').click()
@@ -188,6 +188,7 @@ def get_report(report_link_id, p_seconds, report_name, date_macro_name, report_n
     update_acct_cell(row_no, "ERROR. See email for details", report_link_id, report_name)
     row_no += 1
     time.sleep(3)
+    print "EXCEPTION occured. Traceback:\n%s" %(tb)
     raise Exception("Something went wrong in scraping the reports.")
   return 0
 
@@ -230,7 +231,7 @@ def update_acct_cell(row_no, status, report_link_id, report_name):
   # wksht_id = 'od7'
 
   # 27Dec2012 - 2 lines below are temporary
-  print "Updating worksheet id %s" %(wksht_id)
+  logging.info("Updating worksheet id %s" %(wksht_id))
 
   if (datetime.now().day == 1):
     spr_client.UpdateCell(row_no, 1, report_link_id, spreadsheet_id, wksht_id)
@@ -316,44 +317,34 @@ try:
   # 22Jan2013 - report_wait_time - to replace 2nd parameter with this
   report_wait_time = int(cfg.get('prefs', 'report_wait_time'))
 
-  # 05Feb2013 - from date_macro to low_date
-  get_report('DEPOSIT_DETAIL_reportListLink_Banking', report_wait_time, "Deposit Details", 'date_macro', "deposit_details") 
+###  # 05Feb2013 - from date_macro to low_date
+###  get_report('DEPOSIT_DETAIL_reportListLink_Banking', report_wait_time, "Deposit Details", 'date_macro', "deposit_details") 
+###  
+###  # find_click('id', 'category_BANKING', '', 2, "Getting the Banking reports")
+###  # reload_report_list()
+###  
+###  # Journal
+###  get_report('JOURNAL_reportListLink_Accountant &amp; Taxes', report_wait_time, "Journal", 'date_macro', "journals")
+###  
+###  # Profit & Loss
+###  # 21Jan2013 - in an attempt to simulate an error, i'd change 10 seconds (parameter 2) to 1
+###  get_report('PANDL_reportListLink_Company', report_wait_time, "Profit & Loss", '', "profit_loss")
+###  
+###  # Profit & Loss Detail
+###  get_report('PANDL_DET_reportListLink_Company', report_wait_time, "Profit & Loss Detail", '', "profit_loss_detail")
   
-  # find_click('id', 'category_BANKING', '', 2, "Getting the Banking reports")
-  reload_report_list()
+  # 08Feb2013
+  rpt_spr_key = '0AjKELoU3HY0HdGxhVDVoQ3c5STRyVWJxLWpaYkVzMWc'
+  rpt_wksht_id = 'od6'
   
-  # Journal
-  get_report('JOURNAL_reportListLink_Accountant &amp; Taxes', report_wait_time, "Journal", 'date_macro', "journals")
+  rpt_feed = spr_client.GetListFeed(rpt_spr_key, rpt_wksht_id)
   
-  # Profit & Loss
-  # 21Jan2013 - in an attempt to simulate an error, i'd change 10 seconds (parameter 2) to 1
-  get_report('PANDL_reportListLink_Company', report_wait_time, "Profit & Loss", '', "profit_loss")
-  
-  # Profit & Loss Detail
-  get_report('PANDL_DET_reportListLink_Company', report_wait_time, "Profit & Loss Detail", '', "profit_loss_detail")
-  
-  # Balance Sheet
-  get_report('BAL_SHEET_reportListLink_Company', report_wait_time, "Balance Sheet", '', "balance_sheet")
-  
-  # Balance Sheet Summary
-  get_report('BAL_SHEET_SUM_reportListLink_Company', report_wait_time, "Balance Sheet Summary", '', "balance_sheet_summary")
-  
-  # Statement of Cash Flows
-  # 17Dec2012 - TEST ERROR here!
-  get_report('CASH_FLOW_reportListLink_Company', report_wait_time, "Statement of Cash Flows", '', "statement_cash_flows")
-  
-  # A/R Aging
-  get_report('AR_AGING_reportListLink_Customers', report_wait_time, "A/R Aging Summary", 'date_macro', "ar_aging_summary")
-  
-  # A/R Aging Detail
-  get_report('AR_AGING_DET_reportListLink_Customers', report_wait_time, "A/R Aging Detail", 'date_macro', "ar_aging_detail")
-  
-  # Customer Balance Summary
-  get_report('CUST_BAL_reportListLink_Customers', report_wait_time, "Customer Balance Summary", 'date_macro', "customer_balance_summary")
-  
-  # Customer Balance Detail
-  get_report('CUST_BAL_DET_reportListLink_Customers', report_wait_time, "Customer Balance Detail", '', "customer_balance_detail")
-  
+  for rpt_row_entry in rpt_feed.entry:
+    r = gdata.spreadsheet.text_db.Record(row_entry=rpt_row_entry)
+    get_report(r.content['reportlinkid'], report_wait_time, r.content['reportname'], r.content['datemacroname'], r.content['reportnameprefix'])
+
+  # 08Feb2013
+
   # Collections
   get_report('COLLECTIONS_reportListLink_Customers', report_wait_time, "Collections", 'date_macro', "collections")
   

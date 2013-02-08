@@ -41,7 +41,7 @@ def email(cfg, subject, message):
     print "Preparing to send email to %s with subject \"%s\"" % (toaddr, subject)
     s.starttls()
     s.login(uname, pword)
-    s.sendmail(uname, toaddr, mimetext_msg.as_string())
+    s.sendmail(uname, toaddr.split(','), mimetext_msg.as_string())
     s.quit()
   except:
     import traceback
