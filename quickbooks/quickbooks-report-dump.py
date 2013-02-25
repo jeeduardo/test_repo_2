@@ -209,7 +209,9 @@ def get_payroll_report(payroll_report_url, caption, file_prefix):
     logging.info(mv_cmd)
     print mv_cmd
     os.system(mv_cmd)
+    print "Updating accounting sheet for %s report" %(caption)
     logging.info("Updating accounting sheet for %s report" % (caption))
+    logging.info("Sending OK status for %s report" %(caption))
     update_acct_cell(row_no, "OK", "", caption)
     row_no += 1
   except:
@@ -237,6 +239,8 @@ def update_acct_cell(row_no, status, report_link_id, report_name):
     spr_client.UpdateCell(row_no, 1, report_link_id, spreadsheet_id, wksht_id)
     spr_client.UpdateCell(row_no, 2, report_name, spreadsheet_id, wksht_id)
 
+  print "spr_client.UpdateCell(%d, %d, %s, %s, %s)" %(row_no, offset, status, spreadsheet_id, wksht_id)
+  logging.info("spr_client.UpdateCell(%d, %d, %s, %s, %s)" %(row_no, offset, status, spreadsheet_id, wksht_id))
   return spr_client.UpdateCell(row_no, offset, status, spreadsheet_id, wksht_id)
 
 
@@ -317,153 +321,18 @@ try:
   # 22Jan2013 - report_wait_time - to replace 2nd parameter with this
   report_wait_time = int(cfg.get('prefs', 'report_wait_time'))
 
-###  # 05Feb2013 - from date_macro to low_date
-###  get_report('DEPOSIT_DETAIL_reportListLink_Banking', report_wait_time, "Deposit Details", 'date_macro', "deposit_details") 
-###  
-###  # find_click('id', 'category_BANKING', '', 2, "Getting the Banking reports")
-###  # reload_report_list()
-###  
-###  # Journal
-###  get_report('JOURNAL_reportListLink_Accountant &amp; Taxes', report_wait_time, "Journal", 'date_macro', "journals")
-###  
-###  # Profit & Loss
-###  # 21Jan2013 - in an attempt to simulate an error, i'd change 10 seconds (parameter 2) to 1
-###  get_report('PANDL_reportListLink_Company', report_wait_time, "Profit & Loss", '', "profit_loss")
-###  
-###  # Profit & Loss Detail
-###  get_report('PANDL_DET_reportListLink_Company', report_wait_time, "Profit & Loss Detail", '', "profit_loss_detail")
-  
   # 08Feb2013
   rpt_spr_key = '0AjKELoU3HY0HdGxhVDVoQ3c5STRyVWJxLWpaYkVzMWc'
   rpt_wksht_id = 'od6'
   
   rpt_feed = spr_client.GetListFeed(rpt_spr_key, rpt_wksht_id)
   
+#  15Feb2013 - disabled for now (get_report) due to "Retirement Plan" spreadsheet accounting entry
   for rpt_row_entry in rpt_feed.entry:
     r = gdata.spreadsheet.text_db.Record(row_entry=rpt_row_entry)
     get_report(r.content['reportlinkid'], report_wait_time, r.content['reportname'], r.content['datemacroname'], r.content['reportnameprefix'])
+  # raise Exception("Intentional exception!")
 
-  # 08Feb2013
-
-  # Collections
-  get_report('COLLECTIONS_reportListLink_Customers', report_wait_time, "Collections", 'date_macro', "collections")
-  
-  # Income by Customer Summary
-  get_report('CUST_INC_reportListLink_Customers', report_wait_time, "Income by Customer Summary", '', "income_by_cust_summary")
-  
-  # Transaction List by Customer
-  get_report('TX_LIST_BY_CUST_reportListLink_Customers', report_wait_time, "Transaction List by Customer", 'date_macro', "txn_list_by_customer")
-  
-  # Sales by Customer Summary
-  get_report('CUST_SALES_reportListLink_Customers', report_wait_time, "Sales by Customer Summary", 'date_macro', "sales_by_customer_summary")
-  
-  # Sales by Customer Detail
-  get_report('CUST_SALES_DET_reportListLink_Customers', report_wait_time, "Sales by Customer Detail", 'date_macro', "sales_by_customer_detail")
-  
-  # Invoice List
-  get_report('INVOICE_LIST_reportListLink_Customers', report_wait_time, "Invoice List", 'date_macro', "invoice_list")
-  
-  # Statement List
-  get_report('STATEMENT_INVOICE_reportListLink_Customers', report_wait_time, "Statement List", 'stmtdate_macro', "statement_list")
-  
-  # Sales by Product/Service Summary
-  get_report('ITEM_SALES_reportListLink_Sales', report_wait_time, "Sales by Product/Service Summary", 'date_macro', "sales_product_service_summary")
-  
-  # Sales by Product/Service Detail
-  get_report('ITEM_SALES_DET_reportListLink_Sales', report_wait_time, "Sales by Product/Service Detail", 'date_macro', "sales_product_service_detail")
-  
-  # A/P Aging Summary
-  get_report('AP_AGING_reportListLink_Vendors', report_wait_time, "A/P Aging Summary", 'date_macro', 'ap_aging_summary')
-  
-  # A/P Aging Detail
-  get_report('AP_AGING_DET_reportListLink_Vendors', report_wait_time, "A/P Aging Detail", 'date_macro', 'ap_aging_detail')
-  
-  # Vendor Balance Summary
-  get_report('VEND_BAL_reportListLink_Vendors', report_wait_time, "Vendor Balance Summary", 'date_macro', 'vendor_bal_summary')
-  
-  # Vendor Balance Detail
-  get_report('VEND_BAL_DET_reportListLink_Vendors', report_wait_time, "Vendor Balance Detail", 'date_macro', 'vendor_bal_detail')
-  
-  # Unpaid Bills
-  get_report('UNPAID_BILLS_reportListLink_Vendors', report_wait_time, "Unpaid Bills", '', 'unpaid_bills')
-  
-  # Expenses by Vendor Summary
-  get_report('VEND_EXP_reportListLink_Vendors', report_wait_time, "Expense by Vendor Summary", '', 'exp_by_vendor')
-  
-  # Bill Payment List
-  get_report('BILL_PAY_LIST_reportListLink_Vendors', report_wait_time, "Bill Payment List", 'date_macro', 'bill_pay_list')
-  
-  # Transaction List by Vendor
-  get_report('TX_LIST_BY_VENDOR_reportListLink_Vendors', report_wait_time, "Transaction List by Vendor", 'date_macro', 'txn_list_by_vendor')
-  
-  # Vendor Contact List
-  get_report('VEND_CONTACT_reportListLink_Vendors', report_wait_time, "Vendor Contact List", '', "vendor_contact_list")
-  
-  # Purchases by Vendor Detail
-  get_report('VENDOR_PURCHASE_DET_reportListLink_Vendors', report_wait_time, "Purchases by Vendor Detail", 'date_macro', "vendor_purchase_det")
-  
-  # Purchases by Product/Service Detail
-  get_report('ITEM_PURCHASE_DET_reportListLink_Vendors', report_wait_time, "Purchases by Product/Service Detail", 'date_macro', "item_purchase_det")
-  
-  # Open Purchase Order List
-  get_report('OPEN_PO_LIST_reportListLink_Vendors', report_wait_time, "Open Purchase Order List", '', "open_po_list")
-  
-  # BANKING reports
-  # Check Detail
-  get_report('CHECK_DETAIL_reportListLink_Banking', report_wait_time, "Check Detail", 'date_macro', "check_detail")
-  
-  # Reconciliation Report << SKIP for NOW? It has no Excel version
-  # get_report('RECONCILE_REPORTS_reportListLink_Banking', '', report_wait_time, "Reconciliation Reports", '', "reconciliation_rpts")
-  
-  # Deposit Details here?
-  
-  # ACCOUNTANT & TAXES report
-  # Trial Balance
-  get_report('TRIAL_BAL_reportListLink_Accountant &amp; Taxes', report_wait_time, "Trial Balance", 'date_macro', "trial_balance")
-  
-  # General Ledger
-  get_report('GEN_LEDGER_reportListLink_Accountant &amp; Taxes', report_wait_time, "General Ledger", 'date_macro', "general_ledger")
-  
-  # Transaction Detail by Account
-  get_report('TX_DET_BY_ACCT_reportListLink_Accountant &amp; Taxes', report_wait_time, "Transaction Detail by Account", 'date_macro', "txn_detail_by_acct")
-  
-  # Transaction List by Date
-  get_report('TX_LIST_BY_DATE_reportListLink_Accountant &amp; Taxes', report_wait_time, "Transaction List by Date", 'date_macro', "txn_list_by_date")
-  
-  # Transaction List with Splits
-  get_report('TX_LIST_WITH_SPLITS_reportListLink_Accountant &amp; Taxes', report_wait_time, "Transaction List with Splits", 'date_macro', "txn_list_with_splits")
-  
-  # Recent Transactions
-  get_report('RECENT_TX_reportListLink_Accountant &amp; Taxes', report_wait_time, "Recent Transactions", 'moddate_macro', "recent_txn")
-  
-  # PAYROLL reports not yet included
-  # LISTS reports
-  # Customer Phone List
-  get_report('CUST_PHONE_reportListLink_Lists', report_wait_time, "Customer Phone List", '', "cust_phone_list")
-  
-  # Customer Contact List
-  get_report('CUST_CONTACT_reportListLink_Lists', report_wait_time, "Customer Contact List", '', "cust_contact_list")
-  
-  # Vendor Phone List
-  get_report('VEND_PHONE_reportListLink_Lists', report_wait_time, "Vendor Phone List", '', "vend_phone_list")
-  
-  # Vendor Contact List
-  get_report('VEND_CONTACT_reportListLink_Lists', report_wait_time, "Vendor Contact List", '', "vend_contact_list")
-  
-  # Account Listing
-  get_report('ACCT_LIST_reportListLink_Lists', report_wait_time, "Account Listing", '', "acct_listing")
-  
-  # Product/Service List
-  get_report('ITEM_PRICE_reportListLink_Lists', report_wait_time, "Product/Service List", '', "product_service_list")
-  
-  # Payment Method Listing
-  get_report('PAYMENTMETHOD_LIST_reportListLink_Lists', report_wait_time, "Payment Method Listing", '', "pay_method_listing")
-  
-  # Terms Listing
-  get_report('TERM_LIST_reportListLink_Lists', report_wait_time, "Terms Listing", '', "terms_listing")
-  
-  # Recurring Template Listing
-  get_report('MEM_TXN_REPORT_reportListLink_Lists', report_wait_time, "Recurring Template Listing", '', "recrring_templ_listing")
 except:
   import traceback
   tb = traceback.format_exc()
@@ -557,7 +426,8 @@ except:
 
   exit(1)
 
-show_loading(5)
+# change to 30 just to see if Retirement Plans would be accounted for
+show_loading(30) #5)
 print "Waiting for browser to close..."
 logging.info("Closing browser.")
 # TO-DO: send email
@@ -584,7 +454,10 @@ dd_ba_key = '0AjKELoU3HY0HdGw2MlFSN01lelRDd3I4bVJ6czJSSnc'
 spr_client.InsertRow(dd_ba_dict, dd_ba_key, 'od6')
 # 21Jan2013
 show_loading(10)
-driver.quit()
+# 14Feb2013
+print "NOT executing driver.quit..for now I guess"
+# driver.quit()
+exit(0)
 
 
 

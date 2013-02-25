@@ -2,7 +2,7 @@
 
 clear
 # instance id where the script resides (to find out - curl -s http://169.254.169.254/latest/meta-data/instance-id)
-INSTANCE_ID="i-5c7f3121"
+INSTANCE_ID="i-40992733"
 CURR_MONTH=$(date +"%Y-%m")
 #check if monthend
 # change the directory path depending on the location of the machine
