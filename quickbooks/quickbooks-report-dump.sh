@@ -1,8 +1,12 @@
-#!/bin/bash -x
+#!/bin/bash
 
 clear
-# instance id where the script resides (to find out - curl -s http://169.254.169.254/latest/meta-data/instance-id)
-INSTANCE_ID="i-40992733"
+INSTANCE_ID="i-124d5761"
+# 27Feb2013 - TEMPORARY
+# change date to 'tomorrow' for testing
+###TOM=$(date --date='tomorrow' +'%m%d%H%M%Y')
+###sudo date $TOM
+echo "The date now is set to `date`"
 CURR_MONTH=$(date +"%Y-%m")
 #check if monthend
 # change the directory path depending on the location of the machine
@@ -16,7 +20,7 @@ fi
 
 # check if this is the instance id
 if [ "$INSTANCE_ID" != "`curl -s http://169.254.169.254/latest/meta-data/instance-id`" ]; then
-  echo "This is not SPOF_LASTPASS_DR.cascadeo.com. Aborting QuickBooks data dump."
+  echo "This is not the Lastpass DR instance. Aborting QuickBooks data dump."
   exit -1
 fi
 

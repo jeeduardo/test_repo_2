@@ -10,7 +10,7 @@ import platform
 
 import sys
 sys.path.append(os.getcwd() + '/../utils')
-import enc_pwd
+# import enc_pwd
 import sendmail
 
 # setup spr_client
@@ -33,7 +33,6 @@ cfg.read(cfg_file)
 # move the credentials to config
 spr_client = gdata.spreadsheet.service.SpreadsheetsService()
 spr_client.email = cfg.get('gdata_credentials', 'gdata_username')
-# spr_client.password = enc_pwd.decrypt_pword(cfg.get('gdata_credentials', 'gdata_pword'), os.getcwd()+os.sep)
 spr_client.password = os.popen("./../utils/encpwd/read_cfg_pwd.sh ../../quickbooks/quickbooks-report-dump.cfg gdata_credentials gdata_pword").readline().strip()
 
 logging.info("Logging in to google spreadsheet app.")
@@ -136,6 +135,17 @@ mv = cfg.get('prefs', 'move_command')
 # create download directory
 datetime_now = datetime.now()
 download_dir_full_path = download_dir + os.sep + dirname + datetime_now.strftime('%Y-%m-%d_%H%M')
+# 18Feb2013
+archive_name = os.path.split(download_dir_full_path)[1] + ".tar.gz"
+print "files will be archived later to %s.tar.gz" %(archive_name)
+logging.info("files will be archived later to %s.tar.gz" %(archive_name))
+archive_path = download_dir+os.sep+archive_name
+
+# 28Feb2013 - temporary!
+# write content to /tmp/to_remove_later to remove the folder
+tmpfile = open('/tmp/to_remove_later', 'w')
+tmpfile.write(download_dir_full_path)
+tmpfile.close()
 
 # move file to target directory
 def move_report_xls(report_name_prefix):
@@ -322,16 +332,15 @@ try:
   report_wait_time = int(cfg.get('prefs', 'report_wait_time'))
 
   # 08Feb2013
-  rpt_spr_key = '0AjKELoU3HY0HdGxhVDVoQ3c5STRyVWJxLWpaYkVzMWc'
-  rpt_wksht_id = 'od6'
+  rpt_spr_key = cfg.get('gdata_credentials', 'rpt_spr_key')
+  rpt_wksht_id = cfg.get('gdata_credentials', 'rpt_wksht_id')
+  print "%s and %s\n--------------------" %(rpt_spr_key, rpt_wksht_id)
   
   rpt_feed = spr_client.GetListFeed(rpt_spr_key, rpt_wksht_id)
   
-#  15Feb2013 - disabled for now (get_report) due to "Retirement Plan" spreadsheet accounting entry
   for rpt_row_entry in rpt_feed.entry:
     r = gdata.spreadsheet.text_db.Record(row_entry=rpt_row_entry)
     get_report(r.content['reportlinkid'], report_wait_time, r.content['reportname'], r.content['datemacroname'], r.content['reportnameprefix'])
-  # raise Exception("Intentional exception!")
 
 except:
   import traceback
@@ -352,6 +361,10 @@ except:
 try:
   reload_report_list()
   year_str = str(datetime_now.year)
+
+###  # 03/13/2013 - josephson
+###  print "Stopping script FOR NOW with an INTENTIONAL error!"
+###  print "Quotient =", 10/0
 
   # Payroll Summary
   payroll_summary_url = cfg.get('payroll_reports_url', 'payroll_summary_url') %("01/01/"+year_str, "12/31/"+year_str)
@@ -430,9 +443,6 @@ except:
 show_loading(30) #5)
 print "Waiting for browser to close..."
 logging.info("Closing browser.")
-# TO-DO: send email
-# logging.info("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report Dump has finished.\" --message \"Please check folder %s for the report files.\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg', download_dir_full_path))
-# os.system("python %s/../utils/sendmail.py --cfg %s --subject \"QuickBooks Report Dump has finished.\" --message \"Please check folder %s for the report files.\"" %(os.getcwd(), os.getcwd()+os.sep+'quickbooks-report-dump.cfg', download_dir_full_path))
 send_mail("QuickBooks Report Dump has finished.", "Please check folder %s for the report files." %(download_dir_full_path))
 # 21Jan2013 temporary
 # calculate dump size
@@ -454,41 +464,27 @@ dd_ba_key = '0AjKELoU3HY0HdGw2MlFSN01lelRDd3I4bVJ6czJSSnc'
 spr_client.InsertRow(dd_ba_dict, dd_ba_key, 'od6')
 # 21Jan2013
 show_loading(10)
+# 18Feb2013 - archive the downloaded files
+import subprocess
+os.system("tar czvf %s %s/" %(archive_path, download_dir_full_path))
+###p = subprocess.Popen(cmd_str, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
+# 18Feb2013 - test transfer to an S3 bucket
+cmd_str = "python quickbooks-s3.py %s" %(archive_path)
+###os.system(cmd_str)
+p = subprocess.Popen(cmd_str, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
+# retcode = p.returncode
+inp, out, err = p.stdin, p.stdout, p.stderr
+out_list = out.readlines()
+err_list = err.readlines()
+if len(err_list) > 0:
+  print "Problem occured in uploading %s to s3" %(archive_name)
+  import string
+  print (''.join(err_list)).strip()
+  logging.error("Problem occured in uploading %s to s3" %(archive_name))
+# 01Mar2013 - remove directory to conserve some space
+print "rm -rf %s" %(download_dir_full_path)
+os.system("rm -rf %s" %(download_dir_full_path))
+
 # 14Feb2013
-print "NOT executing driver.quit..for now I guess"
-# driver.quit()
+driver.quit()
 exit(0)
-
-
-
-
-# 12Nov2012 - removing some notes
-# 17Sep2012
-#----------------------------------------------------------------
-# Sales
-# Skip the first 4 reports listed. They're redundant
-#	>> ITEM_SALES_reportListLink_Sales (Sales by Product/Service Summary)
-#	>> ITEM_SALES_DET_reportListLink_Sales (Sales by Product/Service Detail)
-# Vendors
-#	>> AP_AGING_reportListLink_Vendors (A/P Aging Summary)
-#	>> AP_AGING_DET_reportListLink_Vendors (A/P Aging Detail)
-#	>> VEND_BAL_reportListLink_Vendors (Vendor Balance Summary)
-#	>> VEND_BAL_DET_reportListLink_Vendors (Vendor Balance Detail)
-#	>> UNPAID_BILLS_reportListLink_Vendors (Unpaid Bills)
-#	>> VEND_EXP_reportListLink_Vendors (Expense by Vendor Summary)
-#	>> BILL_PAY_LIST_reportListLink_Vendors (Bill Payment List)
-#	>> TX_LIST_BY_VENDOR_reportListLink_Vendors (Transaction List by Vendor)
-#	reportListLink
-#	>> VEND_CONTACT_reportListLink_Vendors (Vendor Contract List)
-#	>> VENDOR_PURCHASE_DET_reportListLink_Vendors (Purchases by Vendor Detail)
-#	>> ITEM_PURCHASE_DET_reportListLink_Vendors (Purchases by Product/Service Detail)
-#	>> OPEN_PO_LIST_reportListLink_Vendors (Open Purchase Order List)
-# SKIP THE FOLLOWING ENTITIES FOR NOW!
-# Employees
-# Payroll
-# Banking
-#	>> CHECK_DETAIL_reportListLink_Banking (Check Detail)
-#	>> DEPOSIT_DETAIL_reportListLink_Banking (Deposit Detail) - the first report scraped
-#	>> RECONCILE_REPORTS_reportListLink_Banking (Reconciliation Reports)
-# Payroll
-
