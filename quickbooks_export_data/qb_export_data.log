@@ -67,3 +67,39 @@ TypeError: 'NoneType' object is not subscriptable
 2012-11-13 03:46:20,697 INFO : Exporting finished successfully.
 2012-11-13 03:46:20,697 INFO : Exiting...
 2013-01-16 15:35:39,873 INFO : Getting configurations...
+2013-03-14 09:07:21,798 INFO : Proceeding in requesting for data export.
+2013-03-14 09:07:21,799 INFO : Opening firefox...
+2013-03-14 09:07:23,452 ERROR : Traceback (most recent call last):
+  File "qb_export_data_request.py", line 47, in <module>
+    driver = webdriver.Firefox()
+  File "/usr/local/lib/python2.7/dist-packages/selenium/webdriver/firefox/webdriver.py", line 51, in __init__
+    self.binary, timeout),
+  File "/usr/local/lib/python2.7/dist-packages/selenium/webdriver/firefox/extension_connection.py", line 47, in __init__
+    self.binary.launch_browser(self.profile)
+  File "/usr/local/lib/python2.7/dist-packages/selenium/webdriver/firefox/firefox_binary.py", line 44, in launch_browser
+    self._wait_until_connectable()
+  File "/usr/local/lib/python2.7/dist-packages/selenium/webdriver/firefox/firefox_binary.py", line 81, in _wait_until_connectable
+    self._get_firefox_output())
+WebDriverException: Message: 'The browser appears to have exited before we could connect. The output was: Error: no display specified\n' 
+
+2013-03-14 09:14:40,803 INFO : Proceeding in requesting for data export.
+2013-03-14 09:14:40,804 INFO : Opening firefox...
+2013-03-14 09:14:56,594 INFO : Logging in as spof.qb.test
+2013-03-14 09:14:57,751 INFO : Requesting data...
+2013-03-14 09:16:08,902 INFO : Request for today has been recorded.
+2013-03-14 09:16:08,902 INFO : REQUEST FOR TODAY, 2013-03-14, WRITTEN TO LOG FILE!
+2013-03-14 09:16:41,449 INFO : Signing out
+2013-03-14 09:16:41,527 ERROR : Traceback (most recent call last):
+  File "qb_export_data_request.py", line 84, in <module>
+    driver.find_element_by_link_text('Sign Out').click()
+  File "/usr/local/lib/python2.7/dist-packages/selenium/webdriver/remote/webdriver.py", line 237, in find_element_by_link_text
+    return self.find_element(by=By.LINK_TEXT, value=link_text)
+  File "/usr/local/lib/python2.7/dist-packages/selenium/webdriver/remote/webdriver.py", line 671, in find_element
+    {'using': by, 'value': value})['value']
+  File "/usr/local/lib/python2.7/dist-packages/selenium/webdriver/remote/webdriver.py", line 156, in execute
+    self.error_handler.check_response(response)
+  File "/usr/local/lib/python2.7/dist-packages/selenium/webdriver/remote/errorhandler.py", line 147, in check_response
+    raise exception_class(message, screen, stacktrace)
+NoSuchElementException: Message: u'Unable to locate element: {"method":"link text","selector":"Sign Out"}' 
+
+2013-03-14 09:19:39,000 INFO : Request has been made already. Please wait for the email to be delivered.

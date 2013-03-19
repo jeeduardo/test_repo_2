@@ -242,14 +242,13 @@ def update_acct_cell(row_no, status, report_link_id, report_name):
   spreadsheet_id = '0AjKELoU3HY0HdEx4MzR1eE1aWUFaem1QZ2VUc0NlVVE'
   # wksht_id = 'od7'
 
-  # 27Dec2012 - 2 lines below are temporary
   logging.info("Updating worksheet id %s" %(wksht_id))
 
   if (datetime.now().day == 1):
     spr_client.UpdateCell(row_no, 1, report_link_id, spreadsheet_id, wksht_id)
     spr_client.UpdateCell(row_no, 2, report_name, spreadsheet_id, wksht_id)
 
-  print "spr_client.UpdateCell(%d, %d, %s, %s, %s)" %(row_no, offset, status, spreadsheet_id, wksht_id)
+  ## print "spr_client.UpdateCell(%d, %d, %s, %s, %s)" %(row_no, offset, status, spreadsheet_id, wksht_id)
   logging.info("spr_client.UpdateCell(%d, %d, %s, %s, %s)" %(row_no, offset, status, spreadsheet_id, wksht_id))
   return spr_client.UpdateCell(row_no, offset, status, spreadsheet_id, wksht_id)
 
@@ -261,7 +260,7 @@ fp = webdriver.FirefoxProfile()
 fp.set_preference("browser.download.manager.showWhenStarting", False) # False
 fp.set_preference("browser.download.dir", download_dir)#"C:\Users\josephson\Downloads")
 #fp.set_preference("browser.download.dir", os.getcwd())
-# 03Sept2012 - Josephson (file type="application/vnd.ms-excel")
+# 03Sept2012 - Josephson (never ask for file type="application/vnd.ms-excel")
 fp.set_preference("browser.helperApps.neverAsk.saveToDisk", save_to_disk) #"application/vnd.ms-excel")
 
 try:
@@ -334,7 +333,7 @@ try:
   # 08Feb2013
   rpt_spr_key = cfg.get('gdata_credentials', 'rpt_spr_key')
   rpt_wksht_id = cfg.get('gdata_credentials', 'rpt_wksht_id')
-  print "%s and %s\n--------------------" %(rpt_spr_key, rpt_wksht_id)
+  ### print "%s and %s\n--------------------" %(rpt_spr_key, rpt_wksht_id)
   
   rpt_feed = spr_client.GetListFeed(rpt_spr_key, rpt_wksht_id)
   
@@ -460,27 +459,32 @@ total_dump_size_kb = float(total_dump_size)/1024.0
 dd_ba_dict['size'] =  "%.2f KB" %(total_dump_size_kb)
 dd_ba_dict['start'] = dd_ba_start
 dd_ba_dict['end'] = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
-dd_ba_key = '0AjKELoU3HY0HdGw2MlFSN01lelRDd3I4bVJ6czJSSnc'
+# 03/13/2013 - josephson
+### dd_ba_key = '0AjKELoU3HY0HdGw2MlFSN01lelRDd3I4bVJ6czJSSnc'
+dd_ba_key = cfg.get('gdata_credentials', 'dd_ba_key')
+print "dd_ba_key is %s" %(dd_ba_key)
 spr_client.InsertRow(dd_ba_dict, dd_ba_key, 'od6')
 # 21Jan2013
 show_loading(10)
 # 18Feb2013 - archive the downloaded files
 import subprocess
-os.system("tar czvf %s %s/" %(archive_path, download_dir_full_path))
+# 03/13/2013 - formerly 'tar czvf...'
+os.system("tar czf %s %s/" %(archive_path, download_dir_full_path))
 ###p = subprocess.Popen(cmd_str, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
 # 18Feb2013 - test transfer to an S3 bucket
-cmd_str = "python quickbooks-s3.py %s" %(archive_path)
-###os.system(cmd_str)
-p = subprocess.Popen(cmd_str, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
-# retcode = p.returncode
-inp, out, err = p.stdin, p.stdout, p.stderr
-out_list = out.readlines()
-err_list = err.readlines()
-if len(err_list) > 0:
-  print "Problem occured in uploading %s to s3" %(archive_name)
-  import string
-  print (''.join(err_list)).strip()
-  logging.error("Problem occured in uploading %s to s3" %(archive_name))
+# 03/15/2013 - disable S3 upload for now
+### cmd_str = "python quickbooks-s3.py %s" %(archive_path)
+### ###os.system(cmd_str)
+### p = subprocess.Popen(cmd_str, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
+### # retcode = p.returncode
+### inp, out, err = p.stdin, p.stdout, p.stderr
+### out_list = out.readlines()
+### err_list = err.readlines()
+### if len(err_list) > 0:
+###   print "Problem occured in uploading %s to s3" %(archive_name)
+###   import string
+###   print (''.join(err_list)).strip()
+###   logging.error("Problem occured in uploading %s to s3" %(archive_name))
 # 01Mar2013 - remove directory to conserve some space
 print "rm -rf %s" %(download_dir_full_path)
 os.system("rm -rf %s" %(download_dir_full_path))

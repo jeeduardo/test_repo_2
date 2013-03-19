@@ -12,7 +12,10 @@ cfg.read('qb_export_data.cfg')
 
 url = cfg.get('credentials', 'url')
 username = cfg.get('credentials', 'username')
-pword = cfg.get('credentials', 'pword')
+# 03/15/2013
+##pword = cfg.get('credentials', 'pword')
+cmd_str = "./../utils/encpwd/read_cfg_pwd.sh ../../quickbooks_export_data/qb_export_data.cfg credentials pword"
+pword = os.popen(cmd_str).readline().strip()
 email_address = cfg.get('email_credentials', 'username')
 export_data_request_url = cfg.get('other_settings', 'export_data_request_url') + ("&user_email=%s&user_name=%s" %(email_address, username))
 
@@ -25,15 +28,19 @@ datetime_now = datetime.now()
 datetime_pdt = datetime_now - timedelta(hours=7)
 # date_today = datetime_now.strftime('%Y%m%d')
 # search for PDT date in log file
-grep_cmd = "grep -q \"REQUEST FOR TODAY, %s, WRITTEN TO LOG FILE\!\" %s" %(datetime_pdt.strftime('%Y-%m-%d'), log_filename)
+# 03/15/2013 - might still return 0 even if there are no results found
+# grep_cmd = "grep -q \"REQUEST FOR TODAY, %s, WRITTEN TO LOG FILE\!\" %s" %(datetime_pdt.strftime('%Y-%m-%d'), log_filename)
+grep_cmd = "grep \"REQUEST FOR TODAY, %s, WRITTEN TO LOG FILE\!\" %s | wc -l" %(datetime_pdt.strftime('%Y-%m-%d'), log_filename)
 try:
-  grep_rs = os.system(grep_cmd)
+  # grep_rs = os.system(grep_cmd)
+  grep_rs = os.popen(grep_cmd).readline().strip()
 except:
   import traceback
   print "An error was encountered. Please check %s for details." %(log_filename)
   logging.error(traceback.format_exc())
 finally:
-  if (grep_rs == 0):
+  ### if (grep_rs == 0):
+  if (grep_rs <> '0'):
     print "REQUESTED"
     logging.info("Request has been made already. Please wait for the email to be delivered.")
     exit(0)
@@ -45,6 +52,7 @@ logging.info("Opening firefox...")
 
 try:
   driver = webdriver.Firefox()
+
   driver.get(url)
   login = driver.find_element_by_name('login')
   login.click()
